@@ -90,9 +90,9 @@ html {
 }
 body {
     margin: 0;
-    background-image: url("/assets/noisy-texture-100x100.png");
+    background-image: url("/assets/noisy-texture-100x100_background.png");
     background-repeat: repeat;
-    height: 100dvh;
+    min-height: 100dvh;
 }
 
 @theme inline {
