@@ -4,7 +4,9 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family:
+        "Exocet Blizzard MixedCaps", "Lato", system-ui, Avenir, Helvetica,
+        Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
 
@@ -83,9 +85,9 @@
     --sidebar-ring: oklch(0.708 0 0); */
 }
 
-/* html {
-    background-color: oklch(0.1975 0.0078 274.6);
-} */
+html {
+    scroll-padding-top: calc(var(--spacing) * 8);
+}
 body {
     margin: 0;
     background-image: url("/assets/noisy-texture-100x100.png");
