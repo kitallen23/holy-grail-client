@@ -1,6 +1,11 @@
 import HeadingSeparator from "@/components/HeadingSeparator";
+import { createFileRoute } from "@tanstack/react-router";
 
-const ItemIndex = () => {
+export const Route = createFileRoute("/items")({
+    component: Items,
+});
+
+function Items() {
     return (
         <div className="pt-4 grid gap-4 grid-cols-1">
             <HeadingSeparator>Armor</HeadingSeparator>
@@ -11,6 +16,4 @@ const ItemIndex = () => {
             <HeadingSeparator>Jewels</HeadingSeparator>
         </div>
     );
-};
-
-export default ItemIndex;
+}

@@ -1,54 +1,80 @@
-# React + TypeScript + Vite
+# Holy Grail
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web application to help Diablo 2 players track their progress through the Holy Grail challenge - the self-imposed quest to collect every unique and set item in the game.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Item Catalogue** - Browse and search through all unique and set items
+- **Runeword Catalogue** - Complete reference for all runewords
+- **Holy Grail Checklist** - Track your collection progress with an interactive checklist
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React + TypeScript
+- Vite
+- Tailwind CSS
+- TanStack Router
+- shadcn/ui
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Getting Started
+
+### Prerequisites
+
+- Node.js (version specified in `.nvmrc`)
+- pnpm
+
+### Installation
+
+1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd holy-grail
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Install dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+pnpm install
 ```
+
+3. Start the development server
+
+```bash
+pnpm dev
+```
+
+The app will be available at `http://localhost:5173`
+
+### Environment Variables
+
+<!-- TODO: Add environment variables documentation when needed -->
+
+```bash
+# .env.local
+# Add environment variables here when implemented
+```
+
+## Building for Production
+
+```bash
+pnpm build
+```
+
+Built files will be output to the `dist/` directory.
+
+## Deployment
+
+<!-- TODO: Add deployment instructions -->
+
+## Contributing
+
+<!-- TODO: Add contributing guidelines -->
+
+## Acknowledgments
+
+<!-- TODO: Add credits and acknowledgments -->
+
+## License
+
+MIT

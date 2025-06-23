@@ -1,9 +1,10 @@
-import { Link, Outlet } from "react-router";
-import styles from "./Layout.module.scss";
+import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import styles from "./__root.module.scss";
 import { Button } from "@/components/ui/button";
 
-export default function Layout() {
-    return (
+export const Route = createRootRoute({
+    component: () => (
         <>
             <header
                 className={`${styles.header} h-8 bg-primary text-primary-foreground flex items-center justify-between fixed top-0 right-0 w-full flex-nowrap`}
@@ -41,6 +42,7 @@ export default function Layout() {
             </main>
 
             {/* <footer></footer> */}
+            <TanStackRouterDevtools />
         </>
-    );
-}
+    ),
+});
