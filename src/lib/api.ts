@@ -40,7 +40,7 @@ export const fetchWithCache = async <T>(endpoint: string): Promise<T> => {
 
 // API methods
 export const getItems = () => fetchWithCache<Items>("items");
-export const getRunewords = () => fetchWithCache<Runewords>("runewords");
+export const getRunewords = () => fetchWithCache<{ runewords: Runewords }>("runewords");
 export const getGrailProgress = () => fetchWithCache<UserItemsResponse>("user-items");
 
 export { api };

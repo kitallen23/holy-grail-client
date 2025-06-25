@@ -11,7 +11,7 @@ export const fetchAllItems = async (): Promise<Items> => {
 /**
  * Get all runewords
  */
-export const fetchAllRunewords = async (): Promise<Runewords> => {
+export const fetchAllRunewords = async (): Promise<{ runewords: Runewords }> => {
     return await getRunewords();
 };
 

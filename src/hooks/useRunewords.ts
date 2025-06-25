@@ -11,7 +11,7 @@ export const useRunewords = () => {
         const loadRunewords = async () => {
             try {
                 const data = await fetchAllRunewords();
-                setRunewords(data);
+                setRunewords(data?.runewords);
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Failed to fetch runewords");
             } finally {

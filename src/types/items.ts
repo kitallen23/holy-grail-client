@@ -189,7 +189,7 @@ type RuneName =
     | "Cham"
     | "Zod";
 
-type RunewordBaseType = "Weapons" | "Body Armor" | "Shields" | "Helmets";
+export type RunewordBaseType = "Weapons" | "Body Armor" | "Shields" | "Helmets";
 
 // Main string, ...variables
 type ItemProp = [string, ...string[]];
