@@ -48,11 +48,11 @@ The app will be available at `http://localhost:5173`
 
 ### Environment Variables
 
-<!-- TODO: Add environment variables documentation when needed -->
+Create a `.env.local` file in the root directory:
 
 ```bash
-# .env.local
-# Add environment variables here when implemented
+# API Configuration
+VITE_API_URL=http://localhost:3000
 ```
 
 ## Building for Production

@@ -2,10 +2,10 @@ import HeadingSeparator from "@/components/HeadingSeparator";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/items")({
-    component: Items,
+    component: ItemsPage,
 });
 
-function Items() {
+function ItemsPage() {
     return (
         <div className="pt-4 grid gap-4 grid-cols-1">
             <HeadingSeparator>Armor</HeadingSeparator>
