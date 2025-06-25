@@ -2,6 +2,9 @@ import { useMemo } from "react";
 import type { Runeword, RunewordBaseType, Runewords } from "@/types/items";
 import HeadingSeparator from "@/components/HeadingSeparator";
 import { Button } from "@/components/ui/button";
+import { HoverCard, HoverCardTrigger } from "@/components/ui/hover-card";
+import ItemTooltipHoverCard from "@/components/ItemTooltip/ItemTooltipHoverCard";
+import ItemAffix from "@/components/ItemTooltip/ItemAffix";
 
 interface RunewordArrayItem extends Runeword {
     key: string;
@@ -36,19 +39,46 @@ export default function RunewordCategory({ data, category, label }: RunewordCate
             <HeadingSeparator>{label}</HeadingSeparator>
             <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                 {displayedRunewords.map(runeword => (
-                    <Button
-                        variant="ghost"
-                        color="primary"
-                        size="sm"
-                        key={runeword.key}
-                        className="justify-start"
-                    >
-                        {/* <Dot /> */}
-                        <div className="text-nowrap">{runeword.name}</div>
-                        <div className="pl-0 sm:pl-1 text-foreground/60 truncate">
-                            {runeword.itemTypes.join(", ")} ({runeword.sockets})
-                        </div>
-                    </Button>
+                    <HoverCard key={runeword.key}>
+                        <HoverCardTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                color="primary"
+                                size="sm"
+                                className="justify-start"
+                            >
+                                <div className="text-nowrap">{runeword.name}</div>
+                                <div className="pl-0 sm:pl-1 text-foreground/60 truncate">
+                                    {runeword.itemTypes.join(", ")} ({runeword.sockets})
+                                </div>
+                            </Button>
+                        </HoverCardTrigger>
+                        <ItemTooltipHoverCard>
+                            <div className="text-primary">{runeword.name}</div>
+                            <div className="text-muted-foreground">
+                                {runeword.itemTypes.join(", ")}
+                            </div>
+                            <div className="text-primary">
+                                &apos;{runeword.runes.join("")}&apos;
+                            </div>
+                            {runeword.implicits?.map((implicit, i) => (
+                                <ItemAffix
+                                    key={i}
+                                    affix={implicit}
+                                    color="text-white"
+                                    variableColor="text-diablo-blue"
+                                />
+                            )) || null}
+                            {runeword.affixes.map((affix, i) => (
+                                <ItemAffix
+                                    key={i}
+                                    affix={affix}
+                                    color="text-diablo-blue"
+                                    variableColor="text-destructive"
+                                />
+                            )) || null}
+                        </ItemTooltipHoverCard>
+                    </HoverCard>
                 ))}
             </div>
         </>

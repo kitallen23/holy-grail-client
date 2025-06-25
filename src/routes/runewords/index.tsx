@@ -33,7 +33,6 @@ function RunewordsPage() {
 
     return (
         <div className="pt-4 grid grid-cols-1 gap-4">
-            Placeholder
             <div className="grid gap-4">
                 <RunewordCategory data={data} category="Weapons" label="Weapons" />
                 <RunewordCategory data={data} category="Body Armor" label="Body Armor" />
