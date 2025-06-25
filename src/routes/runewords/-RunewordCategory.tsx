@@ -20,7 +20,8 @@ function getFilteredRunewords(data: Runewords | null, type: RunewordBaseType): R
             ...value,
             key,
         }))
-        .filter(item => item.type === type);
+        .filter(item => item.type === type)
+        .sort((a, b) => (a.name > b.name ? 1 : 0));
 
     return categoryRunewords;
 }
@@ -33,6 +34,10 @@ interface RunewordCategoryProps {
 
 export default function RunewordCategory({ data, category, label }: RunewordCategoryProps) {
     const displayedRunewords = useMemo(() => getFilteredRunewords(data, category), [data]);
+
+    if (!displayedRunewords.length) {
+        return null;
+    }
 
     return (
         <>

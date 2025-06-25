@@ -19,6 +19,8 @@ function Index() {
                 </Button>
                 <Button variant="secondary">secondary</Button>
                 <Button variant="accent">accent</Button>
+                <Button variant="outline">outline</Button>
+                <Button variant="ghost">ghost</Button>
                 <Button size="icon">
                     <Check />
                 </Button>

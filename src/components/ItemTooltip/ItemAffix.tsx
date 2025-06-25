@@ -41,5 +41,9 @@ export default function ItemAffix({ affix, color, variableColor }: ItemAffixProp
     const template = affix[0];
     const values = affix.slice(1) || [];
 
+    if (affix[0] === "") {
+        return <div className="min-h-4" />;
+    }
+
     return interpolateTemplate(template, values, color, variableColor);
 }
