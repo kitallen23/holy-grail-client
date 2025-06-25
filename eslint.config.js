@@ -32,6 +32,11 @@ export default defineConfig([
     },
     {
         files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+        settings: {
+            react: {
+                version: "detect",
+            },
+        },
         rules: {
             "react/react-in-jsx-scope": "off",
             "no-console": ["warn", { allow: ["info", "warn", "error"] }],

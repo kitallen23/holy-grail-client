@@ -12,7 +12,7 @@ function RunewordsPage() {
     const { data, loading, error } = useRunewords();
 
     useEffect(() => {
-        console.log(`runewords: `, data);
+        // console.log(`runewords: `, data);
     }, [data]);
 
     if (error) {
