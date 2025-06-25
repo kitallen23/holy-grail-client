@@ -34,6 +34,7 @@ export default defineConfig([
         files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
         rules: {
             "react/react-in-jsx-scope": "off",
+            "no-console": ["warn", { allow: ["info", "warn", "error"] }],
         },
     },
 ]);
