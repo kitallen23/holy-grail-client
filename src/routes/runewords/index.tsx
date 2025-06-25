@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert } from "lucide-react";
-import { useRunewords } from "@/hooks/useRunewords";
 import RunewordCategory from "@/routes/runewords/-RunewordCategory";
 
+import { useRunewords } from "@/hooks/queries";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export const Route = createFileRoute("/runewords/")({
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/runewords/")({
 });
 
 function RunewordsPage() {
-    const { data, loading, error } = useRunewords();
+    const { data, isFetching, error } = useRunewords();
 
     if (error) {
         return (
@@ -21,14 +21,13 @@ function RunewordsPage() {
                     <AlertDescription>
                         Something went wrong when loading runewords. Please refresh the page or try
                         again later.
-                        {error}
                     </AlertDescription>
                 </Alert>
             </div>
         );
     }
 
-    if (loading) {
+    if (isFetching || !data) {
         return null;
     }
 

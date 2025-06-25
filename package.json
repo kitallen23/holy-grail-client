@@ -14,6 +14,7 @@
         "@radix-ui/react-separator": "^1.1.7",
         "@radix-ui/react-slot": "^1.2.3",
         "@tailwindcss/vite": "^4.1.8",
+        "@tanstack/react-query": "^5.81.2",
         "@tanstack/react-router": "^1.121.33",
         "@tanstack/react-router-devtools": "^1.121.33",
         "class-variance-authority": "^0.7.1",
