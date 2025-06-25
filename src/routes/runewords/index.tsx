@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert, Filter, X } from "lucide-react";
 
@@ -57,6 +57,32 @@ function RunewordsPage() {
         Shields: true,
         Helmets: true,
     });
+
+    const [selectedRuneword, setSelectedRuneword] = useState<string | null>(null);
+
+    useEffect(() => {
+        const handleGlobalClick = (event: MouseEvent) => {
+            const target = event.target as Element;
+            const isRunewordTrigger = target.closest("button.runeword-trigger");
+
+            if (!isRunewordTrigger) {
+                setSelectedRuneword(null);
+            }
+        };
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                setSelectedRuneword(null);
+            }
+        };
+
+        document.addEventListener("click", handleGlobalClick);
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("click", handleGlobalClick);
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
 
     if (error) {
         return (
@@ -139,6 +165,8 @@ function RunewordsPage() {
                         data={displayedRunewords}
                         category="Weapons"
                         label="Weapons"
+                        selectedRuneword={selectedRuneword}
+                        onClick={runeword => setSelectedRuneword(runeword?.key || null)}
                     />
                 ) : null}
                 {itemTypeFilter["Body Armor"] ? (
@@ -146,6 +174,8 @@ function RunewordsPage() {
                         data={displayedRunewords}
                         category="Body Armor"
                         label="Body Armor"
+                        selectedRuneword={selectedRuneword}
+                        onClick={runeword => setSelectedRuneword(runeword?.key || null)}
                     />
                 ) : null}
                 {itemTypeFilter["Shields"] ? (
@@ -153,6 +183,8 @@ function RunewordsPage() {
                         data={displayedRunewords}
                         category="Shields"
                         label="Shields"
+                        selectedRuneword={selectedRuneword}
+                        onClick={runeword => setSelectedRuneword(runeword?.key || null)}
                     />
                 ) : null}
                 {itemTypeFilter["Helmets"] ? (
@@ -160,6 +192,8 @@ function RunewordsPage() {
                         data={displayedRunewords}
                         category="Helmets"
                         label="Helmets"
+                        selectedRuneword={selectedRuneword}
+                        onClick={runeword => setSelectedRuneword(runeword?.key || null)}
                     />
                 ) : null}
             </div>

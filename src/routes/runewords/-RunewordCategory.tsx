@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardTrigger } from "@/components/ui/hover-card";
 import ItemTooltipHoverCard from "@/components/ItemTooltip/ItemTooltipHoverCard";
 import ItemAffix from "@/components/ItemTooltip/ItemAffix";
+import { cn } from "@/lib/utils";
 
 interface RunewordArrayItem extends Runeword {
     key: string;
@@ -30,10 +31,26 @@ interface RunewordCategoryProps {
     data: Runewords | null;
     category: RunewordBaseType;
     label: string;
+    selectedRuneword: string | null;
+    onClick: (runeword: RunewordArrayItem | null) => void;
 }
 
-export default function RunewordCategory({ data, category, label }: RunewordCategoryProps) {
+export default function RunewordCategory({
+    data,
+    category,
+    label,
+    selectedRuneword,
+    onClick,
+}: RunewordCategoryProps) {
     const displayedRunewords = useMemo(() => getFilteredRunewords(data, category), [data]);
+
+    const handleRunewordClick = (runeword: RunewordArrayItem) => {
+        if (selectedRuneword) {
+            onClick(null);
+        } else {
+            onClick(runeword);
+        }
+    };
 
     if (!displayedRunewords.length) {
         return null;
@@ -44,13 +61,17 @@ export default function RunewordCategory({ data, category, label }: RunewordCate
             <HeadingSeparator>{label}</HeadingSeparator>
             <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                 {displayedRunewords.map(runeword => (
-                    <HoverCard key={runeword.key}>
+                    <HoverCard key={runeword.key} open={selectedRuneword === runeword.key}>
                         <HoverCardTrigger asChild>
                             <Button
                                 variant="ghost"
                                 color="primary"
                                 size="sm"
-                                className="justify-start"
+                                className={cn(
+                                    "runeword-trigger justify-start border border-transparent",
+                                    runeword.key === selectedRuneword ? "border-primary" : ""
+                                )}
+                                onClick={() => handleRunewordClick(runeword)}
                             >
                                 <div className="text-nowrap">{runeword.name}</div>
                                 <div className="pl-0 sm:pl-1 text-foreground/60 truncate">
@@ -58,7 +79,7 @@ export default function RunewordCategory({ data, category, label }: RunewordCate
                                 </div>
                             </Button>
                         </HoverCardTrigger>
-                        <ItemTooltipHoverCard>
+                        <ItemTooltipHoverCard collisionPadding={4}>
                             <div className="text-primary">{runeword.name}</div>
                             <div className="text-muted-foreground">
                                 {runeword.itemTypes.join(", ")}

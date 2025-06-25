@@ -1,6 +1,7 @@
 .header {
     background-image: url("/assets/noisy-texture-100x100_primary.png");
     background-repeat: repeat;
+    z-index: 1;
 
     .title {
         color: inherit;
