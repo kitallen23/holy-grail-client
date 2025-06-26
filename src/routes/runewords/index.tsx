@@ -8,7 +8,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/useDebounce";
 import { SEARCH_DEBOUNCE_DELAY } from "@/lib/constants";
-import { getSearchableText, getSearchTerms, matchesAllTerms } from "@/routes/runewords/-utils";
+import { getSearchTerms, matchesAllTerms } from "@/lib/search";
+import { getSearchableText } from "@/routes/runewords/-utils";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -17,6 +18,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { RunewordBaseType } from "@/types/items";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/runewords/")({
     component: RunewordsPage,
@@ -100,7 +102,46 @@ function RunewordsPage() {
     }
 
     if (isFetching || !displayedRunewords) {
-        return null;
+        return (
+            <div className="pt-4 grid grid-cols-1 gap-4 opacity-20">
+                <div className="max-w-96 m-auto w-full grid grid-cols-[1fr_auto] gap-2">
+                    <Skeleton className="h-9" />
+                    <Skeleton className="h-9 w-9" />
+                </div>
+                <div className="flex items-center">
+                    <Skeleton className="flex-1 h-[1px]" />
+                    <span className="px-4 h-7 flex items-center">
+                        <Skeleton className="w-14 h-4" />
+                    </span>
+                    <Skeleton className="flex-1 h-[1px]" />
+                </div>
+                <div className="grid gap-4">
+                    <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+                        <div className="h-8 flex items-center px-3">
+                            <Skeleton className="w-32 h-4" />
+                        </div>
+                        <div className="h-8 flex items-center px-3">
+                            <Skeleton className="w-24 h-4" />
+                        </div>
+                        <div className="h-8 flex items-center px-3">
+                            <Skeleton className="w-36 h-4" />
+                        </div>
+                        <div className="h-8 flex items-center px-3">
+                            <Skeleton className="w-20 h-4" />
+                        </div>
+                        <div className="h-8 flex items-center px-3">
+                            <Skeleton className="w-44 h-4" />
+                        </div>
+                        <div className="h-8 flex items-center px-3">
+                            <Skeleton className="w-24 h-4" />
+                        </div>
+                        <div className="h-8 flex items-center px-3">
+                            <Skeleton className="w-28 h-4" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (
