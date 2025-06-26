@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert, Filter, X } from "lucide-react";
 
@@ -27,8 +27,41 @@ export const Route = createFileRoute("/runewords/")({
 function RunewordsPage() {
     const { data, isFetching, error } = useRunewords();
 
+    const searchInputRef = useRef<HTMLInputElement>(null);
     const [searchString, setSearchString] = useState("");
     const debouncedSearchString = useDebounce(searchString, SEARCH_DEBOUNCE_DELAY);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            // Ctrl/Cmd+K
+            if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+                e.preventDefault();
+                searchInputRef.current?.focus();
+                return;
+            }
+
+            // Forward slash (only if not typing in an input)
+            if (
+                e.key === "/" &&
+                !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)
+            ) {
+                e.preventDefault();
+                searchInputRef.current?.focus();
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        return () => document.removeEventListener("keydown", handleKeyDown);
+    }, []);
+
+    const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            e.currentTarget.blur();
+        } else if (e.key === "Escape") {
+            e.currentTarget.blur();
+            setSearchString("");
+        }
+    };
 
     // Filter runewords based on search
     const displayedRunewords = useMemo(() => {
@@ -149,10 +182,17 @@ function RunewordsPage() {
             <div className="max-w-96 m-auto w-full grid grid-cols-[1fr_auto] gap-2">
                 <div className="relative">
                     <Input
+                        ref={searchInputRef}
                         value={searchString}
                         onChange={event => setSearchString(event.target.value)}
                         placeholder="Search..."
                         type="search"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck="false"
+                        enterKeyHint="done"
+                        onKeyDown={handleInputKeyDown}
                     />
                     {searchString && (
                         <Button

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert, XIcon } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { BaseCategory, Rune, SetItem, UniqueItem } from "@/types/items";
 import { SEARCH_DEBOUNCE_DELAY } from "@/lib/constants";
@@ -62,8 +62,41 @@ const UNIQUE_CATEGORIES = {
 function ItemsPage() {
     const { data, isFetching, error } = useItems();
 
+    const searchInputRef = useRef<HTMLInputElement>(null);
     const [searchString, setSearchString] = useState("");
     const debouncedSearchString = useDebounce(searchString, SEARCH_DEBOUNCE_DELAY);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            // Ctrl/Cmd+K
+            if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+                e.preventDefault();
+                searchInputRef.current?.focus();
+                return;
+            }
+
+            // Forward slash (only if not typing in an input)
+            if (
+                e.key === "/" &&
+                !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)
+            ) {
+                e.preventDefault();
+                searchInputRef.current?.focus();
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        return () => document.removeEventListener("keydown", handleKeyDown);
+    }, []);
+
+    const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            e.currentTarget.blur();
+        } else if (e.key === "Escape") {
+            e.currentTarget.blur();
+            setSearchString("");
+        }
+    };
 
     const displayedItems = useMemo(() => {
         if (!data || !debouncedSearchString.trim()) {
@@ -108,15 +141,6 @@ function ItemsPage() {
         item: WithKey<UniqueItem> | WithKey<SetItem> | WithKey<Rune>;
     } | null>(null);
 
-    const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
-            e.currentTarget.blur();
-        } else if (e.key === "Escape") {
-            e.currentTarget.blur();
-            setSearchString("");
-        }
-    };
-
     if (error) {
         return (
             <div className="max-w-2xl mx-auto pt-4">
@@ -142,6 +166,7 @@ function ItemsPage() {
                 <div className="max-w-96 m-auto w-full grid grid-cols-[1fr_auto] gap-2">
                     <div className="relative">
                         <Input
+                            ref={searchInputRef}
                             value={searchString}
                             onChange={event => setSearchString(event.target.value)}
                             placeholder="Search..."
