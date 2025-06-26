@@ -15,7 +15,7 @@ export default function UniqueItemDialog({ item, ...props }: UniqueItemDialogPro
             <DialogTitle className="sr-only">{item?.name || "Item"} Tooltip</DialogTitle>
             {item ? (
                 <DialogContent
-                    className="bg-black/90 rounded-none border-none p-3 w-[max-content]"
+                    className="bg-black/90 rounded-none border-none p-3 w-[max-content] max-h-[calc(100dvh-2rem)] overflow-y-auto"
                     onOpenAutoFocus={e => e.preventDefault()}
                     aria-describedby={undefined}
                 >
