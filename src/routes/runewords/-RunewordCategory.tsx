@@ -1,11 +1,12 @@
 import { useMemo } from "react";
+
+import { cn } from "@/lib/utils";
 import type { Runeword, RunewordBaseType, Runewords } from "@/types/items";
 import HeadingSeparator from "@/components/HeadingSeparator";
 import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardTrigger } from "@/components/ui/hover-card";
 import ItemTooltipHoverCard from "@/components/ItemTooltip/ItemTooltipHoverCard";
 import ItemAffix from "@/components/ItemTooltip/ItemAffix";
-import { cn } from "@/lib/utils";
 
 interface RunewordArrayItem extends Runeword {
     key: string;

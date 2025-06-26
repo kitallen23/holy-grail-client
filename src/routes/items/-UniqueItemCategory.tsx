@@ -1,7 +1,8 @@
 import { useMemo } from "react";
-import type { BaseCategory, UniqueItem } from "@/types/items";
+
+import type { BaseCategory, Rune, SetItem, UniqueItem } from "@/types/items";
 import UniqueItemSubcategory from "@/routes/items/-UniqueItemSubcategory";
-import type { UniqueItemArrayItem } from "@/routes/items/-types";
+import type { UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
 
 type TopLevelCategory = "Armor" | "Weapons" | "Other";
 const UNIQUE_CATEGORIES = {
@@ -70,7 +71,7 @@ interface UniqueItemCategoryProps {
     category: "Weapons" | "Armor" | "Other";
     subcategories: BaseCategory[];
     label: string;
-    selectedItem?: string | null;
+    selectedItem?: WithKey<UniqueItem> | WithKey<SetItem> | WithKey<Rune>;
     onClick: (item: UniqueItemArrayItem | null) => void;
 }
 
@@ -86,14 +87,6 @@ export default function UniqueItemCategory({
         () => getFilteredUniqueItems(data, category),
         [data, category]
     );
-
-    const handleItemClick = (item: UniqueItemArrayItem | null) => {
-        if (selectedItem) {
-            onClick(null);
-        } else {
-            onClick(item);
-        }
-    };
 
     if (!displayedCategoryItems.length) {
         return null;
@@ -111,7 +104,7 @@ export default function UniqueItemCategory({
                     subcategory={subcategory as BaseCategory}
                     label={subcategory === "Armor" ? "Body Armor" : subcategory}
                     selectedItem={selectedItem}
-                    onClick={handleItemClick}
+                    onClick={onClick}
                 />
             ))}
         </div>

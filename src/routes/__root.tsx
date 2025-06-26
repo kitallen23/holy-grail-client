@@ -7,7 +7,7 @@ export const Route = createRootRoute({
         <>
             <Header />
 
-            <main className="pt-8 px-2 sm:px-4 mx-auto w-full max-w-4xl">
+            <main className="pt-8 px-2 sm:px-4 mx-auto w-full max-w-4xl h-dvh">
                 <Outlet />
             </main>
 

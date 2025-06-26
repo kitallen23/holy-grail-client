@@ -1,9 +1,10 @@
+import { useMemo } from "react";
+
+import { cn } from "@/lib/utils";
+import type { UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
+import type { BaseCategory, Rune, SetItem, UniqueItem } from "@/types/items";
 import HeadingSeparator from "@/components/HeadingSeparator";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import type { UniqueItemArrayItem } from "@/routes/items/-types";
-import type { BaseCategory } from "@/types/items";
-import { useMemo } from "react";
 
 function getFilteredUniqueItems(
     data: UniqueItemArrayItem[],
@@ -24,7 +25,7 @@ interface UniqueItemSubcategoryProps {
     data: UniqueItemArrayItem[];
     subcategory: BaseCategory;
     label: string;
-    selectedItem?: string | null;
+    selectedItem?: WithKey<UniqueItem> | WithKey<SetItem> | WithKey<Rune>;
     onClick: (item: UniqueItemArrayItem | null) => void;
 }
 
@@ -56,7 +57,7 @@ export default function UniqueItemSubcategory({
                         size="sm"
                         className={cn(
                             "item-trigger justify-start border border-transparent",
-                            item.key === selectedItem ? "border-primary" : ""
+                            item.key === selectedItem?.key ? "border-primary" : ""
                         )}
                         onClick={() => onClick(item)}
                     >

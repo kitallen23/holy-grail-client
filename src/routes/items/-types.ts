@@ -1,5 +1,5 @@
 import type { UniqueItem } from "@/types/items";
 
-export interface UniqueItemArrayItem extends UniqueItem {
-    key: string;
-}
+export type WithKey<T> = T & { key: string };
+
+export type UniqueItemArrayItem = WithKey<UniqueItem>;

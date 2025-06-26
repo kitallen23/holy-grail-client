@@ -10,7 +10,7 @@ function interpolateTemplate(
     const parts = template.split(/({{(\d+)}})/);
 
     return (
-        <div className={color}>
+        <div className={`${color} break-keep wrap-anywhere`}>
             {parts.map((part, index) => {
                 if (/^\d+$/.test(part)) {
                     return null;
@@ -41,7 +41,7 @@ export default function ItemAffix({ affix, color, variableColor }: ItemAffixProp
     const template = affix[0];
     const values = affix.slice(1) || [];
 
-    if (affix[0] === "") {
+    if (template === "") {
         return <div className="min-h-4" />;
     }
 
