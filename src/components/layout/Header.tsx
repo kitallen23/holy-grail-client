@@ -21,7 +21,7 @@ export default function Header() {
                         className="text-primary-foreground font-bold"
                         size="sm"
                     >
-                        <Link to="/">grail</Link>
+                        <Link to="/">Grail</Link>
                     </Button>
                     <Button
                         asChild
@@ -29,7 +29,7 @@ export default function Header() {
                         className="text-primary-foreground font-bold"
                         size="sm"
                     >
-                        <Link to="/items">item index</Link>
+                        <Link to="/items">Item Index</Link>
                     </Button>
                     <Button
                         asChild
@@ -37,7 +37,7 @@ export default function Header() {
                         className="text-primary-foreground font-bold"
                         size="sm"
                     >
-                        <Link to="/runewords">runewords</Link>
+                        <Link to="/runewords">Runewords</Link>
                     </Button>
                 </nav>
             </div>
