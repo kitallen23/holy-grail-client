@@ -31,7 +31,7 @@ interface RunewordCategoryProps {
     data: Runewords | null;
     category: RunewordBaseType;
     label: string;
-    selectedRuneword: string | null;
+    selectedRuneword?: string | null;
     onClick: (runeword: RunewordArrayItem | null) => void;
 }
 
@@ -73,7 +73,7 @@ export default function RunewordCategory({
                                 )}
                                 onClick={() => handleRunewordClick(runeword)}
                             >
-                                <div className="text-nowrap">{runeword.name}</div>
+                                <div className="text-nowrap truncate">{runeword.name}</div>
                                 <div className="pl-0 sm:pl-1 text-foreground/60 truncate">
                                     {runeword.itemTypes.join(", ")} ({runeword.sockets})
                                 </div>

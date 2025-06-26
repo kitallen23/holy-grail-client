@@ -4,15 +4,13 @@ export type BaseCategory =
     | "Belts"
     | "Boots"
     | "Bows"
+    | "Circlets"
     | "Crossbows"
     | "Daggers"
     | "Gloves"
-    | "Helmets"
-    | "Circlets"
-    | "Javelins"
-    | "Amulets"
-    | "Rings"
     | "Hammers"
+    | "Helmets"
+    | "Javelins"
     | "Maces"
     | "Polearms"
     | "Scepters"
@@ -31,8 +29,10 @@ export type BaseCategory =
     | "Necromancer Shrunken Heads"
     | "Paladin Shields"
     | "Sorceress Orbs"
-    | "Charms"
-    | "Jewels";
+    | "Amulets"
+    | "Rings"
+    | "Jewels"
+    | "Charms";
 
 /**
  * All types below this line are identical on client / server

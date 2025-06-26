@@ -5,7 +5,8 @@ import type { Items, Runewords } from "@/types/items";
 export const useItems = () => {
     return useQuery({
         queryKey: ["items"],
-        queryFn: () => fetchItems() as Promise<Items>,
+        queryFn: () => fetchItems() as Promise<{ items: Items }>,
+        select: data => data.items,
     });
 };
 
