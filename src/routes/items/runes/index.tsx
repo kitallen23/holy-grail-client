@@ -72,11 +72,8 @@ function RunesPage() {
 
     if (isFetching || !displayedRunes) {
         return (
-            <div className="pt-4 grid grid-cols-1 gap-4 opacity-20">
+            <div className="grid grid-cols-1 gap-4 opacity-20">
                 <div>
-                    <div className="pb-1 flex justify-center items-center h-9">
-                        <Skeleton className="w-24 h-6" />
-                    </div>
                     <div className="flex items-center">
                         <Skeleton className="flex-1 h-[1px]" />
                         <span className="px-4 h-7 flex items-center">
