@@ -1,6 +1,7 @@
 import UniqueItemDialog from "@/components/ItemTooltip/UniqueItemDialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+
 import { useItems } from "@/hooks/queries";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { TopLevelCategory, WithKey } from "@/routes/items/-types";
@@ -8,6 +9,7 @@ import { getSearchableText } from "@/routes/items/-utils";
 import UniqueItemCategory from "@/routes/items/unique/-UniqueItemCategory";
 import { UNIQUE_CATEGORIES } from "@/routes/items/unique/-utils";
 import type { BaseCategory, UniqueItem } from "@/types/items";
+
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert } from "lucide-react";
 import { useMemo, useState } from "react";

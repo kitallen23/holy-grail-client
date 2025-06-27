@@ -16,7 +16,6 @@ export default function RunewordDialog({ runeword, ...props }: RunewordDialogPro
             {runeword ? (
                 <DialogContent
                     className="bg-black/90 rounded-none border-none p-3 w-[max-content] max-h-[calc(100dvh-2rem)] overflow-y-auto"
-                    onOpenAutoFocus={e => e.preventDefault()}
                     aria-describedby={undefined}
                 >
                     <div className="max-w-3xl font-diablo text-xl flex gap-y-1 flex-col text-center leading-6">
@@ -27,7 +26,7 @@ export default function RunewordDialog({ runeword, ...props }: RunewordDialogPro
                             <ItemAffix
                                 key={i}
                                 affix={implicit}
-                                color="text-white"
+                                color="text-foreground"
                                 variableColor="text-diablo-blue"
                             />
                         )) || null}

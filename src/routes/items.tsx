@@ -6,8 +6,10 @@ import {
     NavigationMenuLink,
     NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+
 import { useDebounce } from "@/hooks/useDebounce";
 import { SEARCH_DEBOUNCE_DELAY } from "@/lib/constants";
+
 import { createFileRoute, Link, Outlet, redirect, useMatchRoute } from "@tanstack/react-router";
 import { XIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";

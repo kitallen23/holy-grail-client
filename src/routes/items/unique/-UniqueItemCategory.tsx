@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import type { BaseCategory, Rune, SetItem, UniqueItem } from "@/types/items";
+import type { BaseCategory, UniqueItem } from "@/types/items";
 import UniqueItemSubcategory from "@/routes/items/unique/-UniqueItemSubcategory";
 import type { TopLevelCategory, UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
 import { UNIQUE_CATEGORIES } from "@/routes/items/unique/-utils";
@@ -33,7 +33,7 @@ interface UniqueItemCategoryProps {
     category: "Weapons" | "Armor" | "Other";
     subcategories: BaseCategory[];
     label: string;
-    selectedItem?: WithKey<UniqueItem> | WithKey<SetItem> | WithKey<Rune> | null;
+    selectedItem?: WithKey<UniqueItem> | null;
     onClick: (item: UniqueItemArrayItem | null) => void;
 }
 
@@ -55,7 +55,7 @@ export default function UniqueItemCategory({
     }
 
     return (
-        <div key={category}>
+        <div key={category} className="grid gap-4">
             <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight pb-1 [&:not(:first-child)]:mt-10 text-primary font-diablo text-center">
                 {label}
             </h2>

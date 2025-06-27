@@ -37,7 +37,7 @@ export type BaseCategory =
 /**
  * All types below this line are identical on client / server
  */
-export type UniqueCategory =
+type UniqueCategory =
     | "Unique Armor"
     | "Exceptional Unique Armor"
     | "Elite Unique Armor"
@@ -119,7 +119,7 @@ export type UniqueCategory =
     | "Unique Charms"
     | "Unique Jewels";
 
-type SetCategory =
+export type SetCategory =
     | "Angelic Raiment"
     | "Arcanna's Tricks"
     | "Arctic Gear"
@@ -190,6 +190,8 @@ type RuneName =
     | "Zod";
 
 export type RunewordBaseType = "Weapons" | "Body Armor" | "Shields" | "Helmets";
+
+export type Tier = "Normal" | "Exceptional" | "Elite";
 
 // Main string, ...variables
 export type ItemProp = [string, ...string[]];

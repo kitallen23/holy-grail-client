@@ -1,10 +1,9 @@
-import { useMemo } from "react";
-
-import { cn } from "@/lib/utils";
-import type { UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
-import type { BaseCategory, Rune, SetItem, UniqueItem } from "@/types/items";
 import HeadingSeparator from "@/components/HeadingSeparator";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import type { UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
+import type { BaseCategory, UniqueItem } from "@/types/items";
+import { useMemo } from "react";
 
 function getFilteredUniqueItems(
     data: UniqueItemArrayItem[],
@@ -25,7 +24,7 @@ interface UniqueItemSubcategoryProps {
     data: UniqueItemArrayItem[];
     subcategory: BaseCategory;
     label: string;
-    selectedItem?: WithKey<UniqueItem> | WithKey<SetItem> | WithKey<Rune> | null;
+    selectedItem?: WithKey<UniqueItem> | null;
     onClick: (item: UniqueItemArrayItem | null) => void;
 }
 

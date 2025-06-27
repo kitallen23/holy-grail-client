@@ -1,0 +1,8 @@
+.linkPrimary {
+    &[data-active="true"],
+    &:hover,
+    &:focus {
+        background-image: url("/assets/noisy-texture-100x100_primary.png");
+        background-repeat: repeat;
+    }
+}
