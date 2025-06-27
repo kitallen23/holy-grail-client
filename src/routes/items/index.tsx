@@ -15,6 +15,7 @@ import UniqueItemDialog from "@/components/ItemTooltip/UniqueItemDialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/items/")({
     component: ItemsPage,
@@ -157,7 +158,51 @@ function ItemsPage() {
     }
 
     if (isFetching || !displayedItems) {
-        return null;
+        return (
+            <div className="pt-4 grid grid-cols-1 gap-4 opacity-20">
+                <div className="max-w-96 m-auto w-full grid grid-cols-[1fr_auto] gap-2">
+                    <Skeleton className="h-9" />
+                    <Skeleton className="h-9 w-9" />
+                </div>
+                <div>
+                    <div className="pb-1 flex justify-center items-center h-9">
+                        <Skeleton className="w-24 h-6" />
+                    </div>
+                    <div className="flex items-center">
+                        <Skeleton className="flex-1 h-[1px]" />
+                        <span className="px-4 h-7 flex items-center">
+                            <Skeleton className="w-14 h-4" />
+                        </span>
+                        <Skeleton className="flex-1 h-[1px]" />
+                    </div>
+                    <div className="grid gap-4">
+                        <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-32 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-24 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-36 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-20 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-44 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-24 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-28 h-4" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (
