@@ -17,8 +17,10 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { RunewordBaseType } from "@/types/items";
+import type { Runeword, RunewordBaseType } from "@/types/items";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { WithKey } from "@/routes/items/-types";
+import RunewordDialog from "@/components/ItemTooltip/RunewordDialog";
 
 export const Route = createFileRoute("/runewords/")({
     component: RunewordsPage,
@@ -93,31 +95,7 @@ function RunewordsPage() {
         Helmets: true,
     });
 
-    const [selectedRuneword, setSelectedRuneword] = useState<string | null>(null);
-
-    useEffect(() => {
-        const handleGlobalClick = (event: MouseEvent) => {
-            const target = event.target as Element;
-            const isRunewordTrigger = target.closest("button.runeword-trigger");
-
-            if (!isRunewordTrigger) {
-                setSelectedRuneword(null);
-            }
-        };
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === "Escape") {
-                setSelectedRuneword(null);
-            }
-        };
-
-        document.addEventListener("click", handleGlobalClick);
-        document.addEventListener("keydown", handleKeyDown);
-
-        return () => {
-            document.removeEventListener("click", handleGlobalClick);
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    }, []);
+    const [selectedRuneword, setSelectedRuneword] = useState<WithKey<Runeword> | null>(null);
 
     if (error) {
         return (
@@ -177,107 +155,109 @@ function RunewordsPage() {
         );
     }
 
+    const disableFilter = !Object.values(itemTypeFilter).some(val => val);
+
     return (
-        <div className="pt-4 grid grid-cols-1 gap-4">
-            <div className="max-w-96 m-auto w-full grid grid-cols-[1fr_auto] gap-2">
-                <div className="relative">
-                    <Input
-                        ref={searchInputRef}
-                        value={searchString}
-                        onChange={event => setSearchString(event.target.value)}
-                        placeholder="Search..."
-                        type="search"
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
-                        enterKeyHint="done"
-                        onKeyDown={handleInputKeyDown}
-                    />
-                    {searchString && (
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-current/60 hover:text-current"
-                            onClick={() => {
-                                setSearchString("");
-                            }}
-                        >
-                            <X />
-                            <span className="sr-only">Clear</span>
-                        </Button>
-                    )}
-                </div>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button
-                            variant={
-                                Object.values(itemTypeFilter).some(val => !val)
-                                    ? "default"
-                                    : "outline"
-                            }
-                            size="icon"
-                        >
-                            <Filter />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-48">
-                        {Object.entries(itemTypeFilter).map(([key, checked]) => (
-                            <DropdownMenuCheckboxItem
-                                key={key}
-                                checked={checked === true}
-                                onCheckedChange={() =>
-                                    setItemTypeFilter(prev => ({
-                                        ...prev,
-                                        [key]: !checked,
-                                    }))
-                                }
-                                onSelect={event => event.preventDefault()}
+        <>
+            <div className="pt-4 grid grid-cols-1 gap-4">
+                <div className="max-w-96 m-auto w-full grid grid-cols-[1fr_auto] gap-2">
+                    <div className="relative">
+                        <Input
+                            ref={searchInputRef}
+                            value={searchString}
+                            onChange={event => setSearchString(event.target.value)}
+                            placeholder="Search..."
+                            type="search"
+                            autoComplete="off"
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            spellCheck="false"
+                            enterKeyHint="done"
+                            onKeyDown={handleInputKeyDown}
+                        />
+                        {searchString && (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-current/60 hover:text-current"
+                                onClick={() => {
+                                    setSearchString("");
+                                }}
                             >
-                                {key}
-                            </DropdownMenuCheckboxItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                                <X />
+                                <span className="sr-only">Clear</span>
+                            </Button>
+                        )}
+                    </div>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant={disableFilter ? "outline" : "default"} size="icon">
+                                <Filter />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-48">
+                            {Object.entries(itemTypeFilter).map(([key, checked]) => (
+                                <DropdownMenuCheckboxItem
+                                    key={key}
+                                    checked={checked === true}
+                                    onCheckedChange={() =>
+                                        setItemTypeFilter(prev => ({
+                                            ...prev,
+                                            [key]: !checked,
+                                        }))
+                                    }
+                                    onSelect={event => event.preventDefault()}
+                                >
+                                    {key}
+                                </DropdownMenuCheckboxItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+                <div className="grid gap-4">
+                    {disableFilter || itemTypeFilter["Weapons"] ? (
+                        <RunewordCategory
+                            data={displayedRunewords}
+                            category="Weapons"
+                            label="Weapons"
+                            selectedRuneword={selectedRuneword}
+                            onClick={runeword => setSelectedRuneword(runeword || null)}
+                        />
+                    ) : null}
+                    {disableFilter || itemTypeFilter["Body Armor"] ? (
+                        <RunewordCategory
+                            data={displayedRunewords}
+                            category="Body Armor"
+                            label="Body Armor"
+                            selectedRuneword={selectedRuneword}
+                            onClick={runeword => setSelectedRuneword(runeword || null)}
+                        />
+                    ) : null}
+                    {disableFilter || itemTypeFilter["Shields"] ? (
+                        <RunewordCategory
+                            data={displayedRunewords}
+                            category="Shields"
+                            label="Shields"
+                            selectedRuneword={selectedRuneword}
+                            onClick={runeword => setSelectedRuneword(runeword || null)}
+                        />
+                    ) : null}
+                    {disableFilter || itemTypeFilter["Helmets"] ? (
+                        <RunewordCategory
+                            data={displayedRunewords}
+                            category="Helmets"
+                            label="Helmets"
+                            selectedRuneword={selectedRuneword}
+                            onClick={runeword => setSelectedRuneword(runeword || null)}
+                        />
+                    ) : null}
+                </div>
             </div>
-            <div className="grid gap-4">
-                {itemTypeFilter["Weapons"] ? (
-                    <RunewordCategory
-                        data={displayedRunewords}
-                        category="Weapons"
-                        label="Weapons"
-                        selectedRuneword={selectedRuneword}
-                        onClick={runeword => setSelectedRuneword(runeword?.key || null)}
-                    />
-                ) : null}
-                {itemTypeFilter["Body Armor"] ? (
-                    <RunewordCategory
-                        data={displayedRunewords}
-                        category="Body Armor"
-                        label="Body Armor"
-                        selectedRuneword={selectedRuneword}
-                        onClick={runeword => setSelectedRuneword(runeword?.key || null)}
-                    />
-                ) : null}
-                {itemTypeFilter["Shields"] ? (
-                    <RunewordCategory
-                        data={displayedRunewords}
-                        category="Shields"
-                        label="Shields"
-                        selectedRuneword={selectedRuneword}
-                        onClick={runeword => setSelectedRuneword(runeword?.key || null)}
-                    />
-                ) : null}
-                {itemTypeFilter["Helmets"] ? (
-                    <RunewordCategory
-                        data={displayedRunewords}
-                        category="Helmets"
-                        label="Helmets"
-                        selectedRuneword={selectedRuneword}
-                        onClick={runeword => setSelectedRuneword(runeword?.key || null)}
-                    />
-                ) : null}
-            </div>
-        </div>
+            <RunewordDialog
+                open={!!selectedRuneword}
+                onOpenChange={open => !open && setSelectedRuneword(null)}
+                runeword={selectedRuneword as Runeword}
+            />
+        </>
     );
 }
