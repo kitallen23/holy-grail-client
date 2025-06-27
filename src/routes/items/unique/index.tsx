@@ -4,11 +4,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { useItems } from "@/hooks/queries";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
-import type { TopLevelCategory, WithKey } from "@/routes/items/-types";
+import type { BaseCategory, TopLevelCategory, WithKey } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
 import UniqueItemCategory from "@/routes/items/unique/-UniqueItemCategory";
 import { UNIQUE_CATEGORIES } from "@/routes/items/unique/-utils";
-import type { BaseCategory, UniqueItem } from "@/types/items";
+import { useDebouncedSearch } from "@/stores/useSearchStore";
+import type { UniqueItem } from "@/types/items";
 
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert } from "lucide-react";
@@ -20,8 +21,7 @@ export const Route = createFileRoute("/items/unique/")({
 
 function UniqueItemsPage() {
     const { data, isFetching, error } = useItems("unique");
-    // TODO: Replace this
-    const debouncedSearchString = "";
+    const { debouncedSearchString } = useDebouncedSearch();
 
     const displayedItems: Record<string, UniqueItem> | undefined = useMemo(() => {
         if (!data || !debouncedSearchString.trim()) {
@@ -35,24 +35,12 @@ function UniqueItemsPage() {
 
         const filtered: Record<string, UniqueItem> = {};
 
-        Object.entries(data.uniqueItems).forEach(([key, item]) => {
+        Object.entries(data).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
             if (matchesAllTerms(searchableText, searchTerms)) {
                 filtered[key] = item;
             }
         });
-        // Object.entries(data.setItems).forEach(([key, item]) => {
-        //     const searchableText = getSearchableText(item);
-        //     if (matchesAllTerms(searchableText, searchTerms)) {
-        //         filtered.setItems[key] = item;
-        //     }
-        // });
-        // Object.entries(data.runes).forEach(([key, item]) => {
-        //     const searchableText = getSearchableText(item);
-        //     if (matchesAllTerms(searchableText, searchTerms)) {
-        //         filtered.runes[key] = item;
-        //     }
-        // });
 
         return filtered;
     }, [data, debouncedSearchString]);

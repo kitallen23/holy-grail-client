@@ -1,8 +1,13 @@
 import { useMemo } from "react";
 
-import type { BaseCategory, UniqueItem } from "@/types/items";
+import type { UniqueItem } from "@/types/items";
 import UniqueItemSubcategory from "@/routes/items/unique/-UniqueItemSubcategory";
-import type { TopLevelCategory, UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
+import type {
+    BaseCategory,
+    TopLevelCategory,
+    UniqueItemArrayItem,
+    WithKey,
+} from "@/routes/items/-types";
 import { UNIQUE_CATEGORIES } from "@/routes/items/unique/-utils";
 
 function getFilteredUniqueItems(

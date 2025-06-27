@@ -6,8 +6,6 @@ import { useRunewords } from "@/hooks/queries";
 import RunewordCategory from "@/routes/runewords/-RunewordCategory";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
-import { useDebounce } from "@/hooks/useDebounce";
-import { SEARCH_DEBOUNCE_DELAY } from "@/lib/constants";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import { getSearchableText } from "@/routes/runewords/-utils";
 import { Button } from "@/components/ui/button";
@@ -21,6 +19,7 @@ import type { Runeword, RunewordBaseType } from "@/types/items";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { WithKey } from "@/routes/items/-types";
 import RunewordDialog from "@/components/ItemTooltip/RunewordDialog";
+import { useDebouncedSearch } from "@/stores/useSearchStore";
 
 export const Route = createFileRoute("/runewords/")({
     component: RunewordsPage,
@@ -30,8 +29,8 @@ function RunewordsPage() {
     const { data, isFetching, error } = useRunewords();
 
     const searchInputRef = useRef<HTMLInputElement>(null);
-    const [searchString, setSearchString] = useState("");
-    const debouncedSearchString = useDebounce(searchString, SEARCH_DEBOUNCE_DELAY);
+    const { searchString, debouncedSearchString, setSearchString, clearSearch } =
+        useDebouncedSearch();
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -180,9 +179,7 @@ function RunewordsPage() {
                                 variant="ghost"
                                 size="icon"
                                 className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-current/60 hover:text-current"
-                                onClick={() => {
-                                    setSearchString("");
-                                }}
+                                onClick={clearSearch}
                             >
                                 <X />
                                 <span className="sr-only">Clear</span>

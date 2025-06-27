@@ -9,6 +9,7 @@ import { CircleAlert } from "lucide-react";
 import { useMemo, useState } from "react";
 import SetItemDialog from "@/components/ItemTooltip/SetItemDialog";
 import SetTier from "@/routes/items/sets/-SetTier";
+import { useDebouncedSearch } from "@/stores/useSearchStore";
 
 export const Route = createFileRoute("/items/sets/")({
     component: SetItemsPage,
@@ -18,8 +19,7 @@ const TIERS: Tier[] = ["Normal", "Exceptional", "Elite"];
 
 function SetItemsPage() {
     const { data, isFetching, error } = useItems("sets");
-    // TODO: Replace this
-    const debouncedSearchString = "";
+    const { debouncedSearchString } = useDebouncedSearch();
 
     const displayedItems: Record<string, SetItem> | undefined = useMemo(() => {
         if (!data || !debouncedSearchString.trim()) {
@@ -33,7 +33,7 @@ function SetItemsPage() {
 
         const filtered: Record<string, SetItem> = {};
 
-        Object.entries(data.setItems).forEach(([key, item]) => {
+        Object.entries(data).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
             if (matchesAllTerms(searchableText, searchTerms)) {
                 filtered[key] = item;
@@ -76,18 +76,6 @@ function SetItemsPage() {
                         onClick={item => setSelectedItem(item || null)}
                     />
                 ))}
-                {/* <div className="grid md:grid-cols-2 gap-4">
-                    {SETS.map(({ name }) => (
-                        <SetCategory
-                            key={name}
-                            data={displayedItems}
-                            set={name}
-                            label={name}
-                            selectedItem={selectedItem}
-                            onClick={item => setSelectedItem(item ? item : null)}
-                        />
-                    ))}
-                </div> */}
             </div>
             <SetItemDialog
                 open={!!selectedItem}

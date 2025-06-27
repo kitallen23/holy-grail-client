@@ -1,8 +1,8 @@
 import HeadingSeparator from "@/components/HeadingSeparator";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
-import type { BaseCategory, UniqueItem } from "@/types/items";
+import type { BaseCategory, UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
+import type { UniqueItem } from "@/types/items";
 import { useMemo } from "react";
 
 function getFilteredUniqueItems(

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from "./routes/__root"
 import { Route as ItemsRouteImport } from "./routes/items"
 import { Route as IndexRouteImport } from "./routes/index"
 import { Route as RunewordsIndexRouteImport } from "./routes/runewords/index"
+import { Route as ItemsIndexRouteImport } from "./routes/items/index"
 import { Route as ItemsUniqueIndexRouteImport } from "./routes/items/unique/index"
 import { Route as ItemsSetsIndexRouteImport } from "./routes/items/sets/index"
 import { Route as ItemsRunesIndexRouteImport } from "./routes/items/runes/index"
@@ -30,6 +31,11 @@ const RunewordsIndexRoute = RunewordsIndexRouteImport.update({
   id: "/runewords/",
   path: "/runewords/",
   getParentRoute: () => rootRouteImport,
+} as any)
+const ItemsIndexRoute = ItemsIndexRouteImport.update({
+  id: "/",
+  path: "/",
+  getParentRoute: () => ItemsRoute,
 } as any)
 const ItemsUniqueIndexRoute = ItemsUniqueIndexRouteImport.update({
   id: "/unique/",
@@ -50,6 +56,7 @@ const ItemsRunesIndexRoute = ItemsRunesIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute
   "/items": typeof ItemsRouteWithChildren
+  "/items/": typeof ItemsIndexRoute
   "/runewords": typeof RunewordsIndexRoute
   "/items/runes": typeof ItemsRunesIndexRoute
   "/items/sets": typeof ItemsSetsIndexRoute
@@ -57,7 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute
-  "/items": typeof ItemsRouteWithChildren
+  "/items": typeof ItemsIndexRoute
   "/runewords": typeof RunewordsIndexRoute
   "/items/runes": typeof ItemsRunesIndexRoute
   "/items/sets": typeof ItemsSetsIndexRoute
@@ -67,6 +74,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   "/": typeof IndexRoute
   "/items": typeof ItemsRouteWithChildren
+  "/items/": typeof ItemsIndexRoute
   "/runewords/": typeof RunewordsIndexRoute
   "/items/runes/": typeof ItemsRunesIndexRoute
   "/items/sets/": typeof ItemsSetsIndexRoute
@@ -77,6 +85,7 @@ export interface FileRouteTypes {
   fullPaths:
     | "/"
     | "/items"
+    | "/items/"
     | "/runewords"
     | "/items/runes"
     | "/items/sets"
@@ -93,6 +102,7 @@ export interface FileRouteTypes {
     | "__root__"
     | "/"
     | "/items"
+    | "/items/"
     | "/runewords/"
     | "/items/runes/"
     | "/items/sets/"
@@ -128,6 +138,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof RunewordsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    "/items/": {
+      id: "/items/"
+      path: "/"
+      fullPath: "/items/"
+      preLoaderRoute: typeof ItemsIndexRouteImport
+      parentRoute: typeof ItemsRoute
+    }
     "/items/unique/": {
       id: "/items/unique/"
       path: "/unique"
@@ -153,12 +170,14 @@ declare module "@tanstack/react-router" {
 }
 
 interface ItemsRouteChildren {
+  ItemsIndexRoute: typeof ItemsIndexRoute
   ItemsRunesIndexRoute: typeof ItemsRunesIndexRoute
   ItemsSetsIndexRoute: typeof ItemsSetsIndexRoute
   ItemsUniqueIndexRoute: typeof ItemsUniqueIndexRoute
 }
 
 const ItemsRouteChildren: ItemsRouteChildren = {
+  ItemsIndexRoute: ItemsIndexRoute,
   ItemsRunesIndexRoute: ItemsRunesIndexRoute,
   ItemsSetsIndexRoute: ItemsSetsIndexRoute,
   ItemsUniqueIndexRoute: ItemsUniqueIndexRoute,

@@ -7,30 +7,20 @@ import {
     NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 
-import { useDebounce } from "@/hooks/useDebounce";
-import { SEARCH_DEBOUNCE_DELAY } from "@/lib/constants";
+import { useDebouncedSearch } from "@/stores/useSearchStore";
 
-import { createFileRoute, Link, Outlet, redirect, useMatchRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useMatchRoute } from "@tanstack/react-router";
 import { XIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export const Route = createFileRoute("/items")({
-    beforeLoad: ({ location }) => {
-        // Redirect /items to /items/unique
-        if (location.pathname === "/items") {
-            throw redirect({ to: "/items/unique" });
-        }
-    },
     component: ItemsPage,
 });
 
 function ItemsPage() {
     const matchRoute = useMatchRoute();
     const searchInputRef = useRef<HTMLInputElement>(null);
-    const [searchString, setSearchString] = useState("");
-    const debouncedSearchString = useDebounce(searchString, SEARCH_DEBOUNCE_DELAY);
-    // TODO: Fix this / use this variable somewhere
-    console.info(`debouncedSearchString: `, debouncedSearchString);
+    const { searchString, setSearchString, clearSearch } = useDebouncedSearch();
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -87,9 +77,7 @@ function ItemsPage() {
                                 variant="ghost"
                                 size="icon"
                                 className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-current/60 hover:text-current"
-                                onClick={() => {
-                                    setSearchString("");
-                                }}
+                                onClick={clearSearch}
                             >
                                 <XIcon />
                                 <span className="sr-only">Clear</span>
