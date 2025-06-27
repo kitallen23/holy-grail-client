@@ -8,6 +8,9 @@ import { defineConfig } from "eslint/config";
 
 export default defineConfig([
     {
+        ignores: ["src/routeTree.gen.ts"],
+    },
+    {
         files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
         plugins: { js },
         extends: ["js/recommended"],

@@ -1,47 +1,9 @@
 import { useMemo } from "react";
 
 import type { BaseCategory, Rune, SetItem, UniqueItem } from "@/types/items";
-import UniqueItemSubcategory from "@/routes/items/-UniqueItemSubcategory";
-import type { UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
-
-type TopLevelCategory = "Armor" | "Weapons" | "Other";
-const UNIQUE_CATEGORIES = {
-    Weapons: [
-        "Axes",
-        "Bows",
-        "Crossbows",
-        "Daggers",
-        "Javelins",
-        "Hammers",
-        "Maces",
-        "Polearms",
-        "Scepters",
-        "Spears",
-        "Staves",
-        "Swords",
-        "Throwing Weapons",
-        "Wands",
-        "Amazon Bows",
-        "Amazon Javelins",
-        "Amazon Spears",
-        "Assassin Katars",
-        "Sorceress Orbs",
-    ],
-    Armor: [
-        "Belts",
-        "Armor",
-        "Boots",
-        "Circlets",
-        "Gloves",
-        "Helmets",
-        "Shields",
-        "Barbarian Helmets",
-        "Druid Pelts",
-        "Necromancer Shrunken Heads",
-        "Paladin Shields",
-    ],
-    Other: ["Amulets", "Rings", "Jewels", "Charms"],
-};
+import UniqueItemSubcategory from "@/routes/items/unique/-UniqueItemSubcategory";
+import type { TopLevelCategory, UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
+import { UNIQUE_CATEGORIES } from "@/routes/items/unique/-utils";
 
 function getFilteredUniqueItems(
     data: Record<string, UniqueItem> | null,
@@ -71,7 +33,7 @@ interface UniqueItemCategoryProps {
     category: "Weapons" | "Armor" | "Other";
     subcategories: BaseCategory[];
     label: string;
-    selectedItem?: WithKey<UniqueItem> | WithKey<SetItem> | WithKey<Rune>;
+    selectedItem?: WithKey<UniqueItem> | WithKey<SetItem> | WithKey<Rune> | null;
     onClick: (item: UniqueItemArrayItem | null) => void;
 }
 

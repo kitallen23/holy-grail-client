@@ -1,11 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchItems, fetchRunewords, fetchUserItems, type GrailProgressItem } from "@/lib/api";
-import type { Items, Runewords } from "@/types/items";
+import {
+    fetchItems,
+    fetchRunewords,
+    fetchUserItems,
+    type GrailProgressItem,
+    type QueryItem,
+} from "@/lib/api";
+import type { Items, Rune, Runewords, SetItem, UniqueItem } from "@/types/items";
 
-export const useItems = () => {
+export const useItems = (type?: QueryItem) => {
     return useQuery({
-        queryKey: ["items"],
-        queryFn: () => fetchItems() as Promise<{ items: Items }>,
+        queryKey: type ? ["items", type] : ["items"],
+        queryFn: () =>
+            fetchItems(type) as Promise<{
+                items: Items | Record<string, UniqueItem | SetItem | Rune>;
+            }>,
         select: data => data.items,
     });
 };

@@ -1,0 +1,141 @@
+import UniqueItemDialog from "@/components/ItemTooltip/UniqueItemDialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useItems } from "@/hooks/queries";
+import { getSearchTerms, matchesAllTerms } from "@/lib/search";
+import type { TopLevelCategory, WithKey } from "@/routes/items/-types";
+import { getSearchableText } from "@/routes/items/-utils";
+import UniqueItemCategory from "@/routes/items/unique/-UniqueItemCategory";
+import { UNIQUE_CATEGORIES } from "@/routes/items/unique/-utils";
+import type { BaseCategory, UniqueItem } from "@/types/items";
+import { createFileRoute } from "@tanstack/react-router";
+import { CircleAlert } from "lucide-react";
+import { useMemo, useState } from "react";
+
+export const Route = createFileRoute("/items/unique/")({
+    component: UniqueItemsPage,
+});
+
+function UniqueItemsPage() {
+    const { data, isFetching, error } = useItems("unique");
+    // TODO: Replace this
+    const debouncedSearchString = "";
+
+    const displayedItems: Record<string, UniqueItem> | undefined = useMemo(() => {
+        if (!data || !debouncedSearchString.trim()) {
+            return data as Record<string, UniqueItem>;
+        }
+
+        const searchTerms = getSearchTerms(debouncedSearchString);
+        if (searchTerms.length === 0) {
+            return data as Record<string, UniqueItem>;
+        }
+
+        const filtered: Record<string, UniqueItem> = {};
+
+        Object.entries(data.uniqueItems).forEach(([key, item]) => {
+            const searchableText = getSearchableText(item);
+            if (matchesAllTerms(searchableText, searchTerms)) {
+                filtered[key] = item;
+            }
+        });
+        // Object.entries(data.setItems).forEach(([key, item]) => {
+        //     const searchableText = getSearchableText(item);
+        //     if (matchesAllTerms(searchableText, searchTerms)) {
+        //         filtered.setItems[key] = item;
+        //     }
+        // });
+        // Object.entries(data.runes).forEach(([key, item]) => {
+        //     const searchableText = getSearchableText(item);
+        //     if (matchesAllTerms(searchableText, searchTerms)) {
+        //         filtered.runes[key] = item;
+        //     }
+        // });
+
+        return filtered;
+    }, [data, debouncedSearchString]);
+
+    const [selectedItem, setSelectedItem] = useState<WithKey<UniqueItem> | null>(null);
+
+    if (error) {
+        return (
+            <div className="max-w-2xl mx-auto pt-4">
+                <Alert variant="destructive">
+                    <CircleAlert />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        Something went wrong when loading items. Please refresh the page or try
+                        again later.
+                    </AlertDescription>
+                </Alert>
+            </div>
+        );
+    }
+
+    if (isFetching || !displayedItems) {
+        return (
+            <div className="pt-4 grid grid-cols-1 gap-4 opacity-20">
+                <div>
+                    <div className="pb-1 flex justify-center items-center h-9">
+                        <Skeleton className="w-24 h-6" />
+                    </div>
+                    <div className="flex items-center">
+                        <Skeleton className="flex-1 h-[1px]" />
+                        <span className="px-4 h-7 flex items-center">
+                            <Skeleton className="w-14 h-4" />
+                        </span>
+                        <Skeleton className="flex-1 h-[1px]" />
+                    </div>
+                    <div className="grid gap-4">
+                        <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-32 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-24 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-36 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-20 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-44 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-24 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-28 h-4" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <>
+            <div className="grid gap-4">
+                {Object.entries(UNIQUE_CATEGORIES).map(([category, subcategories]) => (
+                    <UniqueItemCategory
+                        key={category}
+                        data={displayedItems}
+                        category={category as TopLevelCategory}
+                        label={category}
+                        subcategories={subcategories as BaseCategory[]}
+                        selectedItem={selectedItem}
+                        onClick={item => setSelectedItem(item ? item : null)}
+                    />
+                ))}
+            </div>
+            <UniqueItemDialog
+                open={!!selectedItem}
+                onOpenChange={open => !open && setSelectedItem(null)}
+                item={selectedItem as UniqueItem}
+            />
+        </>
+    );
+}

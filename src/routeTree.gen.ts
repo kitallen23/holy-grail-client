@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from "./routes/__root"
+import { Route as ItemsRouteImport } from "./routes/items"
 import { Route as IndexRouteImport } from "./routes/index"
 import { Route as RunewordsIndexRouteImport } from "./routes/runewords/index"
-import { Route as ItemsIndexRouteImport } from "./routes/items/index"
+import { Route as ItemsUniqueIndexRouteImport } from "./routes/items/unique/index"
 
+const ItemsRoute = ItemsRouteImport.update({
+  id: "/items",
+  path: "/items",
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: "/",
   path: "/",
@@ -23,44 +29,54 @@ const RunewordsIndexRoute = RunewordsIndexRouteImport.update({
   path: "/runewords/",
   getParentRoute: () => rootRouteImport,
 } as any)
-const ItemsIndexRoute = ItemsIndexRouteImport.update({
-  id: "/items/",
-  path: "/items/",
-  getParentRoute: () => rootRouteImport,
+const ItemsUniqueIndexRoute = ItemsUniqueIndexRouteImport.update({
+  id: "/unique/",
+  path: "/unique/",
+  getParentRoute: () => ItemsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute
-  "/items": typeof ItemsIndexRoute
+  "/items": typeof ItemsRouteWithChildren
   "/runewords": typeof RunewordsIndexRoute
+  "/items/unique": typeof ItemsUniqueIndexRoute
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute
-  "/items": typeof ItemsIndexRoute
+  "/items": typeof ItemsRouteWithChildren
   "/runewords": typeof RunewordsIndexRoute
+  "/items/unique": typeof ItemsUniqueIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   "/": typeof IndexRoute
-  "/items/": typeof ItemsIndexRoute
+  "/items": typeof ItemsRouteWithChildren
   "/runewords/": typeof RunewordsIndexRoute
+  "/items/unique/": typeof ItemsUniqueIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/items" | "/runewords"
+  fullPaths: "/" | "/items" | "/runewords" | "/items/unique"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/items" | "/runewords"
-  id: "__root__" | "/" | "/items/" | "/runewords/"
+  to: "/" | "/items" | "/runewords" | "/items/unique"
+  id: "__root__" | "/" | "/items" | "/runewords/" | "/items/unique/"
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ItemsIndexRoute: typeof ItemsIndexRoute
+  ItemsRoute: typeof ItemsRouteWithChildren
   RunewordsIndexRoute: typeof RunewordsIndexRoute
 }
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
+    "/items": {
+      id: "/items"
+      path: "/items"
+      fullPath: "/items"
+      preLoaderRoute: typeof ItemsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     "/": {
       id: "/"
       path: "/"
@@ -75,19 +91,29 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof RunewordsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    "/items/": {
-      id: "/items/"
-      path: "/items"
-      fullPath: "/items"
-      preLoaderRoute: typeof ItemsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+    "/items/unique/": {
+      id: "/items/unique/"
+      path: "/unique"
+      fullPath: "/items/unique"
+      preLoaderRoute: typeof ItemsUniqueIndexRouteImport
+      parentRoute: typeof ItemsRoute
     }
   }
 }
 
+interface ItemsRouteChildren {
+  ItemsUniqueIndexRoute: typeof ItemsUniqueIndexRoute
+}
+
+const ItemsRouteChildren: ItemsRouteChildren = {
+  ItemsUniqueIndexRoute: ItemsUniqueIndexRoute,
+}
+
+const ItemsRouteWithChildren = ItemsRoute._addFileChildren(ItemsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ItemsIndexRoute: ItemsIndexRoute,
+  ItemsRoute: ItemsRouteWithChildren,
   RunewordsIndexRoute: RunewordsIndexRoute,
 }
 export const routeTree = rootRouteImport

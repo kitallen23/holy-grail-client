@@ -25,7 +25,7 @@ interface UniqueItemSubcategoryProps {
     data: UniqueItemArrayItem[];
     subcategory: BaseCategory;
     label: string;
-    selectedItem?: WithKey<UniqueItem> | WithKey<SetItem> | WithKey<Rune>;
+    selectedItem?: WithKey<UniqueItem> | WithKey<SetItem> | WithKey<Rune> | null;
     onClick: (item: UniqueItemArrayItem | null) => void;
 }
 
