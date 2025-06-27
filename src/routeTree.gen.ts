@@ -13,6 +13,8 @@ import { Route as ItemsRouteImport } from "./routes/items"
 import { Route as IndexRouteImport } from "./routes/index"
 import { Route as RunewordsIndexRouteImport } from "./routes/runewords/index"
 import { Route as ItemsUniqueIndexRouteImport } from "./routes/items/unique/index"
+import { Route as ItemsSetsIndexRouteImport } from "./routes/items/sets/index"
+import { Route as ItemsRunesIndexRouteImport } from "./routes/items/runes/index"
 
 const ItemsRoute = ItemsRouteImport.update({
   id: "/items",
@@ -34,17 +36,31 @@ const ItemsUniqueIndexRoute = ItemsUniqueIndexRouteImport.update({
   path: "/unique/",
   getParentRoute: () => ItemsRoute,
 } as any)
+const ItemsSetsIndexRoute = ItemsSetsIndexRouteImport.update({
+  id: "/sets/",
+  path: "/sets/",
+  getParentRoute: () => ItemsRoute,
+} as any)
+const ItemsRunesIndexRoute = ItemsRunesIndexRouteImport.update({
+  id: "/runes/",
+  path: "/runes/",
+  getParentRoute: () => ItemsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute
   "/items": typeof ItemsRouteWithChildren
   "/runewords": typeof RunewordsIndexRoute
+  "/items/runes": typeof ItemsRunesIndexRoute
+  "/items/sets": typeof ItemsSetsIndexRoute
   "/items/unique": typeof ItemsUniqueIndexRoute
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute
   "/items": typeof ItemsRouteWithChildren
   "/runewords": typeof RunewordsIndexRoute
+  "/items/runes": typeof ItemsRunesIndexRoute
+  "/items/sets": typeof ItemsSetsIndexRoute
   "/items/unique": typeof ItemsUniqueIndexRoute
 }
 export interface FileRoutesById {
@@ -52,14 +68,35 @@ export interface FileRoutesById {
   "/": typeof IndexRoute
   "/items": typeof ItemsRouteWithChildren
   "/runewords/": typeof RunewordsIndexRoute
+  "/items/runes/": typeof ItemsRunesIndexRoute
+  "/items/sets/": typeof ItemsSetsIndexRoute
   "/items/unique/": typeof ItemsUniqueIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/items" | "/runewords" | "/items/unique"
+  fullPaths:
+    | "/"
+    | "/items"
+    | "/runewords"
+    | "/items/runes"
+    | "/items/sets"
+    | "/items/unique"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/items" | "/runewords" | "/items/unique"
-  id: "__root__" | "/" | "/items" | "/runewords/" | "/items/unique/"
+  to:
+    | "/"
+    | "/items"
+    | "/runewords"
+    | "/items/runes"
+    | "/items/sets"
+    | "/items/unique"
+  id:
+    | "__root__"
+    | "/"
+    | "/items"
+    | "/runewords/"
+    | "/items/runes/"
+    | "/items/sets/"
+    | "/items/unique/"
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -98,14 +135,32 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof ItemsUniqueIndexRouteImport
       parentRoute: typeof ItemsRoute
     }
+    "/items/sets/": {
+      id: "/items/sets/"
+      path: "/sets"
+      fullPath: "/items/sets"
+      preLoaderRoute: typeof ItemsSetsIndexRouteImport
+      parentRoute: typeof ItemsRoute
+    }
+    "/items/runes/": {
+      id: "/items/runes/"
+      path: "/runes"
+      fullPath: "/items/runes"
+      preLoaderRoute: typeof ItemsRunesIndexRouteImport
+      parentRoute: typeof ItemsRoute
+    }
   }
 }
 
 interface ItemsRouteChildren {
+  ItemsRunesIndexRoute: typeof ItemsRunesIndexRoute
+  ItemsSetsIndexRoute: typeof ItemsSetsIndexRoute
   ItemsUniqueIndexRoute: typeof ItemsUniqueIndexRoute
 }
 
 const ItemsRouteChildren: ItemsRouteChildren = {
+  ItemsRunesIndexRoute: ItemsRunesIndexRoute,
+  ItemsSetsIndexRoute: ItemsSetsIndexRoute,
   ItemsUniqueIndexRoute: ItemsUniqueIndexRoute,
 }
 

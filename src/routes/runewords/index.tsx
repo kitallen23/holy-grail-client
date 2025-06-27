@@ -89,10 +89,10 @@ function RunewordsPage() {
     }, [data, debouncedSearchString]);
 
     const [itemTypeFilter, setItemTypeFilter] = useState<Record<RunewordBaseType, boolean>>({
-        Weapons: true,
-        "Body Armor": true,
-        Shields: true,
-        Helmets: true,
+        Weapons: false,
+        "Body Armor": false,
+        Shields: false,
+        Helmets: false,
     });
 
     const [selectedRuneword, setSelectedRuneword] = useState<WithKey<Runeword> | null>(null);

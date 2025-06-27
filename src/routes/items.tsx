@@ -1,8 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+    NavigationMenu,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+} from "@/components/ui/navigation-menu";
 import { useDebounce } from "@/hooks/useDebounce";
 import { SEARCH_DEBOUNCE_DELAY } from "@/lib/constants";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, redirect, useMatchRoute } from "@tanstack/react-router";
 import { XIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -17,6 +23,7 @@ export const Route = createFileRoute("/items")({
 });
 
 function ItemsPage() {
+    const matchRoute = useMatchRoute();
     const searchInputRef = useRef<HTMLInputElement>(null);
     const [searchString, setSearchString] = useState("");
     const debouncedSearchString = useDebounce(searchString, SEARCH_DEBOUNCE_DELAY);
@@ -87,6 +94,42 @@ function ItemsPage() {
                             </Button>
                         )}
                     </div>
+                </div>
+                <div className="flex justify-center">
+                    <NavigationMenu orientation="horizontal">
+                        <NavigationMenuList className="bg-popover p-1 rounded-md border">
+                            <NavigationMenuItem>
+                                <NavigationMenuLink asChild className="py-1 px-1.5">
+                                    <Link
+                                        to="/items/unique"
+                                        data-active={!!matchRoute({ to: "/items/unique" })}
+                                    >
+                                        Unique Items
+                                    </Link>
+                                </NavigationMenuLink>
+                            </NavigationMenuItem>
+                            <NavigationMenuItem>
+                                <NavigationMenuLink asChild className="py-1 px-1.5">
+                                    <Link
+                                        to="/items/sets"
+                                        data-active={!!matchRoute({ to: "/items/sets" })}
+                                    >
+                                        Set Items
+                                    </Link>
+                                </NavigationMenuLink>
+                            </NavigationMenuItem>
+                            <NavigationMenuItem>
+                                <NavigationMenuLink asChild className="py-1 px-1.5">
+                                    <Link
+                                        to="/items/runes"
+                                        data-active={!!matchRoute({ to: "/items/runes" })}
+                                    >
+                                        Runes
+                                    </Link>
+                                </NavigationMenuLink>
+                            </NavigationMenuItem>
+                        </NavigationMenuList>
+                    </NavigationMenu>
                 </div>
                 <Outlet />
             </div>
