@@ -10,6 +10,7 @@ import { useMemo, useState } from "react";
 import SetItemDialog from "@/components/ItemTooltip/SetItemDialog";
 import SetTier from "@/routes/items/sets/-SetTier";
 import { useDebouncedSearch } from "@/stores/useSearchStore";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/items/sets/")({
     component: SetItemsPage,
@@ -59,9 +60,49 @@ function SetItemsPage() {
             </div>
         );
     }
+
     if (isFetching || !displayedItems) {
-        // TODO: Replace this with a skeleton
-        return null;
+        return (
+            <div className="pt-4 grid grid-cols-1 gap-4 opacity-20">
+                <div>
+                    <div className="pb-1 flex justify-center items-center h-9">
+                        <Skeleton className="w-24 h-6" />
+                    </div>
+                    <div className="flex items-center">
+                        <Skeleton className="flex-1 h-[1px]" />
+                        <span className="px-4 h-7 flex items-center">
+                            <Skeleton className="w-14 h-4" />
+                        </span>
+                        <Skeleton className="flex-1 h-[1px]" />
+                    </div>
+                    <div className="grid gap-4">
+                        <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-32 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-24 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-36 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-20 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-44 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-24 h-4" />
+                            </div>
+                            <div className="h-8 flex items-center px-3">
+                                <Skeleton className="w-28 h-4" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (

@@ -41,6 +41,7 @@
     --ring: oklch(0.556 0 0);
     --diablo-blue: oklch(0.66 0.17 280.5);
     --diablo-green: oklch(0.84 0.28 142.5);
+    --diablo-orange: oklch(0.799 0.17 72.5);
     --chart-1: oklch(0.488 0.243 264.376);
     --chart-2: oklch(0.696 0.17 162.48);
     --chart-3: oklch(0.769 0.188 70.08);
@@ -127,6 +128,7 @@ body {
     --color-ring: var(--ring);
     --color-diablo-blue: var(--diablo-blue);
     --color-diablo-green: var(--diablo-green);
+    --color-diablo-orange: var(--diablo-orange);
     --color-chart-1: var(--chart-1);
     --color-chart-2: var(--chart-2);
     --color-chart-3: var(--chart-3);
