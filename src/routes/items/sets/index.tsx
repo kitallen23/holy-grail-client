@@ -6,10 +6,10 @@ import { getSearchableText } from "@/routes/items/-utils";
 import type { SetItem, Tier } from "@/types/items";
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SetItemDialog from "@/components/ItemTooltip/SetItemDialog";
 import SetTier from "@/routes/items/sets/-SetTier";
-import { useDebouncedSearch } from "@/stores/useSearchStore";
+import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/items/sets/")({
@@ -21,6 +21,24 @@ const TIERS: Tier[] = ["Normal", "Exceptional", "Elite"];
 function SetItemsPage() {
     const { data, isFetching, error } = useItems("sets");
     const { debouncedSearchString } = useDebouncedSearch();
+    const { selectedFilters, setPageFilters } = useSearchFilters();
+
+    useEffect(() => {
+        const filters = [
+            {
+                id: "set_tier",
+                label: "Set Tier",
+                options: [
+                    { id: "Normal", label: "Normal", value: false },
+                    { id: "Exceptional", label: "Exceptional", value: false },
+                    { id: "Elite", label: "Elite", value: false },
+                ],
+            },
+        ];
+        setPageFilters(filters);
+
+        return () => setPageFilters(null);
+    }, []);
 
     const displayedItems: Record<string, SetItem> | undefined = useMemo(() => {
         if (!data || !debouncedSearchString.trim()) {
@@ -103,18 +121,22 @@ function SetItemsPage() {
         );
     }
 
+    const disableFilter = !Object.values(selectedFilters).some(val => val);
+
     return (
         <>
             <div className="grid gap-4">
-                {TIERS.map(tier => (
-                    <SetTier
-                        key={tier}
-                        data={displayedItems}
-                        tier={tier}
-                        selectedItem={selectedItem}
-                        onClick={item => setSelectedItem(item || null)}
-                    />
-                ))}
+                {TIERS.map(tier =>
+                    disableFilter || selectedFilters[tier] ? (
+                        <SetTier
+                            key={tier}
+                            data={displayedItems}
+                            tier={tier}
+                            selectedItem={selectedItem}
+                            onClick={item => setSelectedItem(item || null)}
+                        />
+                    ) : null
+                )}
             </div>
             <SetItemDialog
                 open={!!selectedItem}
