@@ -11,6 +11,8 @@ import SetItemDialog from "@/components/ItemTooltip/SetItemDialog";
 import SetTier from "@/routes/items/sets/-SetTier";
 import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { SETS } from "@/routes/items/sets/-utils";
 
 export const Route = createFileRoute("/items/sets/")({
     component: SetItemsPage,
@@ -20,8 +22,8 @@ const TIERS: Tier[] = ["Normal", "Exceptional", "Elite"];
 
 function SetItemsPage() {
     const { data, isFetching, error } = useItems("sets");
-    const { debouncedSearchString } = useDebouncedSearch();
-    const { selectedFilters, setPageFilters } = useSearchFilters();
+    const { debouncedSearchString, clearSearch } = useDebouncedSearch();
+    const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
 
     useEffect(() => {
         const filters = [
@@ -41,26 +43,27 @@ function SetItemsPage() {
     }, []);
 
     const displayedItems: Record<string, SetItem> | undefined = useMemo(() => {
-        if (!data || !debouncedSearchString.trim()) {
-            return data as Record<string, SetItem>;
+        if (!data) {
+            return data;
         }
 
         const searchTerms = getSearchTerms(debouncedSearchString);
-        if (searchTerms.length === 0) {
-            return data as Record<string, SetItem>;
-        }
 
         const filtered: Record<string, SetItem> = {};
+        const disableFilter = !Object.values(selectedFilters).some(val => val);
 
         Object.entries(data).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
             if (matchesAllTerms(searchableText, searchTerms)) {
-                filtered[key] = item;
+                const setTier = SETS.find(set => set.name === item.category)?.tier;
+                if (disableFilter || selectedFilters[setTier!]) {
+                    filtered[key] = item;
+                }
             }
         });
 
         return filtered;
-    }, [data, debouncedSearchString]);
+    }, [data, debouncedSearchString, selectedFilters]);
 
     const [selectedItem, setSelectedItem] = useState<WithKey<SetItem> | null>(null);
 
@@ -121,22 +124,18 @@ function SetItemsPage() {
         );
     }
 
-    const disableFilter = !Object.values(selectedFilters).some(val => val);
-
-    return (
+    return Object.keys(displayedItems).length ? (
         <>
             <div className="grid gap-4">
-                {TIERS.map(tier =>
-                    disableFilter || selectedFilters[tier] ? (
-                        <SetTier
-                            key={tier}
-                            data={displayedItems}
-                            tier={tier}
-                            selectedItem={selectedItem}
-                            onClick={item => setSelectedItem(item || null)}
-                        />
-                    ) : null
-                )}
+                {TIERS.map(tier => (
+                    <SetTier
+                        key={tier}
+                        data={displayedItems}
+                        tier={tier}
+                        selectedItem={selectedItem}
+                        onClick={item => setSelectedItem(item || null)}
+                    />
+                ))}
             </div>
             <SetItemDialog
                 open={!!selectedItem}
@@ -144,5 +143,20 @@ function SetItemsPage() {
                 item={selectedItem as SetItem}
             />
         </>
+    ) : (
+        <div className="mt-4 flex flex-col gap-2">
+            <div className="text-center text-muted-foreground italic">No set items found.</div>
+            <Button
+                variant="ghost"
+                size="sm"
+                className="text-muted-foreground self-center"
+                onClick={() => {
+                    clearSearch();
+                    clearFilters();
+                }}
+            >
+                Clear filter
+            </Button>
+        </div>
     );
 }

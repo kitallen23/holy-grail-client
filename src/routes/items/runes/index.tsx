@@ -8,7 +8,7 @@ import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import { cn } from "@/lib/utils";
 import type { RuneArrayItem, WithKey } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
-import { useDebouncedSearch } from "@/stores/useSearchStore";
+import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import type { Rune } from "@/types/items";
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert } from "lucide-react";
@@ -20,7 +20,8 @@ export const Route = createFileRoute("/items/runes/")({
 
 function RunesPage() {
     const { data, isFetching, error } = useItems("runes");
-    const { debouncedSearchString } = useDebouncedSearch();
+    const { debouncedSearchString, clearSearch } = useDebouncedSearch();
+    const { clearFilters } = useSearchFilters();
 
     const displayedRunes: RuneArrayItem[] = useMemo(() => {
         if (!data || !debouncedSearchString.trim()) {
@@ -111,7 +112,7 @@ function RunesPage() {
         );
     }
 
-    return (
+    return Object.keys(displayedRunes).length ? (
         <>
             <div className="grid gap-4">
                 <HeadingSeparator color="text-diablo-orange">Runes</HeadingSeparator>
@@ -139,5 +140,20 @@ function RunesPage() {
                 rune={selectedRune as Rune}
             />
         </>
+    ) : (
+        <div className="mt-4 flex flex-col gap-2">
+            <div className="text-center text-muted-foreground italic">No runes found.</div>
+            <Button
+                variant="ghost"
+                size="sm"
+                className="text-muted-foreground self-center"
+                onClick={() => {
+                    clearSearch();
+                    clearFilters();
+                }}
+            >
+                Clear filter
+            </Button>
+        </div>
     );
 }

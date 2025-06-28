@@ -1,5 +1,6 @@
 import UniqueItemDialog from "@/components/ItemTooltip/UniqueItemDialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useItems } from "@/hooks/queries";
@@ -21,8 +22,8 @@ export const Route = createFileRoute("/items/unique/")({
 
 function UniqueItemsPage() {
     const { data, isFetching, error } = useItems("unique");
-    const { debouncedSearchString } = useDebouncedSearch();
-    const { selectedFilters, setPageFilters } = useSearchFilters();
+    const { debouncedSearchString, clearSearch } = useDebouncedSearch();
+    const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
 
     useEffect(() => {
         const filters = [
@@ -42,26 +43,31 @@ function UniqueItemsPage() {
     }, []);
 
     const displayedItems: Record<string, UniqueItem> | undefined = useMemo(() => {
-        if (!data || !debouncedSearchString.trim()) {
-            return data as Record<string, UniqueItem>;
+        if (!data) {
+            return data;
         }
 
         const searchTerms = getSearchTerms(debouncedSearchString);
-        if (searchTerms.length === 0) {
-            return data as Record<string, UniqueItem>;
-        }
 
         const filtered: Record<string, UniqueItem> = {};
+        const disableFilter = !Object.values(selectedFilters).some(val => val);
 
         Object.entries(data).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
             if (matchesAllTerms(searchableText, searchTerms)) {
-                filtered[key] = item;
+                const itemType = Object.entries(UNIQUE_CATEGORIES).find(([, subcategories]) =>
+                    subcategories.some(subcategory =>
+                        item.category.endsWith(`Unique ${subcategory}`)
+                    )
+                )?.[0];
+                if (disableFilter || selectedFilters[itemType!]) {
+                    filtered[key] = item;
+                }
             }
         });
 
         return filtered;
-    }, [data, debouncedSearchString]);
+    }, [data, debouncedSearchString, selectedFilters]);
 
     const [selectedItem, setSelectedItem] = useState<WithKey<UniqueItem> | null>(null);
 
@@ -122,24 +128,20 @@ function UniqueItemsPage() {
         );
     }
 
-    const disableFilter = !Object.values(selectedFilters).some(val => val);
-
-    return (
+    return Object.keys(displayedItems).length ? (
         <>
             <div className="grid gap-4">
-                {Object.entries(UNIQUE_CATEGORIES).map(([category, subcategories]) =>
-                    disableFilter || selectedFilters[category] ? (
-                        <UniqueItemCategory
-                            key={category}
-                            data={displayedItems}
-                            category={category as TopLevelCategory}
-                            label={category}
-                            subcategories={subcategories as BaseCategory[]}
-                            selectedItem={selectedItem}
-                            onClick={item => setSelectedItem(item ? item : null)}
-                        />
-                    ) : null
-                )}
+                {Object.entries(UNIQUE_CATEGORIES).map(([category, subcategories]) => (
+                    <UniqueItemCategory
+                        key={category}
+                        data={displayedItems}
+                        category={category as TopLevelCategory}
+                        label={category}
+                        subcategories={subcategories as BaseCategory[]}
+                        selectedItem={selectedItem}
+                        onClick={item => setSelectedItem(item ? item : null)}
+                    />
+                ))}
             </div>
             <UniqueItemDialog
                 open={!!selectedItem}
@@ -147,5 +149,20 @@ function UniqueItemsPage() {
                 item={selectedItem as UniqueItem}
             />
         </>
+    ) : (
+        <div className="mt-4 flex flex-col gap-2">
+            <div className="text-center text-muted-foreground italic">No unique items found.</div>
+            <Button
+                variant="ghost"
+                size="sm"
+                className="text-muted-foreground self-center"
+                onClick={() => {
+                    clearSearch();
+                    clearFilters();
+                }}
+            >
+                Clear filter
+            </Button>
+        </div>
     );
 }

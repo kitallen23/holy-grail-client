@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlertIcon } from "lucide-react";
 
@@ -7,18 +7,22 @@ import RunewordCategory from "@/routes/runewords/-RunewordCategory";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import { getSearchableText } from "@/routes/runewords/-utils";
-import type { Runeword } from "@/types/items";
+import type { Runeword, RunewordBaseType } from "@/types/items";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { WithKey } from "@/routes/items/-types";
 import RunewordDialog from "@/components/ItemTooltip/RunewordDialog";
 import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/runewords/")({
     component: RunewordsPage,
 });
 
+const RUNEWORD_BASE_TYPES: RunewordBaseType[] = ["Weapons", "Body Armor", "Helmets", "Shields"];
+
 function RunewordsPage() {
-    const { selectedFilters, setPageFilters } = useSearchFilters();
+    const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
+    const { debouncedSearchString, clearSearch } = useDebouncedSearch();
     const { data, isFetching, error } = useRunewords();
 
     useEffect(() => {
@@ -39,54 +43,28 @@ function RunewordsPage() {
         return () => setPageFilters(null);
     }, []);
 
-    const searchInputRef = useRef<HTMLInputElement>(null);
-    const { debouncedSearchString } = useDebouncedSearch();
-
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            // Ctrl/Cmd+K
-            if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-                e.preventDefault();
-                searchInputRef.current?.focus();
-                return;
-            }
-
-            // Forward slash (only if not typing in an input)
-            if (
-                e.key === "/" &&
-                !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)
-            ) {
-                e.preventDefault();
-                searchInputRef.current?.focus();
-            }
-        };
-
-        document.addEventListener("keydown", handleKeyDown);
-        return () => document.removeEventListener("keydown", handleKeyDown);
-    }, []);
-
     // Filter runewords based on search
     const displayedRunewords = useMemo(() => {
-        if (!data || !debouncedSearchString.trim()) {
+        if (!data) {
             return data;
         }
 
         const searchTerms = getSearchTerms(debouncedSearchString);
-        if (searchTerms.length === 0) {
-            return data;
-        }
 
         const filtered: typeof data = {};
+        const disableFilter = !Object.values(selectedFilters).some(val => val);
 
         Object.entries(data).forEach(([key, runeword]) => {
             const searchableText = getSearchableText(runeword);
             if (matchesAllTerms(searchableText, searchTerms)) {
-                filtered[key] = runeword;
+                if (disableFilter || selectedFilters[runeword.type]) {
+                    filtered[key] = runeword;
+                }
             }
         });
 
         return filtered;
-    }, [data, debouncedSearchString]);
+    }, [data, debouncedSearchString, selectedFilters]);
 
     const [selectedRuneword, setSelectedRuneword] = useState<WithKey<Runeword> | null>(null);
 
@@ -144,48 +122,20 @@ function RunewordsPage() {
         );
     }
 
-    const disableFilter = !Object.values(selectedFilters).some(val => val);
-
-    return (
+    return Object.keys(displayedRunewords).length ? (
         <>
             <div className="pt-4 grid grid-cols-1 gap-4">
                 <div className="grid gap-4">
-                    {disableFilter || selectedFilters["Weapons"] ? (
+                    {RUNEWORD_BASE_TYPES.map(runewordBaseType => (
                         <RunewordCategory
+                            key={runewordBaseType}
                             data={displayedRunewords}
-                            category="Weapons"
-                            label="Weapons"
+                            category={runewordBaseType}
+                            label={runewordBaseType}
                             selectedRuneword={selectedRuneword}
                             onClick={runeword => setSelectedRuneword(runeword || null)}
                         />
-                    ) : null}
-                    {disableFilter || selectedFilters["Body Armor"] ? (
-                        <RunewordCategory
-                            data={displayedRunewords}
-                            category="Body Armor"
-                            label="Body Armor"
-                            selectedRuneword={selectedRuneword}
-                            onClick={runeword => setSelectedRuneword(runeword || null)}
-                        />
-                    ) : null}
-                    {disableFilter || selectedFilters["Helmets"] ? (
-                        <RunewordCategory
-                            data={displayedRunewords}
-                            category="Helmets"
-                            label="Helmets"
-                            selectedRuneword={selectedRuneword}
-                            onClick={runeword => setSelectedRuneword(runeword || null)}
-                        />
-                    ) : null}
-                    {disableFilter || selectedFilters["Shields"] ? (
-                        <RunewordCategory
-                            data={displayedRunewords}
-                            category="Shields"
-                            label="Shields"
-                            selectedRuneword={selectedRuneword}
-                            onClick={runeword => setSelectedRuneword(runeword || null)}
-                        />
-                    ) : null}
+                    ))}
                 </div>
             </div>
             <RunewordDialog
@@ -194,5 +144,20 @@ function RunewordsPage() {
                 runeword={selectedRuneword as Runeword}
             />
         </>
+    ) : (
+        <div className="mt-4 flex flex-col gap-2">
+            <div className="text-center text-muted-foreground italic">No runewords found.</div>
+            <Button
+                variant="ghost"
+                size="sm"
+                className="text-muted-foreground self-center"
+                onClick={() => {
+                    clearSearch();
+                    clearFilters();
+                }}
+            >
+                Clear filters
+            </Button>
+        </div>
     );
 }
