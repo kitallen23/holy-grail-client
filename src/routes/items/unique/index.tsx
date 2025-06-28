@@ -8,12 +8,12 @@ import type { BaseCategory, TopLevelCategory, WithKey } from "@/routes/items/-ty
 import { getSearchableText } from "@/routes/items/-utils";
 import UniqueItemCategory from "@/routes/items/unique/-UniqueItemCategory";
 import { UNIQUE_CATEGORIES } from "@/routes/items/unique/-utils";
-import { useDebouncedSearch } from "@/stores/useSearchStore";
+import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import type { UniqueItem } from "@/types/items";
 
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export const Route = createFileRoute("/items/unique/")({
     component: UniqueItemsPage,
@@ -22,6 +22,24 @@ export const Route = createFileRoute("/items/unique/")({
 function UniqueItemsPage() {
     const { data, isFetching, error } = useItems("unique");
     const { debouncedSearchString } = useDebouncedSearch();
+    const { selectedFilters, setPageFilters } = useSearchFilters();
+
+    useEffect(() => {
+        const filters = [
+            {
+                id: "item_type",
+                label: "Item Type",
+                options: [
+                    { id: "Weapons", label: "Weapons", value: false },
+                    { id: "Armor", label: "Armor", value: false },
+                    { id: "Other", label: "Other", value: false },
+                ],
+            },
+        ];
+        setPageFilters(filters);
+
+        return () => setPageFilters(null);
+    }, []);
 
     const displayedItems: Record<string, UniqueItem> | undefined = useMemo(() => {
         if (!data || !debouncedSearchString.trim()) {
@@ -104,20 +122,24 @@ function UniqueItemsPage() {
         );
     }
 
+    const disableFilter = !Object.values(selectedFilters).some(val => val);
+
     return (
         <>
             <div className="grid gap-4">
-                {Object.entries(UNIQUE_CATEGORIES).map(([category, subcategories]) => (
-                    <UniqueItemCategory
-                        key={category}
-                        data={displayedItems}
-                        category={category as TopLevelCategory}
-                        label={category}
-                        subcategories={subcategories as BaseCategory[]}
-                        selectedItem={selectedItem}
-                        onClick={item => setSelectedItem(item ? item : null)}
-                    />
-                ))}
+                {Object.entries(UNIQUE_CATEGORIES).map(([category, subcategories]) =>
+                    disableFilter || selectedFilters[category] ? (
+                        <UniqueItemCategory
+                            key={category}
+                            data={displayedItems}
+                            category={category as TopLevelCategory}
+                            label={category}
+                            subcategories={subcategories as BaseCategory[]}
+                            selectedItem={selectedItem}
+                            onClick={item => setSelectedItem(item ? item : null)}
+                        />
+                    ) : null
+                )}
             </div>
             <UniqueItemDialog
                 open={!!selectedItem}
