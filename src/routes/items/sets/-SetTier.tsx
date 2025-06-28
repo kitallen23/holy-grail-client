@@ -42,7 +42,7 @@ export default function SetTier({ data, tier, selectedItem, onClick }: SetTierPr
 
     return (
         <div className="grid gap-4 content-start">
-            <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight pb-1 [&:not(:first-child)]:mt-10 text-primary font-diablo text-center">
+            <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight pb-1 [&:not(:first-child)]:mt-10 text-destructive font-diablo text-center">
                 {tier}
             </h2>
             <div className="grid md:grid-cols-2 gap-4">

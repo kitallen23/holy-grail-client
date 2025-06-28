@@ -61,7 +61,7 @@ export default function UniqueItemCategory({
 
     return (
         <div key={category} className="grid gap-4">
-            <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight pb-1 [&:not(:first-child)]:mt-10 text-primary font-diablo text-center">
+            <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight pb-1 [&:not(:first-child)]:mt-10 text-destructive font-diablo text-center">
                 {label}
             </h2>
             {subcategories.map(subcategory => (
