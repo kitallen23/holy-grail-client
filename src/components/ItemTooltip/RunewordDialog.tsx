@@ -18,7 +18,7 @@ export default function RunewordDialog({ runeword, ...props }: RunewordDialogPro
                     className="bg-black/90 rounded-none border-none p-3 w-[max-content] max-h-[calc(100dvh-2rem)] overflow-y-auto"
                     aria-describedby={undefined}
                 >
-                    <div className="max-w-3xl font-diablo text-xl flex gap-y-1 flex-col text-center leading-6">
+                    <div className="max-w-3xl font-diablo text-md sm:text-xl flex gap-y-1 flex-col text-center leading-6">
                         <div className="text-primary">{runeword.name}</div>
                         <div className="text-muted-foreground">{runeword.itemTypes.join(", ")}</div>
                         <div className="text-primary">&apos;{runeword.runes.join("")}&apos;</div>
