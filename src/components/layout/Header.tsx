@@ -32,7 +32,9 @@ export default function Header() {
                             className="text-primary-foreground font-bold"
                             size="sm"
                         >
-                            <Link to="/">Grail</Link>
+                            <Link to="/" onClick={() => window.scrollTo(0, 0)}>
+                                Grail
+                            </Link>
                         </Button>
                         <Button
                             asChild
@@ -40,7 +42,9 @@ export default function Header() {
                             className="text-primary-foreground font-bold"
                             size="sm"
                         >
-                            <Link to="/items">Item Index</Link>
+                            <Link to="/items" onClick={() => window.scrollTo(0, 0)}>
+                                Item Index
+                            </Link>
                         </Button>
                         <Button
                             asChild
@@ -48,7 +52,9 @@ export default function Header() {
                             className="text-primary-foreground font-bold"
                             size="sm"
                         >
-                            <Link to="/runewords">Runewords</Link>
+                            <Link to="/runewords" onClick={() => window.scrollTo(0, 0)}>
+                                Runewords
+                            </Link>
                         </Button>
                     </nav>
                 </div>
