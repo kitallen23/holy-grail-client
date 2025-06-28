@@ -7,7 +7,7 @@ import type { UniqueItem, SetItem, Rune } from "@/types/items";
  * @returns A lowercase string containing all searchable text joined with spaces
  */
 export function getSearchableText(item: UniqueItem | SetItem | Rune): string {
-    const searchableFields = [];
+    const searchableFields = [item.name];
 
     // Add attributes common to sets & uniques
     if ("affixes" in item) {
@@ -20,7 +20,7 @@ export function getSearchableText(item: UniqueItem | SetItem | Rune): string {
             cleanVariablePlaceholders(affix[0])
         );
 
-        searchableFields.push(item.name, item.type, ...searchableImplicits, ...searchableAffixes);
+        searchableFields.push(item.type, ...searchableImplicits, ...searchableAffixes);
     }
     // Add set-specific attributes
     if ("setBonuses" in item) {
