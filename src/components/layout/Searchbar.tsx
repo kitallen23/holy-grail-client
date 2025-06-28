@@ -65,6 +65,7 @@ export default function Searchbar() {
                     spellCheck="false"
                     enterKeyHint="done"
                     onKeyDown={handleInputKeyDown}
+                    onFocus={e => e.target.select()}
                 />
                 {searchString && (
                     <Button
