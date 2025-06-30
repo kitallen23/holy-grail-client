@@ -8,9 +8,10 @@ import SetItemBonusAffix from "@/components/ItemTooltip/SetItemBonusAffix";
 
 interface SetItemDialogProps extends React.ComponentProps<typeof DialogPrimitive.Root> {
     item?: SetItem;
+    onSetItemClick: (itemName: string) => void;
 }
 
-export default function SetItemDialog({ item, ...props }: SetItemDialogProps) {
+export default function SetItemDialog({ item, onSetItemClick, ...props }: SetItemDialogProps) {
     const displayedItemBonuses = Object.entries(item?.itemBonuses || {}).sort((a, b) =>
         a[0] > b[0] ? 0 : 1
     );
@@ -67,7 +68,13 @@ export default function SetItemDialog({ item, ...props }: SetItemDialogProps) {
                                 key={itemName}
                                 className="text-diablo-green break-keep wrap-anywhere"
                             >
-                                {itemName}
+                                <button
+                                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-all shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-diablo-green/20 text-diablo-green px-2 cursor-default select-none"
+                                    onClick={() => onSetItemClick(itemName)}
+                                    aria-label={`View details for ${itemName}`}
+                                >
+                                    {itemName}
+                                </button>
                             </div>
                         ))}
                     </div>

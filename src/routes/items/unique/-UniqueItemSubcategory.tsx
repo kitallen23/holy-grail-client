@@ -59,6 +59,8 @@ export default function UniqueItemSubcategory({
                             item.key === selectedItem?.key ? "border-primary" : ""
                         )}
                         onClick={() => onClick(item)}
+                        aria-haspopup="dialog"
+                        aria-label={`View details for ${item.name}`}
                     >
                         <div className="text-nowrap truncate">{item.key}</div>
                         <div className="pl-0 sm:pl-1 text-foreground/60 truncate">{item.type}</div>

@@ -70,6 +70,8 @@ export default function RunewordCategory({
                             runeword.key === selectedRuneword?.key ? "border-primary" : ""
                         )}
                         onClick={() => handleRunewordClick(runeword)}
+                        aria-haspopup="dialog"
+                        aria-label={`View details for ${runeword.name}`}
                     >
                         <div className="text-nowrap truncate">{runeword.name}</div>
                         <div className="pl-0 sm:pl-1 text-foreground/60 truncate">

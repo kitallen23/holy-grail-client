@@ -67,6 +67,13 @@ function SetItemsPage() {
 
     const [selectedItem, setSelectedItem] = useState<WithKey<SetItem> | null>(null);
 
+    const handleSetItemClick = (itemName: string) => {
+        const setItem = Object.values(data || {}).find(item => item.name === itemName);
+        if (setItem) {
+            setSelectedItem(setItem);
+        }
+    };
+
     if (error) {
         return (
             <div className="max-w-2xl mx-auto pt-4">
@@ -141,6 +148,7 @@ function SetItemsPage() {
                 open={!!selectedItem}
                 onOpenChange={open => !open && setSelectedItem(null)}
                 item={selectedItem as SetItem}
+                onSetItemClick={handleSetItemClick}
             />
         </>
     ) : (

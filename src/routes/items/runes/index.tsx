@@ -128,6 +128,8 @@ function RunesPage() {
                                 rune.key === selectedRune?.key ? "border-primary" : ""
                             )}
                             onClick={() => setSelectedRune(rune)}
+                            aria-haspopup="dialog"
+                            aria-label={`View details for ${rune.name}`}
                         >
                             <div className="text-nowrap truncate">{rune.key}</div>
                         </Button>
