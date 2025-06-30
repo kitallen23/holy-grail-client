@@ -39,9 +39,13 @@ export default function Searchbar() {
         return () => document.removeEventListener("keydown", handleKeyDown);
     }, []);
 
+    const handleClearSearch = () => {
+        clearSearch();
+        searchInputRef.current?.focus();
+    };
+
     const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Escape") {
-            e.currentTarget.blur();
             setSearchString("");
         }
     };
@@ -72,7 +76,7 @@ export default function Searchbar() {
                         variant="ghost"
                         size="icon"
                         className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-current/60 hover:text-current"
-                        onClick={clearSearch}
+                        onClick={handleClearSearch}
                     >
                         <XIcon />
                         <span className="sr-only">Clear</span>

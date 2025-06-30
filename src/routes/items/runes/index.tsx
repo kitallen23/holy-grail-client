@@ -118,22 +118,27 @@ function RunesPage() {
                 <HeadingSeparator color="text-diablo-orange">Runes</HeadingSeparator>
                 <div className="grid gap-1 grid-cols-3 md:grid-cols-6 justify-items-center">
                     {displayedRunes.map(rune => (
-                        <Button
-                            key={rune.key}
-                            variant="ghost"
-                            color="primary"
-                            size="sm"
-                            className={clsx(
-                                "item-trigger justify-center border border-transparent inline-flex w-fit max-w-full",
-                                rune.key === selectedRune?.key ? "border-primary" : ""
-                            )}
-                            onClick={() => setSelectedRune(rune)}
-                            aria-haspopup="dialog"
-                            aria-label={`View details for ${rune.name}`}
-                        >
-                            <img src={`/img/${rune.key.toLowerCase()}.webp`} className="h-[2em]" />
-                            <div className="text-nowrap truncate">{rune.name}</div>
-                        </Button>
+                        <div className="flex w-28 justify-start" key={rune.key}>
+                            <Button
+                                key={rune.key}
+                                variant="ghost"
+                                color="primary"
+                                size="sm"
+                                className={clsx(
+                                    "item-trigger justify-start border border-transparent inline-flex w-fit max-w-full",
+                                    rune.key === selectedRune?.key ? "border-primary" : ""
+                                )}
+                                onClick={() => setSelectedRune(rune)}
+                                aria-haspopup="dialog"
+                                aria-label={`View details for ${rune.name}`}
+                            >
+                                <img
+                                    src={`/img/${rune.key.toLowerCase()}.webp`}
+                                    className="h-[2em]"
+                                />
+                                <div className="text-nowrap truncate">{rune.name}</div>
+                            </Button>
+                        </div>
                     ))}
                 </div>
             </div>
