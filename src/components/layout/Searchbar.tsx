@@ -50,7 +50,7 @@ export default function Searchbar() {
 
     return (
         <div
-            className={`max-w-96 m-auto w-full grid grid-cols-${currentPageFilters ? "[1fr_auto]" : "1"} gap-2 px-2`}
+            className={`max-w-96 m-auto w-full grid ${currentPageFilters ? "grid-cols-[1fr_auto]" : "grid-cols-1"} gap-2 px-2`}
         >
             <div className="relative">
                 <Input

@@ -27,6 +27,29 @@ export const useRunewords = () => {
     });
 };
 
+export const useGrailItems = () => {
+    const unique = useItems("unique");
+    const sets = useItems("sets");
+    const runes = useItems("runes");
+
+    const data: Items | undefined =
+        unique.data && sets.data && runes.data
+            ? {
+                  uniqueItems: unique.data as Record<string, UniqueItem>,
+                  setItems: sets.data as Record<string, SetItem>,
+                  runes: runes.data as Record<string, Rune>,
+              }
+            : undefined;
+
+    return {
+        data,
+        isLoading: unique.isLoading || sets.isLoading || runes.isLoading,
+        isFetching: unique.isFetching || sets.isFetching || runes.isFetching,
+        isError: unique.isError || sets.isError || runes.isError,
+        error: unique.error || sets.error || runes.error,
+    };
+};
+
 export const useGrailProgress = () => {
     return useQuery({
         queryKey: ["grail-progress"],
