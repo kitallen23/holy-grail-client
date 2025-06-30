@@ -131,7 +131,8 @@ function RunesPage() {
                             aria-haspopup="dialog"
                             aria-label={`View details for ${rune.name}`}
                         >
-                            <div className="text-nowrap truncate">{rune.key}</div>
+                            <img src={`/img/${rune.key.toLowerCase()}.webp`} className="h-[2em]" />
+                            <div className="text-nowrap truncate">{rune.name}</div>
                         </Button>
                     ))}
                 </div>
