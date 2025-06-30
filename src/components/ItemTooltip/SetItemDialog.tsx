@@ -11,7 +11,10 @@ interface SetItemDialogProps extends React.ComponentProps<typeof DialogPrimitive
     onSetItemClick: (itemName: string) => void;
 }
 
-export default function SetItemDialog({ item, onSetItemClick, ...props }: SetItemDialogProps) {
+const SetItemDialog = React.forwardRef<
+    React.ComponentRef<typeof DialogContent>,
+    SetItemDialogProps
+>(({ item, onSetItemClick, ...props }, ref) => {
     const displayedItemBonuses = Object.entries(item?.itemBonuses || {}).sort((a, b) =>
         a[0] > b[0] ? 0 : 1
     );
@@ -21,6 +24,7 @@ export default function SetItemDialog({ item, onSetItemClick, ...props }: SetIte
             <DialogTitle className="sr-only">{item?.name || "Item"} Tooltip</DialogTitle>
             {item ? (
                 <DialogContent
+                    ref={ref}
                     className="bg-black/90 rounded-none border-none p-3 w-[max-content] max-h-[calc(100dvh-2rem)] overflow-y-auto"
                     aria-describedby={undefined}
                 >
@@ -82,4 +86,8 @@ export default function SetItemDialog({ item, onSetItemClick, ...props }: SetIte
             ) : null}
         </Dialog>
     );
-}
+});
+
+SetItemDialog.displayName = "SetItemDialog";
+
+export default SetItemDialog;

@@ -6,13 +6,14 @@ import { getSearchableText } from "@/routes/items/-utils";
 import type { SetItem, Tier } from "@/types/items";
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import SetItemDialog from "@/components/ItemTooltip/SetItemDialog";
 import SetTier from "@/routes/items/sets/-SetTier";
 import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { SETS } from "@/routes/items/sets/-utils";
+import { DialogContent } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/items/sets/")({
     component: SetItemsPage,
@@ -66,12 +67,14 @@ function SetItemsPage() {
     }, [data, debouncedSearchString, selectedFilters]);
 
     const [selectedItem, setSelectedItem] = useState<WithKey<SetItem> | null>(null);
+    const dialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
 
     const handleSetItemClick = (itemName: string) => {
         const setItem = Object.values(data || {}).find(item => item.name === itemName);
         if (setItem) {
             setSelectedItem(setItem);
         }
+        dialogRef.current?.scrollTo(0, 0);
     };
 
     if (error) {
@@ -145,6 +148,7 @@ function SetItemsPage() {
                 ))}
             </div>
             <SetItemDialog
+                ref={dialogRef}
                 open={!!selectedItem}
                 onOpenChange={open => !open && setSelectedItem(null)}
                 item={selectedItem as SetItem}
