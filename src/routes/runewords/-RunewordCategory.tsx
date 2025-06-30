@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 
-import { cn } from "@/lib/utils";
 import type { Runeword, RunewordBaseType, Runewords } from "@/types/items";
 import HeadingSeparator from "@/components/HeadingSeparator";
 import { Button } from "@/components/ui/button";
 import type { WithKey } from "@/routes/items/-types";
+import clsx from "clsx";
 
 interface RunewordArrayItem extends Runeword {
     key: string;
@@ -58,15 +58,15 @@ export default function RunewordCategory({
     return (
         <>
             <HeadingSeparator color="text-primary">{label}</HeadingSeparator>
-            <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+            <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {displayedRunewords.map(runeword => (
                     <Button
                         key={runeword.key}
                         variant="ghost"
                         color="primary"
                         size="sm"
-                        className={cn(
-                            "runeword-trigger justify-start border border-transparent",
+                        className={clsx(
+                            "runeword-trigger justify-start border border-transparent inline-flex w-fit max-w-full",
                             runeword.key === selectedRuneword?.key ? "border-primary" : ""
                         )}
                         onClick={() => handleRunewordClick(runeword)}

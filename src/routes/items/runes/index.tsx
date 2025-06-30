@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useItems } from "@/hooks/queries";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
-import { cn } from "@/lib/utils";
 import type { RuneArrayItem, WithKey } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
 import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import type { Rune } from "@/types/items";
 import { createFileRoute } from "@tanstack/react-router";
+import clsx from "clsx";
 import { CircleAlert } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -116,15 +116,15 @@ function RunesPage() {
         <>
             <div className="grid gap-4">
                 <HeadingSeparator color="text-diablo-orange">Runes</HeadingSeparator>
-                <div className="grid gap-1 grid-cols-3 md:grid-cols-6">
+                <div className="grid gap-1 grid-cols-3 md:grid-cols-6 justify-items-center">
                     {displayedRunes.map(rune => (
                         <Button
                             key={rune.key}
                             variant="ghost"
                             color="primary"
                             size="sm"
-                            className={cn(
-                                "item-trigger justify-center border border-transparent",
+                            className={clsx(
+                                "item-trigger justify-center border border-transparent inline-flex w-fit max-w-full",
                                 rune.key === selectedRune?.key ? "border-primary" : ""
                             )}
                             onClick={() => setSelectedRune(rune)}

@@ -1,8 +1,8 @@
 import HeadingSeparator from "@/components/HeadingSeparator";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import type { BaseCategory, UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
 import type { UniqueItem } from "@/types/items";
+import clsx from "clsx";
 import { useMemo } from "react";
 
 function getFilteredUniqueItems(
@@ -54,8 +54,8 @@ export default function UniqueItemSubcategory({
                         variant="ghost"
                         color="primary"
                         size="sm"
-                        className={cn(
-                            "item-trigger justify-start border border-transparent",
+                        className={clsx(
+                            "item-trigger justify-start border border-transparent inline-flex w-fit max-w-full",
                             item.key === selectedItem?.key ? "border-primary" : ""
                         )}
                         onClick={() => onClick(item)}

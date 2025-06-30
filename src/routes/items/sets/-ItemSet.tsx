@@ -1,8 +1,8 @@
 import HeadingSeparator from "@/components/HeadingSeparator";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import type { SetItemArrayItem, WithKey } from "@/routes/items/-types";
 import type { SetCategory, SetItem } from "@/types/items";
+import clsx from "clsx";
 import { useMemo } from "react";
 
 function getFilteredSetItems(data: SetItemArrayItem[], set: SetCategory): SetItemArrayItem[] {
@@ -42,8 +42,8 @@ export default function ItemSet({ data, set, label, selectedItem, onClick }: Set
                         variant="ghost"
                         color="primary"
                         size="sm"
-                        className={cn(
-                            "item-trigger justify-start border border-transparent",
+                        className={clsx(
+                            "item-trigger justify-start border border-transparent inline-flex w-fit max-w-full",
                             item.key === selectedItem?.key ? "border-primary" : ""
                         )}
                         onClick={() => onClick(item)}
