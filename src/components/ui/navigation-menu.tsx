@@ -120,8 +120,9 @@ function NavigationMenuViewport({
 
 function NavigationMenuLink({
     className,
+    indicator,
     ...props
-}: React.ComponentProps<typeof NavigationMenuPrimitive.Link>) {
+}: React.ComponentProps<typeof NavigationMenuPrimitive.Link> & { indicator?: boolean }) {
     return (
         <NavigationMenuPrimitive.Link
             data-slot="navigation-menu-link"
@@ -129,7 +130,9 @@ function NavigationMenuLink({
                 styles.linkPrimary,
                 "data-[active=true]:focus:bg-primary/90 data-[active=true]:hover:bg-primary/90 data-[active=true]:bg-primary/75 data-[active=true]:text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground focus:bg-primary/90 focus:text-accent-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4",
                 // Diamond indicator for active state
-                "relative data-[active=true]:after:content-[''] data-[active=true]:after:absolute data-[active=true]:after:bottom-0 data-[active=true]:after:left-1/2 data-[active=true]:after:-translate-x-1/2 data-[active=true]:after:translate-y-1/2 data-[active=true]:after:w-1 data-[active=true]:after:h-1 data-[active=true]:after:bg-destructive data-[active=true]:after:rotate-45 data-[active=true]:after:shadow-[0_0_0_1px_background]",
+                indicator
+                    ? "relative data-[active=true]:after:content-[''] data-[active=true]:after:absolute data-[active=true]:after:bottom-0 data-[active=true]:after:left-1/2 data-[active=true]:after:-translate-x-1/2 data-[active=true]:after:translate-y-1/2 data-[active=true]:after:w-1 data-[active=true]:after:h-1 data-[active=true]:after:bg-destructive data-[active=true]:after:rotate-45 data-[active=true]:after:shadow-[0_0_0_1px_background]"
+                    : "",
                 className
             )}
             {...props}

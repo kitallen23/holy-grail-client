@@ -21,7 +21,7 @@ function ItemsPage() {
                     <NavigationMenu orientation="horizontal">
                         <NavigationMenuList className="bg-popover p-1 rounded-md border">
                             <NavigationMenuItem>
-                                <NavigationMenuLink asChild className="py-1 px-1.5">
+                                <NavigationMenuLink asChild className="py-1 px-1.5" indicator>
                                     <Link
                                         to="/items/unique"
                                         data-active={!!matchRoute({ to: "/items/unique" })}
@@ -31,7 +31,7 @@ function ItemsPage() {
                                 </NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
-                                <NavigationMenuLink asChild className="py-1 px-1.5">
+                                <NavigationMenuLink asChild className="py-1 px-1.5" indicator>
                                     <Link
                                         to="/items/sets"
                                         data-active={!!matchRoute({ to: "/items/sets" })}
@@ -41,7 +41,7 @@ function ItemsPage() {
                                 </NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
-                                <NavigationMenuLink asChild className="py-1 px-1.5">
+                                <NavigationMenuLink asChild className="py-1 px-1.5" indicator>
                                     <Link
                                         to="/items/runes"
                                         data-active={!!matchRoute({ to: "/items/runes" })}

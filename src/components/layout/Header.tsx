@@ -38,6 +38,7 @@ export default function Header() {
                                     <NavigationMenuLink
                                         asChild
                                         className="py-0.5 px-1.5 data-[active=true]:bg-background/10 data-[active=true]:focus:bg-background/10 data-[active=true]:hover:bg-background/10 hover:bg-background/10 focus:bg-background/10"
+                                        indicator
                                     >
                                         <Link
                                             to="/"
@@ -53,6 +54,7 @@ export default function Header() {
                                     <NavigationMenuLink
                                         asChild
                                         className="py-0.5 px-1.5 data-[active=true]:bg-background/10 data-[active=true]:focus:bg-background/10 data-[active=true]:hover:bg-background/10 hover:bg-background/10 focus:bg-background/10"
+                                        indicator
                                     >
                                         <Link
                                             to="/items"
@@ -70,6 +72,7 @@ export default function Header() {
                                     <NavigationMenuLink
                                         asChild
                                         className="py-0.5 px-1.5 data-[active=true]:bg-background/10 data-[active=true]:focus:bg-background/10 data-[active=true]:hover:bg-background/10 hover:bg-background/10 focus:bg-background/10"
+                                        indicator
                                     >
                                         <Link
                                             to="/runewords"
