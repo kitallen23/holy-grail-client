@@ -2,87 +2,165 @@ import styles from "./Header.module.scss";
 import { Link, useMatchRoute } from "@tanstack/react-router";
 import Searchbar from "@/components/layout/Searchbar";
 import { useDebouncedSearch, useSearchBar } from "@/stores/useSearchStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
     NavigationMenu,
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+import { Button } from "@/components/ui/button";
+import { MenuIcon, XIcon } from "lucide-react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import clsx from "clsx";
+
+const NAV_ITEMS = [
+    {
+        label: "Grail",
+        path: "/",
+        fuzzy: false,
+    },
+    {
+        label: "Item Index",
+        path: "/items",
+        fuzzy: true,
+    },
+    {
+        label: "Unique Items",
+        path: "/items/unique",
+        fuzzy: false,
+        isChild: true,
+    },
+    {
+        label: "Set Items",
+        path: "/items/sets",
+        fuzzy: false,
+        isChild: true,
+    },
+    {
+        label: "Runes",
+        path: "/items/runes",
+        fuzzy: false,
+        isChild: true,
+    },
+    {
+        label: "Runewords",
+        path: "/runewords",
+        fuzzy: false,
+    },
+];
 
 export default function Header() {
     const matchRoute = useMatchRoute();
     const { isVisible } = useSearchBar();
     const { debouncedSearchString } = useDebouncedSearch();
 
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [debouncedSearchString]);
 
+    const currentPageName =
+        NAV_ITEMS.find(item => matchRoute({ to: item.path, fuzzy: item.fuzzy }))?.label || "";
+
     return (
-        <>
+        <div className="relative">
             <header
                 className={`${styles.header} h-8 bg-primary text-primary-foreground flex items-center justify-between fixed top-0 right-0 w-full flex-nowrap`}
             >
                 <div className="flex gap-4 items-center flex-nowrap mx-auto max-w-4xl w-full px-2 sm:px-4">
+                    <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                        <DropdownMenuTrigger
+                            className="sm:hidden hover:text-primary-foreground h-6 hover:bg-background/10"
+                            asChild
+                        >
+                            <Button variant="ghost" size="sm">
+                                {isMenuOpen ? <XIcon /> : <MenuIcon />}
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-48 m-1">
+                            {NAV_ITEMS.map(item => {
+                                const isActiveRoute = !!matchRoute({
+                                    to: item.path,
+                                    fuzzy: false,
+                                });
+                                return (
+                                    <DropdownMenuItem
+                                        key={item.path}
+                                        asChild
+                                        className={clsx(
+                                            "font-bold",
+                                            {
+                                                "pl-8": item.isChild,
+                                            },
+                                            item.isChild ? "text-sm" : "text-md"
+                                        )}
+                                    >
+                                        <Link
+                                            to={item.path}
+                                            data-active={isActiveRoute}
+                                            onClick={() => window.scrollTo(0, 0)}
+                                        >
+                                            <div
+                                                className={clsx(
+                                                    "w-1 h-1 rotate-45",
+                                                    isActiveRoute ? "bg-destructive" : "bg-muted"
+                                                )}
+                                            />
+                                            {item.label}
+                                        </Link>
+                                    </DropdownMenuItem>
+                                );
+                            })}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                     <div
                         className={`${styles.title} text-lg flex items-center text-primary-foreground flex-nowrap`}
                     >
                         HOLY GRAIL
                     </div>
 
-                    <nav>
+                    {currentPageName ? (
+                        <div className="sm:hidden font-bold">
+                            <div className="py-0.5 px-1.5 w-fit bg-background/10 focus:bg-background/10 text-primary-foreground hover:text-primary-foreground focus:text-accent-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4 relative after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:translate-y-1/2 after:w-1 after:h-1 after:bg-destructive after:rotate-45 after:shadow-[0_0_0_1px_background]">
+                                {currentPageName}
+                            </div>
+                        </div>
+                    ) : null}
+
+                    <nav className="hidden sm:block">
                         <NavigationMenu orientation="horizontal">
                             <NavigationMenuList className="">
-                                <NavigationMenuItem>
-                                    <NavigationMenuLink
-                                        asChild
-                                        className="py-0.5 px-1.5 data-[active=true]:bg-background/10 data-[active=true]:focus:bg-background/10 data-[active=true]:hover:bg-background/10 hover:bg-background/10 focus:bg-background/10"
-                                        indicator
-                                    >
-                                        <Link
-                                            to="/"
-                                            data-active={!!matchRoute({ to: "/" })}
-                                            onClick={() => window.scrollTo(0, 0)}
-                                            className="font-bold"
-                                        >
-                                            Grail
-                                        </Link>
-                                    </NavigationMenuLink>
-                                </NavigationMenuItem>
-                                <NavigationMenuItem>
-                                    <NavigationMenuLink
-                                        asChild
-                                        className="py-0.5 px-1.5 data-[active=true]:bg-background/10 data-[active=true]:focus:bg-background/10 data-[active=true]:hover:bg-background/10 hover:bg-background/10 focus:bg-background/10"
-                                        indicator
-                                    >
-                                        <Link
-                                            to="/items"
-                                            data-active={
-                                                !!matchRoute({ to: "/items", fuzzy: true })
-                                            }
-                                            onClick={() => window.scrollTo(0, 0)}
-                                            className="font-bold"
-                                        >
-                                            Item Index
-                                        </Link>
-                                    </NavigationMenuLink>
-                                </NavigationMenuItem>
-                                <NavigationMenuItem>
-                                    <NavigationMenuLink
-                                        asChild
-                                        className="py-0.5 px-1.5 data-[active=true]:bg-background/10 data-[active=true]:focus:bg-background/10 data-[active=true]:hover:bg-background/10 hover:bg-background/10 focus:bg-background/10"
-                                        indicator
-                                    >
-                                        <Link
-                                            to="/runewords"
-                                            data-active={!!matchRoute({ to: "/runewords" })}
-                                            className="font-bold"
-                                        >
-                                            Runewords
-                                        </Link>
-                                    </NavigationMenuLink>
-                                </NavigationMenuItem>
+                                {NAV_ITEMS.map(item =>
+                                    item.isChild ? null : (
+                                        <NavigationMenuItem key={item.path}>
+                                            <NavigationMenuLink
+                                                asChild
+                                                className="font-bold py-0.5 px-1.5 data-[active=true]:bg-background/10 data-[active=true]:focus:bg-background/10 data-[active=true]:hover:bg-background/10 hover:bg-background/10 focus:bg-background/10"
+                                                indicator
+                                            >
+                                                <Link
+                                                    to={item.path}
+                                                    data-active={
+                                                        !!matchRoute({
+                                                            to: item.path,
+                                                            fuzzy: item.fuzzy,
+                                                        })
+                                                    }
+                                                    onClick={() => window.scrollTo(0, 0)}
+                                                >
+                                                    {item.label}
+                                                </Link>
+                                            </NavigationMenuLink>
+                                        </NavigationMenuItem>
+                                    )
+                                )}
                             </NavigationMenuList>
                         </NavigationMenu>
                     </nav>
@@ -95,6 +173,6 @@ export default function Header() {
                     <Searchbar />
                 </div>
             ) : null}
-        </>
+        </div>
     );
 }
