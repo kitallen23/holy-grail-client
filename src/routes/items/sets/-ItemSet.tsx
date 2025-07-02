@@ -10,11 +10,17 @@ function getFilteredSetItems(data: SetItemArrayItem[], set: SetCategory): SetIte
         return [];
     }
 
-    const categorySetItems = data
-        .filter(item => item.category === set)
-        .sort((a, b) => (a.name > b.name ? 1 : 0));
+    const categorySetItems = data.filter(item => item.category === set);
+    const setOrder = Object.fromEntries(
+        categorySetItems[0]?.setItems.map((item, i) => [item, i++]) ?? []
+    );
 
-    return categorySetItems;
+    const sortedCategorySetItems = categorySetItems.sort((a, b) => {
+        const orderA = setOrder[a.name] ?? Infinity;
+        const orderB = setOrder[b.name] ?? Infinity;
+        return orderA - orderB;
+    });
+    return sortedCategorySetItems;
 }
 
 interface SetCategoryProps {
