@@ -127,7 +127,7 @@ export default function Header() {
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <div
-                        className={`${styles.title} text-lg flex items-center text-primary-foreground flex-nowrap`}
+                        className={`${styles.title} text-lg flex items-center text-primary-foreground flex-nowrap font-semibold`}
                     >
                         HOLY GRAIL
                     </div>
