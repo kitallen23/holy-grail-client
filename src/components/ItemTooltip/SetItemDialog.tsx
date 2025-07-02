@@ -5,16 +5,20 @@ import type { SetItem } from "@/types/items";
 import ItemAffix from "@/components/ItemTooltip/ItemAffix";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import SetItemBonusAffix from "@/components/ItemTooltip/SetItemBonusAffix";
+import clsx from "clsx";
+
+const EXCLUDED_BASES = ["Amulet", "Ring"];
 
 interface SetItemDialogProps extends React.ComponentProps<typeof DialogPrimitive.Root> {
     item?: SetItem;
+    onBaseItemClick: (itemName: string) => void;
     onSetItemClick: (itemName: string) => void;
 }
 
 const SetItemDialog = React.forwardRef<
     React.ComponentRef<typeof DialogContent>,
     SetItemDialogProps
->(({ item, onSetItemClick, ...props }, ref) => {
+>(({ item, onSetItemClick, onBaseItemClick, ...props }, ref) => {
     const displayedItemBonuses = Object.entries(item?.itemBonuses || {}).sort((a, b) =>
         a[0] > b[0] ? 0 : 1
     );
@@ -30,7 +34,19 @@ const SetItemDialog = React.forwardRef<
                 >
                     <div className="max-w-3xl font-diablo text-md sm:text-xl flex gap-y-1 flex-col text-center leading-6">
                         <div className="text-diablo-green">{item.name}</div>
-                        <div className="text-diablo-green">{item.type}</div>
+                        {EXCLUDED_BASES.includes(item.type) ? (
+                            <div className="text-diablo-green">{item.type}</div>
+                        ) : (
+                            <div className="text-diablo-green break-keep wrap-anywhere">
+                                <button
+                                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-all shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-diablo-green/20 text-diablo-green px-2 cursor-default select-none"
+                                    onClick={() => onBaseItemClick(item.type)}
+                                    aria-label={`View details for ${item.type}`}
+                                >
+                                    {item.type}
+                                </button>
+                            </div>
+                        )}
                         {item.implicits?.map((implicit, i) => (
                             <ItemAffix
                                 key={i}
@@ -73,7 +89,12 @@ const SetItemDialog = React.forwardRef<
                                 className="text-diablo-green break-keep wrap-anywhere"
                             >
                                 <button
-                                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-all shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-diablo-green/20 text-diablo-green px-2 cursor-default select-none"
+                                    className={clsx(
+                                        "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-all shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-diablo-green/20 text-diablo-green px-2 cursor-default select-none",
+                                        itemName === item.name
+                                            ? "relative after:content-[''] after:absolute after:right-0 after:top-1/2 after:translate-x-1/2 after:-translate-y-1/2 after:w-1 after:h-1 after:bg-destructive after:rotate-45 after:shadow-[0_0_0_1px_background] before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-1 before:h-1 before:bg-destructive before:rotate-45 before:shadow-[0_0_0_1px_background]"
+                                            : ""
+                                    )}
                                     onClick={() => onSetItemClick(itemName)}
                                     aria-label={`View details for ${itemName}`}
                                 >

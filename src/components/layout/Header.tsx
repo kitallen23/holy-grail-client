@@ -43,6 +43,12 @@ const NAV_ITEMS = [
         isChild: true,
     },
     {
+        label: "Base Items",
+        path: "/items/bases",
+        fuzzy: false,
+        isChild: true,
+    },
+    {
         label: "Runes",
         path: "/items/runes",
         fuzzy: false,
