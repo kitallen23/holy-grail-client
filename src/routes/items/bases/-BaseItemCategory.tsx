@@ -1,52 +1,51 @@
 import { useMemo } from "react";
 
-import type { BaseCategory, UniqueItem } from "@/types/items";
-import UniqueItemSubcategory from "@/routes/items/unique/-UniqueItemSubcategory";
-import type { TopLevelCategory, UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
+import type { BaseCategory, BaseItem } from "@/types/items";
+import type { BaseItemArrayItem, TopLevelCategory, WithKey } from "@/routes/items/-types";
 import { ITEM_CATEGORIES } from "@/routes/items/-utils";
+import BaseItemSubcategory from "@/routes/items/bases/-BaseItemSubcategory";
+import { tierOrder } from "@/routes/items/bases/-utils";
 
-function getFilteredUniqueItems(
-    data: Record<string, UniqueItem> | null,
+function getFilteredBaseItems(
+    data: Record<string, BaseItem> | null,
     category: TopLevelCategory
-): UniqueItemArrayItem[] {
+): BaseItemArrayItem[] {
     if (!data) {
         return [];
     }
 
-    const categoryUniqueItems = Object.entries(data)
+    const categoryBaseItems = Object.entries(data)
         .map(([key, value]) => ({
             ...value,
             key,
         }))
         .filter(item =>
-            ITEM_CATEGORIES[category].some(subcategory =>
-                item.category.endsWith(`Unique ${subcategory}`)
-            )
+            ITEM_CATEGORIES[category].some(subcategory => item.category === subcategory)
         )
-        .sort((a, b) => (a.name > b.name ? 1 : 0));
+        .sort((a, b) => tierOrder[a.tier] - tierOrder[b.tier]);
 
-    return categoryUniqueItems;
+    return categoryBaseItems;
 }
 
-interface UniqueItemCategoryProps {
-    data: Record<string, UniqueItem> | null;
+interface BaseItemCategoryProps {
+    data: Record<string, BaseItem> | null;
     category: "Weapons" | "Armor" | "Other";
     subcategories: BaseCategory[];
     label: string;
-    selectedItem?: WithKey<UniqueItem> | null;
-    onClick: (item: UniqueItemArrayItem | null) => void;
+    selectedItem?: WithKey<BaseItem> | null;
+    onClick: (item: BaseItemArrayItem | null) => void;
 }
 
-export default function UniqueItemCategory({
+export default function BaseItemCategory({
     data,
     category,
     subcategories,
     label,
     selectedItem,
     onClick,
-}: UniqueItemCategoryProps) {
+}: BaseItemCategoryProps) {
     const displayedCategoryItems = useMemo(
-        () => getFilteredUniqueItems(data, category),
+        () => getFilteredBaseItems(data, category),
         [data, category]
     );
 
@@ -60,7 +59,7 @@ export default function UniqueItemCategory({
                 {label}
             </h2>
             {subcategories.map(subcategory => (
-                <UniqueItemSubcategory
+                <BaseItemSubcategory
                     key={`${category}-${subcategory}`}
                     data={displayedCategoryItems}
                     subcategory={subcategory as BaseCategory}

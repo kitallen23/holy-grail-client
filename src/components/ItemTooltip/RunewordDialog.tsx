@@ -30,7 +30,7 @@ export default function RunewordDialog({ runeword, ...props }: RunewordDialogPro
                                 variableColor="text-diablo-blue"
                             />
                         )) || null}
-                        {runeword.affixes.map((affix, i) => (
+                        {(runeword.affixes || []).map((affix, i) => (
                             <ItemAffix
                                 key={i}
                                 affix={affix}

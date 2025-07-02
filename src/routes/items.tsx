@@ -43,6 +43,16 @@ function ItemsPage() {
                             <NavigationMenuItem>
                                 <NavigationMenuLink asChild className="py-1 px-1.5" indicator>
                                     <Link
+                                        to="/items/bases"
+                                        data-active={!!matchRoute({ to: "/items/bases" })}
+                                    >
+                                        Base Items
+                                    </Link>
+                                </NavigationMenuLink>
+                            </NavigationMenuItem>
+                            <NavigationMenuItem>
+                                <NavigationMenuLink asChild className="py-1 px-1.5" indicator>
+                                    <Link
                                         to="/items/runes"
                                         data-active={!!matchRoute({ to: "/items/runes" })}
                                     >

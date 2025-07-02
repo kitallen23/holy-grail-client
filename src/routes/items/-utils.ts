@@ -15,7 +15,9 @@ export function getSearchableText(item: UniqueItem | SetItem | Rune): string {
             ? item.category.replace("Unique Armor", "Unique Body Armor")
             : item.category;
         searchableFields.push(parsedCategory);
-        const searchableAffixes = item.affixes.map(affix => cleanVariablePlaceholders(affix[0]));
+        const searchableAffixes = (item.affixes || []).map(affix =>
+            cleanVariablePlaceholders(affix[0])
+        );
         const searchableImplicits = (item?.implicits || []).map(affix =>
             cleanVariablePlaceholders(affix[0])
         );
@@ -41,3 +43,41 @@ export function getSearchableText(item: UniqueItem | SetItem | Rune): string {
 
     return searchableFields.join(" ").toLowerCase();
 }
+
+export const ITEM_CATEGORIES = {
+    Weapons: [
+        "Axes",
+        "Bows",
+        "Crossbows",
+        "Daggers",
+        "Javelins",
+        "Hammers",
+        "Maces",
+        "Polearms",
+        "Scepters",
+        "Spears",
+        "Staves",
+        "Swords",
+        "Throwing Weapons",
+        "Wands",
+        "Amazon Bows",
+        "Amazon Javelins",
+        "Amazon Spears",
+        "Assassin Katars",
+        "Sorceress Orbs",
+    ],
+    Armor: [
+        "Belts",
+        "Armor",
+        "Boots",
+        "Circlets",
+        "Gloves",
+        "Helmets",
+        "Shields",
+        "Barbarian Helmets",
+        "Druid Pelts",
+        "Necromancer Shrunken Heads",
+        "Paladin Shields",
+    ],
+    Other: ["Amulets", "Rings", "Jewels", "Charms"],
+};

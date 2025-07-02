@@ -29,7 +29,7 @@ export default function UniqueItemDialog({ item, ...props }: UniqueItemDialogPro
                                 variableColor="text-diablo-blue"
                             />
                         )) || null}
-                        {item.affixes.map((affix, i) => (
+                        {(item.affixes || []).map((affix, i) => (
                             <ItemAffix
                                 key={i}
                                 affix={affix}

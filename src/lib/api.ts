@@ -1,6 +1,6 @@
 import ky from "ky";
 
-export type QueryItem = "unique" | "sets" | "runes";
+export type QueryItem = "unique" | "sets" | "runes" | "bases";
 
 const api = ky.create({
     prefixUrl: import.meta.env.VITE_API_URL || "https://api.holy-grail.chuggs.net",

@@ -1,26 +1,25 @@
-import UniqueItemDialog from "@/components/ItemTooltip/UniqueItemDialog";
+import BaseItemDialog from "@/components/ItemTooltip/BaseItemDialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import type { DialogContent } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-
 import { useItems } from "@/hooks/queries";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { TopLevelCategory, WithKey } from "@/routes/items/-types";
 import { getSearchableText, ITEM_CATEGORIES } from "@/routes/items/-utils";
-import UniqueItemCategory from "@/routes/items/unique/-UniqueItemCategory";
+import BaseItemCategory from "@/routes/items/bases/-BaseItemCategory";
 import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
-import type { BaseCategory, UniqueItem } from "@/types/items";
-
+import type { BaseCategory, BaseItem, Tier } from "@/types/items";
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-export const Route = createFileRoute("/items/unique/")({
-    component: UniqueItemsPage,
+export const Route = createFileRoute("/items/bases/")({
+    component: BaseItemsPage,
 });
 
-function UniqueItemsPage() {
-    const { data, isFetching, error } = useItems("unique");
+function BaseItemsPage() {
+    const { data, isFetching, error } = useItems("bases");
     const { debouncedSearchString, clearSearch } = useDebouncedSearch();
     const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
 
@@ -32,7 +31,15 @@ function UniqueItemsPage() {
                 options: [
                     { id: "Weapons", label: "Weapons", value: false },
                     { id: "Armor", label: "Armor", value: false },
-                    { id: "Other", label: "Other", value: false },
+                ],
+            },
+            {
+                id: "item_tier",
+                label: "Item Tier",
+                options: [
+                    { id: "Normal", label: "Normal", value: false },
+                    { id: "Exceptional", label: "Exceptional", value: false },
+                    { id: "Elite", label: "Elite", value: false },
                 ],
             },
         ];
@@ -41,25 +48,39 @@ function UniqueItemsPage() {
         return () => setPageFilters(null);
     }, []);
 
-    const displayedItems: Record<string, UniqueItem> | undefined = useMemo(() => {
+    const displayedItems: Record<string, BaseItem> | undefined = useMemo(() => {
         if (!data) {
             return data;
         }
 
         const searchTerms = getSearchTerms(debouncedSearchString);
 
-        const filtered: Record<string, UniqueItem> = {};
-        const disableFilter = !Object.values(selectedFilters).some(val => val);
+        const filtered: Record<string, BaseItem> = {};
+        // const disableFilter = !Object.values(selectedFilters).some(val => val);
+        // console.log(`selectedFilters: `, selectedFilters);
+
+        const filterType = (type: "Weapons" | "Armor") => {
+            if (selectedFilters.Weapons || selectedFilters.Armor) {
+                return selectedFilters[type];
+            }
+            return true;
+        };
+
+        const filterTier = (tier: Tier) => {
+            if (selectedFilters.Normal || selectedFilters.Exceptional || selectedFilters.Elite) {
+                return selectedFilters[tier];
+            }
+            return true;
+        };
 
         Object.entries(data).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
             if (matchesAllTerms(searchableText, searchTerms)) {
                 const itemType = Object.entries(ITEM_CATEGORIES).find(([, subcategories]) =>
-                    subcategories.some(subcategory =>
-                        item.category.endsWith(`Unique ${subcategory}`)
-                    )
+                    subcategories.some(subcategory => item.category === subcategory)
                 )?.[0];
-                if (disableFilter || selectedFilters[itemType!]) {
+
+                if (filterType(itemType as "Weapons" | "Armor") && filterTier(item.tier)) {
                     filtered[key] = item;
                 }
             }
@@ -68,7 +89,16 @@ function UniqueItemsPage() {
         return filtered;
     }, [data, debouncedSearchString, selectedFilters]);
 
-    const [selectedItem, setSelectedItem] = useState<WithKey<UniqueItem> | null>(null);
+    const [selectedItem, setSelectedItem] = useState<WithKey<BaseItem> | null>(null);
+    const dialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
+
+    const handleBaseItemClick = (itemName: string) => {
+        const baseItem = Object.values(data || {}).find(item => item.name === itemName);
+        if (baseItem) {
+            setSelectedItem(baseItem);
+        }
+        dialogRef.current?.scrollTo(0, 0);
+    };
 
     if (error) {
         return (
@@ -131,7 +161,7 @@ function UniqueItemsPage() {
         <>
             <div className="grid gap-4">
                 {Object.entries(ITEM_CATEGORIES).map(([category, subcategories]) => (
-                    <UniqueItemCategory
+                    <BaseItemCategory
                         key={category}
                         data={displayedItems}
                         category={category as TopLevelCategory}
@@ -142,15 +172,16 @@ function UniqueItemsPage() {
                     />
                 ))}
             </div>
-            <UniqueItemDialog
+            <BaseItemDialog
                 open={!!selectedItem}
                 onOpenChange={open => !open && setSelectedItem(null)}
-                item={selectedItem as UniqueItem}
+                item={selectedItem as BaseItem}
+                onBaseItemClick={handleBaseItemClick}
             />
         </>
     ) : (
         <div className="mt-4 flex flex-col gap-2">
-            <div className="text-center text-muted-foreground italic">No unique items found.</div>
+            <div className="text-center text-muted-foreground italic">No base items found.</div>
             <Button
                 variant="ghost"
                 size="sm"

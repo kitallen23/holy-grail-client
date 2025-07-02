@@ -1,42 +1,43 @@
 import HeadingSeparator from "@/components/HeadingSeparator";
 import { Button } from "@/components/ui/button";
-import type { UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
-import type { BaseCategory, UniqueItem } from "@/types/items";
+import type { BaseItemArrayItem, WithKey } from "@/routes/items/-types";
+import { tierOrder } from "@/routes/items/bases/-utils";
+import type { BaseCategory, BaseItem } from "@/types/items";
 import clsx from "clsx";
 import { useMemo } from "react";
 
-function getFilteredUniqueItems(
-    data: UniqueItemArrayItem[],
+function getFilteredBaseItems(
+    data: BaseItemArrayItem[],
     subcategory: BaseCategory
-): UniqueItemArrayItem[] {
+): BaseItemArrayItem[] {
     if (!data) {
         return [];
     }
 
-    const categoryUniqueItems = data
-        .filter(item => item.category.endsWith(`Unique ${subcategory}`))
-        .sort((a, b) => (a.name > b.name ? 1 : 0));
+    const categoryBaseItems = data
+        .filter(item => item.category === subcategory)
+        .sort((a, b) => tierOrder[a.tier] - tierOrder[b.tier]);
 
-    return categoryUniqueItems;
+    return categoryBaseItems;
 }
 
-interface UniqueItemSubcategoryProps {
-    data: UniqueItemArrayItem[];
+interface BaseItemSubcategoryProps {
+    data: BaseItemArrayItem[];
     subcategory: BaseCategory;
     label: string;
-    selectedItem?: WithKey<UniqueItem> | null;
-    onClick: (item: UniqueItemArrayItem | null) => void;
+    selectedItem?: WithKey<BaseItem> | null;
+    onClick: (item: BaseItemArrayItem | null) => void;
 }
 
-export default function UniqueItemSubcategory({
+export default function BaseItemSubcategory({
     data,
     subcategory,
     label,
     selectedItem,
     onClick,
-}: UniqueItemSubcategoryProps) {
+}: BaseItemSubcategoryProps) {
     const displayedSubcategoryItems = useMemo(
-        () => getFilteredUniqueItems(data, subcategory),
+        () => getFilteredBaseItems(data, subcategory),
         [data, subcategory]
     );
 
@@ -46,7 +47,7 @@ export default function UniqueItemSubcategory({
 
     return (
         <>
-            <HeadingSeparator color="text-primary">{label}</HeadingSeparator>
+            <HeadingSeparator color="text-foreground">{label}</HeadingSeparator>
             <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                 {displayedSubcategoryItems.map(item => (
                     <Button
@@ -62,8 +63,8 @@ export default function UniqueItemSubcategory({
                         aria-haspopup="dialog"
                         aria-label={`View details for ${item.name}`}
                     >
-                        <div className="text-nowrap truncate">{item.key}</div>
-                        <div className="pl-0 sm:pl-1 text-foreground/60 truncate">{item.type}</div>
+                        <div className="text-nowrap truncate">{item.name}</div>
+                        <div className="pl-0 sm:pl-1 text-foreground/60 truncate">{item.tier}</div>
                     </Button>
                 ))}
             </div>
