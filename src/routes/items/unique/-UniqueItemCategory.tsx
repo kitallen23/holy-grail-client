@@ -1,8 +1,13 @@
 import { useMemo } from "react";
 
-import type { BaseCategory, UniqueItem } from "@/types/items";
+import type { UniqueItem } from "@/types/items";
 import UniqueItemSubcategory from "@/routes/items/unique/-UniqueItemSubcategory";
-import type { TopLevelCategory, UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
+import type {
+    TopLevelCategory,
+    UniqueBaseCategory,
+    UniqueItemArrayItem,
+    WithKey,
+} from "@/routes/items/-types";
 import { ITEM_CATEGORIES } from "@/routes/items/-utils";
 
 function getFilteredUniqueItems(
@@ -22,8 +27,7 @@ function getFilteredUniqueItems(
             ITEM_CATEGORIES[category].some(subcategory =>
                 item.category.endsWith(`Unique ${subcategory}`)
             )
-        )
-        .sort((a, b) => (a.name > b.name ? 1 : 0));
+        );
 
     return categoryUniqueItems;
 }
@@ -31,7 +35,7 @@ function getFilteredUniqueItems(
 interface UniqueItemCategoryProps {
     data: Record<string, UniqueItem> | null;
     category: "Weapons" | "Armor" | "Other";
-    subcategories: BaseCategory[];
+    subcategories: UniqueBaseCategory[];
     label: string;
     selectedItem?: WithKey<UniqueItem> | null;
     onClick: (item: UniqueItemArrayItem | null) => void;
@@ -63,7 +67,7 @@ export default function UniqueItemCategory({
                 <UniqueItemSubcategory
                     key={`${category}-${subcategory}`}
                     data={displayedCategoryItems}
-                    subcategory={subcategory as BaseCategory}
+                    subcategory={subcategory as UniqueBaseCategory}
                     label={subcategory === "Armor" ? "Body Armor" : subcategory}
                     selectedItem={selectedItem}
                     onClick={onClick}

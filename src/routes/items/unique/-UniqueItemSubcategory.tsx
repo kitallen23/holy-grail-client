@@ -1,28 +1,30 @@
 import HeadingSeparator from "@/components/HeadingSeparator";
 import { Button } from "@/components/ui/button";
-import type { UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
-import type { BaseCategory, UniqueItem } from "@/types/items";
+import type { UniqueBaseCategory, UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
+import type { UniqueItem } from "@/types/items";
 import clsx from "clsx";
 import { useMemo } from "react";
 
 function getFilteredUniqueItems(
     data: UniqueItemArrayItem[],
-    subcategory: BaseCategory
+    subcategory: UniqueBaseCategory
 ): UniqueItemArrayItem[] {
     if (!data) {
         return [];
     }
 
-    const categoryUniqueItems = data
-        .filter(item => item.category.endsWith(`Unique ${subcategory}`))
-        .sort((a, b) => (a.name > b.name ? 1 : 0));
+    let categoryUniqueItems = data.filter(item => item.category.endsWith(`Unique ${subcategory}`));
+
+    if (subcategory !== "Charms") {
+        categoryUniqueItems = categoryUniqueItems.sort((a, b) => (a.name > b.name ? 1 : 0));
+    }
 
     return categoryUniqueItems;
 }
 
 interface UniqueItemSubcategoryProps {
     data: UniqueItemArrayItem[];
-    subcategory: BaseCategory;
+    subcategory: UniqueBaseCategory;
     label: string;
     selectedItem?: WithKey<UniqueItem> | null;
     onClick: (item: UniqueItemArrayItem | null) => void;
