@@ -1,4 +1,5 @@
 import { checkAuth, logout as apiLogout, type User } from "@/lib/api";
+import { toast } from "sonner";
 import { create } from "zustand";
 
 interface AuthState {
@@ -28,6 +29,7 @@ export const useAuthStore = create<AuthState>(set => ({
             console.error("Logout error:", error);
         } finally {
             set({ user: null });
+            toast.success("You've been signed out.");
         }
     },
 }));

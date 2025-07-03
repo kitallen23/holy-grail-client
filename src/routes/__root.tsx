@@ -3,6 +3,7 @@ import { createRootRoute, Outlet } from "@tanstack/react-router";
 import Header from "@/components/layout/Header";
 import { useSearchBar } from "@/stores/useSearchStore";
 import LoginModal from "@/components/LoginModal";
+import { Toaster } from "@/components/ui/sonner";
 
 const RootLayout = () => {
     const { isVisible } = useSearchBar();
@@ -16,6 +17,7 @@ const RootLayout = () => {
                 <Outlet />
                 <LoginModal />
             </main>
+            <Toaster />
             {/* <footer></footer> */}
             {/* <TanStackRouterDevtools /> */}
         </>
