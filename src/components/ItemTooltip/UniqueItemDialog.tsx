@@ -18,13 +18,13 @@ export const UniqueItemDialog = React.forwardRef<
 >(({ item, onBaseItemClick, ...props }, ref) => {
     return (
         <Dialog {...props}>
-            <DialogTitle className="sr-only">{item?.name || "Item"} Tooltip</DialogTitle>
             {item ? (
                 <DialogContent
                     ref={ref}
                     className="bg-black/90 rounded-none border-none p-3 w-[max-content] max-h-[calc(100dvh-2rem)] overflow-y-auto"
                     aria-describedby={undefined}
                 >
+                    <DialogTitle className="sr-only">{item?.name || "Item"} Tooltip</DialogTitle>
                     <div className="max-w-3xl font-diablo text-md sm:text-xl flex gap-y-1 flex-col text-center leading-6">
                         <div className="text-primary">{item.name}</div>
                         {EXCLUDED_BASES.includes(item.type) ? (
