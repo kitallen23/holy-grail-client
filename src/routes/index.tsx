@@ -1,41 +1,60 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { useGrailProgress, useItems } from "@/hooks/queries";
+import GrailStatsTable from "./-grail/GrailStatsTable";
+import GrailRemainingItemSummary from "./-grail/GrailRemainingItemSummary";
 
 export const Route = createFileRoute("/")({
-    component: Index,
+    component: GrailPage,
 });
 
-function Index() {
+function GrailPage() {
+    const {
+        data,
+        isFetching: isFetchingItems,
+        // error: itemsError,
+    } = useItems(["baseItems", "runes", "uniqueItems", "setItems"]);
+    const baseItems = data?.baseItems;
+    const uniqueItems = data?.uniqueItems;
+    const setItems = data?.setItems;
+    const runes = data?.runes;
+
+    const {
+        data: grailProgress,
+        isFetching: isFetchingGrailProgress,
+        // error: grailProgressError,
+    } = useGrailProgress();
+
+    const isFetching = isFetchingItems || isFetchingGrailProgress;
+    // const error = itemsError || grailProgressError;
+
+    if (isFetching || !data || !grailProgress) {
+        return null;
+    }
+
     return (
-        <div>
-            <div className="font-bold">Hello, World!</div>
-            <div className="flex gap-4">
-                <Button>
-                    <div className="flex flex-nowrap gap-x-1 items-center">
-                        <Check size={64} />
-                        primary
-                    </div>
-                </Button>
-                <Button variant="secondary">secondary</Button>
-                <Button variant="accent">accent</Button>
-                <Button variant="outline">outline</Button>
-                <Button variant="ghost">ghost</Button>
-                <Button size="icon">
-                    <Check />
-                </Button>
+        <div className="pt-2 pb-8 grid grid-cols-1 gap-4">
+            <div className="grid max-w-lg mx-auto w-full">
+                <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight pb-1 [&:not(:first-child)]:mt-10 text-destructive font-diablo text-center">
+                    Statistics
+                </h2>
+                <GrailStatsTable
+                    uniqueItems={uniqueItems!}
+                    setItems={setItems!}
+                    runes={runes!}
+                    grailProgress={grailProgress}
+                />
             </div>
-            <div className="text-lg">This is a test of the new font.</div>
-            <div className="text-xl">abcdefghijklmnopqrstuvwxyz</div>
-            <div className="text-xl">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
-            <div className="text-xl">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien
-                vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.
-                Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec
-                metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere.
-                Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia
-                nostra inceptos himenaeos.
-            </div>
+
+            <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight pb-1 [&:not(:first-child)]:mt-10 text-destructive font-diablo text-center">
+                Pickup List
+            </h2>
+            <GrailRemainingItemSummary
+                uniqueItems={uniqueItems!}
+                setItems={setItems!}
+                runes={runes!}
+                baseItems={baseItems!}
+                grailProgress={grailProgress}
+            />
         </div>
     );
 }
