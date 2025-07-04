@@ -19,7 +19,9 @@ export const Route = createFileRoute("/items/bases/")({
 });
 
 function BaseItemsPage() {
-    const { data, isFetching, error } = useItems("bases");
+    const { data, isFetching, error } = useItems(["baseItems"]);
+    const baseItems = data?.baseItems;
+
     const { debouncedSearchString, clearSearch } = useDebouncedSearch();
     const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
 
@@ -49,15 +51,13 @@ function BaseItemsPage() {
     }, []);
 
     const displayedItems: Record<string, BaseItem> | undefined = useMemo(() => {
-        if (!data) {
-            return data;
+        if (!baseItems) {
+            return baseItems;
         }
 
         const searchTerms = getSearchTerms(debouncedSearchString);
 
         const filtered: Record<string, BaseItem> = {};
-        // const disableFilter = !Object.values(selectedFilters).some(val => val);
-        // console.log(`selectedFilters: `, selectedFilters);
 
         const filterType = (type: "Weapons" | "Armor") => {
             if (selectedFilters.Weapons || selectedFilters.Armor) {
@@ -73,7 +73,7 @@ function BaseItemsPage() {
             return true;
         };
 
-        Object.entries(data).forEach(([key, item]) => {
+        Object.entries(baseItems).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
             if (matchesAllTerms(searchableText, searchTerms)) {
                 const itemType = Object.entries(ITEM_CATEGORIES).find(([, subcategories]) =>
@@ -87,15 +87,16 @@ function BaseItemsPage() {
         });
 
         return filtered;
-    }, [data, debouncedSearchString, selectedFilters]);
+    }, [baseItems, debouncedSearchString, selectedFilters]);
 
     const [selectedItem, setSelectedItem] = useState<WithKey<BaseItem> | null>(null);
     const dialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
 
     const handleBaseItemClick = (itemName: string) => {
-        const baseItem = Object.values(data || {}).find(item => item.name === itemName);
-        if (baseItem) {
-            setSelectedItem(baseItem);
+        const [key, baseItem] =
+            Object.entries(baseItems || {}).find(([, item]) => item.name === itemName) || [];
+        if (key && baseItem) {
+            setSelectedItem({ ...baseItem, key });
         }
         dialogRef.current?.scrollTo(0, 0);
     };

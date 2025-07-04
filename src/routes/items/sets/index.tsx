@@ -23,8 +23,10 @@ export const Route = createFileRoute("/items/sets/")({
 const TIERS: Tier[] = ["Normal", "Exceptional", "Elite"];
 
 function SetItemsPage() {
-    const { data, isFetching, error } = useItems("sets");
-    const { data: basesData, isFetching: isFetchingBases, error: basesError } = useItems("bases");
+    const { data, isFetching, error } = useItems(["setItems", "baseItems"]);
+    const setItems = data?.setItems;
+    const baseItems = data?.baseItems;
+
     const { debouncedSearchString, clearSearch } = useDebouncedSearch();
     const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
 
@@ -46,8 +48,8 @@ function SetItemsPage() {
     }, []);
 
     const displayedItems: Record<string, SetItem> | undefined = useMemo(() => {
-        if (!data) {
-            return data;
+        if (!setItems) {
+            return setItems;
         }
 
         const searchTerms = getSearchTerms(debouncedSearchString);
@@ -55,7 +57,7 @@ function SetItemsPage() {
         const filtered: Record<string, SetItem> = {};
         const disableFilter = !Object.values(selectedFilters).some(val => val);
 
-        Object.entries(data).forEach(([key, item]) => {
+        Object.entries(setItems).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
             if (matchesAllTerms(searchableText, searchTerms)) {
                 const setTier = SETS.find(set => set.name === item.category)?.tier;
@@ -66,7 +68,7 @@ function SetItemsPage() {
         });
 
         return filtered;
-    }, [data, debouncedSearchString, selectedFilters]);
+    }, [setItems, debouncedSearchString, selectedFilters]);
 
     const [selectedItem, setSelectedItem] = useState<WithKey<SetItem> | null>(null);
     const [selectedBaseItem, setSelectedBaseItem] = useState<WithKey<BaseItem> | null>(null);
@@ -74,22 +76,24 @@ function SetItemsPage() {
     const baseDialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
 
     const handleSetItemClick = (itemName: string) => {
-        const setItem = Object.values(data || {}).find(item => item.name === itemName);
-        if (setItem) {
-            setSelectedItem(setItem);
+        const [key, setItem] =
+            Object.entries(setItems || {}).find(([, item]) => item.name === itemName) || [];
+        if (key && setItem) {
+            setSelectedItem({ ...setItem, key });
         }
         dialogRef.current?.scrollTo(0, 0);
     };
     const handleBaseItemClick = (itemName: string) => {
-        const baseItem = Object.values(basesData || {}).find(item => item.name === itemName);
-        if (baseItem) {
-            setSelectedBaseItem(baseItem);
+        const [key, baseItem] =
+            Object.entries(baseItems || {}).find(([, item]) => item.name === itemName) || [];
+        if (key && baseItem) {
+            setSelectedBaseItem({ ...baseItem, key });
         }
         setSelectedItem(null);
         baseDialogRef.current?.scrollTo(0, 0);
     };
 
-    if (error || basesError) {
+    if (error) {
         return (
             <div className="max-w-2xl mx-auto pt-4">
                 <Alert variant="destructive">
@@ -104,7 +108,7 @@ function SetItemsPage() {
         );
     }
 
-    if (isFetching || isFetchingBases || !displayedItems) {
+    if (isFetching || !displayedItems) {
         return (
             <div className="grid grid-cols-1 gap-4 opacity-20">
                 <div className="pb-1 flex justify-center items-center h-9">

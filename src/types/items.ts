@@ -236,7 +236,7 @@ export type Items = {
     uniqueItems: Record<string, UniqueItem>;
     setItems: Record<string, SetItem>;
     runes: Record<string, Rune>;
-    bases: Record<string, BaseItem>;
+    baseItems: Record<string, BaseItem>;
 };
 
 export type Runewords = Record<string, Runeword>;

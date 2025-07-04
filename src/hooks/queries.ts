@@ -1,20 +1,55 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
     fetchItems,
     fetchRunewords,
     fetchUserItems,
     type GrailProgressItem,
-    type QueryItem,
+    type QueryType,
 } from "@/lib/api";
-import type { BaseItem, Items, Rune, Runewords, SetItem, UniqueItem } from "@/types/items";
+import type { Items, Runewords } from "@/types/items";
 
-export const useItems = (type?: QueryItem) => {
+export const useItems = (types: QueryType[]) => {
+    const queryClient = useQueryClient();
+
     return useQuery({
-        queryKey: type ? ["items", type] : ["items"],
-        queryFn: () =>
-            fetchItems(type) as Promise<{
-                items: Items | Record<string, UniqueItem | SetItem | Rune | BaseItem>;
-            }>,
+        queryKey: ["items", types.sort()],
+        queryFn: async () => {
+            // Check what's already cached
+            const missingTypes = types.filter(type => {
+                const cached = queryClient.getQueryData(["items", "single", type]);
+                return !cached;
+            });
+
+            let response: { items: Partial<Items> } = { items: {} };
+
+            // Fetch missing types
+            if (missingTypes.length > 0) {
+                response = (await fetchItems(missingTypes)) as { items: Partial<Items> };
+
+                // Cache individual types
+                missingTypes.forEach(type => {
+                    if (response.items[type]) {
+                        queryClient.setQueryData(["items", "single", type], {
+                            items: response.items[type],
+                        });
+                    }
+                });
+            }
+
+            // Combine cached + fetched data
+            const combinedItems: Partial<Items> = {};
+            types.forEach(type => {
+                const cached = queryClient.getQueryData(["items", "single", type]) as
+                    | { items: Items[typeof type] }
+                    | undefined;
+                if (cached?.items) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (combinedItems as any)[type] = cached.items;
+                }
+            });
+
+            return { items: combinedItems };
+        },
         select: data => data.items,
     });
 };
@@ -25,31 +60,6 @@ export const useRunewords = () => {
         queryFn: () => fetchRunewords() as Promise<{ runewords: Runewords }>,
         select: data => data.runewords,
     });
-};
-
-export const useGrailItems = () => {
-    const unique = useItems("unique");
-    const sets = useItems("sets");
-    const runes = useItems("runes");
-    const bases = useItems("bases");
-
-    const data: Items | undefined =
-        unique.data && sets.data && runes.data && bases.data
-            ? {
-                  uniqueItems: unique.data as Record<string, UniqueItem>,
-                  setItems: sets.data as Record<string, SetItem>,
-                  runes: runes.data as Record<string, Rune>,
-                  bases: bases.data as Record<string, BaseItem>,
-              }
-            : undefined;
-
-    return {
-        data,
-        isLoading: unique.isLoading || sets.isLoading || runes.isLoading || bases.isLoading,
-        isFetching: unique.isFetching || sets.isFetching || runes.isFetching || bases.isFetching,
-        isError: unique.isError || sets.isError || runes.isError || bases.isError,
-        error: unique.error || sets.error || runes.error || bases.error,
-    };
 };
 
 export const useGrailProgress = () => {

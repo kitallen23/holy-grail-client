@@ -22,8 +22,10 @@ export const Route = createFileRoute("/items/unique/")({
 });
 
 function UniqueItemsPage() {
-    const { data, isFetching, error } = useItems("unique");
-    const { data: basesData, isFetching: isFetchingBases, error: basesError } = useItems("bases");
+    const { data, isFetching, error } = useItems(["uniqueItems", "baseItems"]);
+    const uniqueItems = data?.uniqueItems;
+    const baseItems = data?.baseItems;
+
     const { debouncedSearchString, clearSearch } = useDebouncedSearch();
     const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
 
@@ -45,8 +47,8 @@ function UniqueItemsPage() {
     }, []);
 
     const displayedItems: Record<string, UniqueItem> | undefined = useMemo(() => {
-        if (!data) {
-            return data;
+        if (!uniqueItems) {
+            return uniqueItems;
         }
 
         const searchTerms = getSearchTerms(debouncedSearchString);
@@ -54,7 +56,7 @@ function UniqueItemsPage() {
         const filtered: Record<string, UniqueItem> = {};
         const disableFilter = !Object.values(selectedFilters).some(val => val);
 
-        Object.entries(data).forEach(([key, item]) => {
+        Object.entries(uniqueItems).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
             if (matchesAllTerms(searchableText, searchTerms)) {
                 const itemType = Object.entries(ITEM_CATEGORIES).find(([, subcategories]) =>
@@ -69,22 +71,23 @@ function UniqueItemsPage() {
         });
 
         return filtered;
-    }, [data, debouncedSearchString, selectedFilters]);
+    }, [uniqueItems, debouncedSearchString, selectedFilters]);
 
     const [selectedItem, setSelectedItem] = useState<WithKey<UniqueItem> | null>(null);
     const [selectedBaseItem, setSelectedBaseItem] = useState<WithKey<BaseItem> | null>(null);
     const baseDialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
 
     const handleBaseItemClick = (itemName: string) => {
-        const baseItem = Object.values(basesData || {}).find(item => item.name === itemName);
-        if (baseItem) {
-            setSelectedBaseItem(baseItem);
+        const [key, baseItem] =
+            Object.entries(baseItems || {}).find(([, item]) => item.name === itemName) || [];
+        if (key && baseItem) {
+            setSelectedBaseItem({ ...baseItem, key });
         }
         setSelectedItem(null);
         baseDialogRef.current?.scrollTo(0, 0);
     };
 
-    if (error || basesError) {
+    if (error) {
         return (
             <div className="max-w-2xl mx-auto pt-4">
                 <Alert variant="destructive">
@@ -99,7 +102,7 @@ function UniqueItemsPage() {
         );
     }
 
-    if (isFetching || isFetchingBases || !displayedItems) {
+    if (isFetching || !displayedItems) {
         return (
             <div className="grid grid-cols-1 gap-4 opacity-20">
                 <div className="pb-1 flex justify-center items-center h-9">

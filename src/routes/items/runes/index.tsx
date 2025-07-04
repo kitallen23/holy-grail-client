@@ -19,13 +19,15 @@ export const Route = createFileRoute("/items/runes/")({
 });
 
 function RunesPage() {
-    const { data, isFetching, error } = useItems("runes");
+    const { data, isFetching, error } = useItems(["runes"]);
+    const runes = data?.runes;
+
     const { debouncedSearchString, clearSearch } = useDebouncedSearch();
     const { clearFilters } = useSearchFilters();
 
     const displayedRunes: RuneArrayItem[] = useMemo(() => {
-        if (!data || !debouncedSearchString.trim()) {
-            return Object.entries(data || {}).map(([key, value]) => ({
+        if (!runes || !debouncedSearchString.trim()) {
+            return Object.entries(runes || {}).map(([key, value]) => ({
                 ...value,
                 key,
             }));
@@ -33,7 +35,7 @@ function RunesPage() {
 
         const searchTerms = getSearchTerms(debouncedSearchString);
         if (searchTerms.length === 0) {
-            return Object.entries(data || {}).map(([key, value]) => ({
+            return Object.entries(runes || {}).map(([key, value]) => ({
                 ...value,
                 key,
             }));
@@ -41,7 +43,7 @@ function RunesPage() {
 
         const filtered: Record<string, Rune> = {};
 
-        Object.entries(data).forEach(([key, item]) => {
+        Object.entries(runes).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
             if (matchesAllTerms(searchableText, searchTerms)) {
                 filtered[key] = item;
@@ -52,7 +54,7 @@ function RunesPage() {
             ...value,
             key,
         }));
-    }, [data, debouncedSearchString]);
+    }, [runes, debouncedSearchString]);
 
     const [selectedRune, setSelectedRune] = useState<WithKey<Rune> | null>(null);
 

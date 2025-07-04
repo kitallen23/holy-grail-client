@@ -1,15 +1,15 @@
 import { cleanVariablePlaceholders } from "@/lib/search";
-import type { UniqueItem, SetItem, Rune } from "@/types/items";
+import type { UniqueItem, SetItem, Rune, BaseItem } from "@/types/items";
 
 /**
  * Extracts all searchable text from an unique item, a set item, or a rune
  * @param item - The item object to extract searchable text from
  * @returns A lowercase string containing all searchable text joined with spaces
  */
-export function getSearchableText(item: UniqueItem | SetItem | Rune): string {
+export function getSearchableText(item: UniqueItem | SetItem | Rune | BaseItem): string {
     const searchableFields = [item.name];
 
-    // Add attributes common to sets & uniques
+    // Add attributes common to sets, uniques & bases
     if ("affixes" in item) {
         const parsedCategory = item.category.endsWith("Unique Armor")
             ? item.category.replace("Unique Armor", "Unique Body Armor")
@@ -22,7 +22,10 @@ export function getSearchableText(item: UniqueItem | SetItem | Rune): string {
             cleanVariablePlaceholders(affix[0])
         );
 
-        searchableFields.push(item.type, ...searchableImplicits, ...searchableAffixes);
+        searchableFields.push(...searchableImplicits, ...searchableAffixes);
+    }
+    if ("type" in item) {
+        searchableFields.push(item.type);
     }
     // Add set-specific attributes
     if ("setBonuses" in item) {
