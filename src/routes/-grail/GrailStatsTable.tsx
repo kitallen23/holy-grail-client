@@ -25,7 +25,7 @@ export default function GrailStatsTable({
     );
     const totalFound = tableRows.reduce((acc, curr) => (acc += curr.found), 0);
     const totalItems = tableRows.reduce((acc, curr) => (acc += curr.total), 0);
-    const totalPercentage = Math.round((totalFound / totalItems) * 100);
+    const totalPercentage = Math.floor((totalFound / totalItems) * 100);
 
     return (
         <div>

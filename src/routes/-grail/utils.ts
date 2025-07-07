@@ -1,8 +1,18 @@
 import type { BaseItem, Rune, SetItem, UniqueItem } from "@/types/items";
 import type { RowData } from "./types";
 import type { GrailProgressItem } from "@/lib/api";
-import type { UniqueItemArrayItem, WithKey } from "@/routes/items/-types";
+import type { WithKey } from "@/routes/items/-types";
 import { ITEM_CATEGORIES } from "@/routes/items/-utils";
+
+export type UniqueBase = {
+    base: Partial<BaseItem>;
+    uniqueItems: UniqueItem[];
+};
+
+export type SetBase = {
+    base: Partial<BaseItem>;
+    setItems: SetItem[];
+};
 
 export const buildTableRows = (
     uniqueItems: Record<string, UniqueItem>,
@@ -41,7 +51,7 @@ export const buildTableRows = (
     const foundUniqueWeaponCount = uniqueWeapons.filter(item =>
         foundItemKeys.includes(item.key)
     ).length;
-    const foundUniqueWeaponPercentage = Math.round(
+    const foundUniqueWeaponPercentage = Math.floor(
         (foundUniqueWeaponCount / uniqueWeapons.length) * 100
     );
     data.push({
@@ -55,7 +65,7 @@ export const buildTableRows = (
     const foundUniqueArmorCount = uniqueArmor.filter(item =>
         foundItemKeys.includes(item.key)
     ).length;
-    const foundUniqueArmorPercentage = Math.round(
+    const foundUniqueArmorPercentage = Math.floor(
         (foundUniqueArmorCount / uniqueArmor.length) * 100
     );
     data.push({
@@ -69,7 +79,7 @@ export const buildTableRows = (
     const foundUniqueOtherCount = uniqueOther.filter(item =>
         foundItemKeys.includes(item.key)
     ).length;
-    const foundUniqueOtherPercentage = Math.round(
+    const foundUniqueOtherPercentage = Math.floor(
         (foundUniqueOtherCount / uniqueOther.length) * 100
     );
     data.push({
@@ -81,7 +91,7 @@ export const buildTableRows = (
 
     // Build table data for set items
     const foundSetItemCount = setItemsArray.filter(item => foundItemKeys.includes(item.key)).length;
-    const foundSetItemPercentage = Math.round((foundSetItemCount / setItemsArray.length) * 100);
+    const foundSetItemPercentage = Math.floor((foundSetItemCount / setItemsArray.length) * 100);
     data.push({
         title: "Set Items",
         total: setItemsArray.length,
@@ -91,7 +101,7 @@ export const buildTableRows = (
 
     // Build table data for runes
     const foundRunesCount = runesArray.filter(item => foundItemKeys.includes(item.key)).length;
-    const foundRunesPercentage = Math.round((foundRunesCount / runesArray.length) * 100);
+    const foundRunesPercentage = Math.floor((foundRunesCount / runesArray.length) * 100);
     data.push({
         title: "Runes",
         total: runesArray.length,
@@ -106,9 +116,52 @@ export const getRemainingUniqueBases = (
     uniqueItems: Record<string, UniqueItem>,
     baseItems: Record<string, BaseItem>,
     grailProgress: Record<string, GrailProgressItem>
-): UniqueItemArrayItem[] => {
-    // TODO: Implement me
-    console.info(uniqueItems, baseItems, grailProgress);
+): Record<string, UniqueBase> => {
+    const foundItemKeys = Object.values(grailProgress).map(item => item.itemKey);
 
-    return [];
+    const uniqueBases: Record<string, UniqueBase> = {};
+    Object.entries(uniqueItems).forEach(([key, item]) => {
+        if (foundItemKeys.includes(key)) {
+            return;
+        }
+
+        if (uniqueBases[item.type]) {
+            uniqueBases[item.type].uniqueItems.push(item);
+        } else {
+            const baseItem = Object.values(baseItems).find(baseItem => baseItem.name === item.type);
+            uniqueBases[item.type] = {
+                base: baseItem || { name: item.type },
+                uniqueItems: [item],
+            };
+        }
+    });
+
+    return uniqueBases;
+};
+
+export const getRemainingSetBases = (
+    setItems: Record<string, SetItem>,
+    baseItems: Record<string, BaseItem>,
+    grailProgress: Record<string, GrailProgressItem>
+): Record<string, SetBase> => {
+    const foundItemKeys = Object.values(grailProgress).map(item => item.itemKey);
+
+    const setBases: Record<string, SetBase> = {};
+    Object.entries(setItems).forEach(([key, item]) => {
+        if (foundItemKeys.includes(key)) {
+            return;
+        }
+
+        if (setBases[item.type]) {
+            setBases[item.type].setItems.push(item);
+        } else {
+            const baseItem = Object.values(baseItems).find(baseItem => baseItem.name === item.type);
+            setBases[item.type] = {
+                base: baseItem || { name: item.type },
+                setItems: [item],
+            };
+        }
+    });
+
+    return setBases;
 };

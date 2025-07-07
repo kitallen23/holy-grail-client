@@ -51,7 +51,6 @@ function GrailPage() {
             <GrailRemainingItemSummary
                 uniqueItems={uniqueItems!}
                 setItems={setItems!}
-                runes={runes!}
                 baseItems={baseItems!}
                 grailProgress={grailProgress}
             />
