@@ -1,6 +1,6 @@
 import type { GrailProgressItem } from "@/lib/api";
 import type { BaseItem, SetItem, UniqueItem } from "@/types/items";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
     getRemainingSetBases,
     getRemainingUniqueBases,
@@ -8,9 +8,11 @@ import {
     type UniqueBase,
 } from "./utils";
 import HeadingSeparator from "@/components/HeadingSeparator";
+import { Button } from "@/components/ui/button";
 import UniqueBaseItem from "./UniqueBaseItem";
 import SetBaseItem from "./SetBaseItem";
-import { Button } from "@/components/ui/button";
+import GrailUniqueBaseDialog from "./GrailUniqueBaseDialog";
+import type { WithKey } from "@/routes/items/-types";
 
 type Props = {
     uniqueItems: Record<string, UniqueItem>;
@@ -20,6 +22,14 @@ type Props = {
 };
 
 const DEFAULT_ITEM_LIMIT = 24; // Must be divisible by 2 and 3
+
+type SelectedItemState =
+    | { type: "UniqueBase"; item: UniqueBase }
+    | { type: "SetBase"; item: SetBase }
+    | { type: "UniqueItem"; item: WithKey<UniqueItem> }
+    | { type: "SetItem"; item: WithKey<SetItem> }
+    | { type: "BaseItem"; item: WithKey<BaseItem> }
+    | null;
 
 export default function GrailRemainingItemSummary({
     uniqueItems,
@@ -59,8 +69,11 @@ export default function GrailRemainingItemSummary({
         .sort((a, b) => (a.key > b.key ? 1 : 0))
         .slice(0, itemLimit);
 
-    const [selectedUniqueBase, setSelectedUniqueBase] = useState<UniqueBase | null>(null);
-    const [selectedSetBase, setSelectedSetBase] = useState<SetBase | null>(null);
+    const [selectedItem, setSelectedItem] = useState<SelectedItemState>(null);
+    useEffect(() => {
+        // TODO: Remove me
+        console.info(`selectedItem: `, selectedItem);
+    }, [selectedItem]);
 
     return (
         <>
@@ -73,8 +86,12 @@ export default function GrailRemainingItemSummary({
                                 <UniqueBaseItem
                                     key={key}
                                     uniqueBase={{ base, notFoundUniqueItems, foundUniqueItems }}
-                                    selectedUniqueBase={selectedUniqueBase}
-                                    onClick={setSelectedUniqueBase}
+                                    selectedUniqueBase={
+                                        selectedItem?.type === "UniqueBase"
+                                            ? selectedItem.item
+                                            : null
+                                    }
+                                    onClick={item => setSelectedItem({ type: "UniqueBase", item })}
                                 />
                             )
                         )}
@@ -87,8 +104,10 @@ export default function GrailRemainingItemSummary({
                             <SetBaseItem
                                 key={key}
                                 setBase={{ base, notFoundSetItems, foundSetItems }}
-                                selectedSetBase={selectedSetBase}
-                                onClick={setSelectedSetBase}
+                                selectedSetBase={
+                                    selectedItem?.type === "SetBase" ? selectedItem.item : null
+                                }
+                                onClick={item => setSelectedItem({ type: "SetBase", item })}
                             />
                         ))}
                     </div>
@@ -115,6 +134,21 @@ export default function GrailRemainingItemSummary({
                     </Button>
                 )}
             </div>
+            <GrailUniqueBaseDialog
+                open={selectedItem?.type === "UniqueBase"}
+                onOpenChange={open => !open && setSelectedItem(null)}
+                base={selectedItem?.type === "UniqueBase" ? selectedItem.item.base : undefined}
+                foundUniqueItems={
+                    selectedItem?.type === "UniqueBase"
+                        ? selectedItem.item.foundUniqueItems
+                        : undefined
+                }
+                notFoundUniqueItems={
+                    selectedItem?.type === "UniqueBase"
+                        ? selectedItem.item.notFoundUniqueItems
+                        : undefined
+                }
+            />
         </>
     );
 }

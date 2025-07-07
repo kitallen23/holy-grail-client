@@ -5,15 +5,15 @@ import type { WithKey } from "@/routes/items/-types";
 import { ITEM_CATEGORIES } from "@/routes/items/-utils";
 
 export type UniqueBase = {
-    base: Partial<BaseItem>;
-    foundUniqueItems: UniqueItem[];
-    notFoundUniqueItems: UniqueItem[];
+    base: Partial<WithKey<BaseItem>>;
+    foundUniqueItems: WithKey<UniqueItem>[];
+    notFoundUniqueItems: WithKey<UniqueItem>[];
 };
 
 export type SetBase = {
-    base: Partial<BaseItem>;
-    foundSetItems: SetItem[];
-    notFoundSetItems: SetItem[];
+    base: Partial<WithKey<BaseItem>>;
+    foundSetItems: WithKey<SetItem>[];
+    notFoundSetItems: WithKey<SetItem>[];
 };
 
 export const buildTableRows = (
@@ -123,21 +123,24 @@ export const getRemainingUniqueBases = (
 
     const uniqueBases: Record<string, UniqueBase> = {};
     Object.entries(uniqueItems).forEach(([key, item]) => {
+        const itemWithKey = { ...item, key };
         const isItemFound = foundItemKeys.includes(key);
 
         if (uniqueBases[item.type]) {
             if (isItemFound) {
-                uniqueBases[item.type].foundUniqueItems.push(item);
+                uniqueBases[item.type].foundUniqueItems.push(itemWithKey);
             } else {
-                uniqueBases[item.type].notFoundUniqueItems.push(item);
+                uniqueBases[item.type].notFoundUniqueItems.push(itemWithKey);
             }
         } else {
-            const baseItem = Object.values(baseItems).find(baseItem => baseItem.name === item.type);
+            const base = Object.entries(baseItems).find(
+                ([, baseItem]) => baseItem.name === item.type
+            );
             uniqueBases[item.type] = {
-                base: baseItem || { name: item.type },
+                base: base ? { ...base[1], key: base[0] } : { name: item.type },
                 ...(isItemFound
-                    ? { foundUniqueItems: [item], notFoundUniqueItems: [] }
-                    : { foundUniqueItems: [], notFoundUniqueItems: [item] }),
+                    ? { foundUniqueItems: [itemWithKey], notFoundUniqueItems: [] }
+                    : { foundUniqueItems: [], notFoundUniqueItems: [itemWithKey] }),
             };
         }
     });
@@ -154,21 +157,24 @@ export const getRemainingSetBases = (
 
     const setBases: Record<string, SetBase> = {};
     Object.entries(setItems).forEach(([key, item]) => {
+        const itemWithKey = { ...item, key };
         const isItemFound = foundItemKeys.includes(key);
 
         if (setBases[item.type]) {
             if (isItemFound) {
-                setBases[item.type].foundSetItems.push(item);
+                setBases[item.type].foundSetItems.push(itemWithKey);
             } else {
-                setBases[item.type].notFoundSetItems.push(item);
+                setBases[item.type].notFoundSetItems.push(itemWithKey);
             }
         } else {
-            const baseItem = Object.values(baseItems).find(baseItem => baseItem.name === item.type);
+            const base = Object.entries(baseItems).find(
+                ([, baseItem]) => baseItem.name === item.type
+            );
             setBases[item.type] = {
-                base: baseItem || { name: item.type },
+                base: base ? { ...base[1], key: base[0] } : { name: item.type },
                 ...(isItemFound
-                    ? { foundSetItems: [item], notFoundSetItems: [] }
-                    : { foundSetItems: [], notFoundSetItems: [item] }),
+                    ? { foundSetItems: [itemWithKey], notFoundSetItems: [] }
+                    : { foundSetItems: [], notFoundSetItems: [itemWithKey] }),
             };
         }
     });
