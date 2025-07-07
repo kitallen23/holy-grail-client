@@ -19,13 +19,15 @@ type Props = {
     grailProgress: Record<string, GrailProgressItem>;
 };
 
+const DEFAULT_ITEM_LIMIT = 24; // Must be divisible by 2 and 3
+
 export default function GrailRemainingItemSummary({
     uniqueItems,
     setItems,
     baseItems,
     grailProgress,
 }: Props) {
-    const [itemLimit, setItemLimit] = useState(24);
+    const [itemLimit, setItemLimit] = useState(DEFAULT_ITEM_LIMIT);
 
     const remainingUniqueBases = useMemo(
         () => getRemainingUniqueBases(uniqueItems, baseItems, grailProgress),
@@ -43,6 +45,7 @@ export default function GrailRemainingItemSummary({
                 ...item,
             };
         })
+        .filter(entry => entry.notFoundUniqueItems.length)
         .sort((a, b) => (a.key > b.key ? 1 : 0))
         .slice(0, itemLimit);
     const displayedSetBases = Object.entries(remainingSetBases)
@@ -52,6 +55,7 @@ export default function GrailRemainingItemSummary({
                 ...item,
             };
         })
+        .filter(entry => entry.notFoundSetItems.length)
         .sort((a, b) => (a.key > b.key ? 1 : 0))
         .slice(0, itemLimit);
 
@@ -64,23 +68,25 @@ export default function GrailRemainingItemSummary({
                 <div className="grid gap-4 content-start">
                     <HeadingSeparator color="text-primary">Unique Bases</HeadingSeparator>
                     <div className="grid gap-1 grid-cols-2 sm:grid-cols-3">
-                        {displayedUniqueBases.map(({ key, base, uniqueItems }) => (
-                            <UniqueBaseItem
-                                key={key}
-                                uniqueBase={{ base, uniqueItems }}
-                                selectedUniqueBase={selectedUniqueBase}
-                                onClick={setSelectedUniqueBase}
-                            />
-                        ))}
+                        {displayedUniqueBases.map(
+                            ({ key, base, notFoundUniqueItems, foundUniqueItems }) => (
+                                <UniqueBaseItem
+                                    key={key}
+                                    uniqueBase={{ base, notFoundUniqueItems, foundUniqueItems }}
+                                    selectedUniqueBase={selectedUniqueBase}
+                                    onClick={setSelectedUniqueBase}
+                                />
+                            )
+                        )}
                     </div>
                 </div>
                 <div className="grid gap-4 content-start">
                     <HeadingSeparator color="text-diablo-green">Set Bases</HeadingSeparator>
                     <div className="grid gap-1 grid-cols-2 sm:grid-cols-3">
-                        {displayedSetBases.map(({ key, base, setItems }) => (
+                        {displayedSetBases.map(({ key, base, notFoundSetItems, foundSetItems }) => (
                             <SetBaseItem
                                 key={key}
-                                setBase={{ base, setItems }}
+                                setBase={{ base, notFoundSetItems, foundSetItems }}
                                 selectedSetBase={selectedSetBase}
                                 onClick={setSelectedSetBase}
                             />
@@ -88,25 +94,27 @@ export default function GrailRemainingItemSummary({
                     </div>
                 </div>
             </div>
-            {itemLimit === Infinity ? (
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    className="italic text-muted-foreground"
-                    onClick={() => setItemLimit(Infinity)}
-                >
-                    show less
-                </Button>
-            ) : (
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    className="italic text-muted-foreground"
-                    onClick={() => setItemLimit(Infinity)}
-                >
-                    show more
-                </Button>
-            )}
+            <div className="flex justify-center">
+                {itemLimit === Infinity ? (
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="italic text-muted-foreground"
+                        onClick={() => setItemLimit(DEFAULT_ITEM_LIMIT)}
+                    >
+                        show less
+                    </Button>
+                ) : (
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="italic text-muted-foreground"
+                        onClick={() => setItemLimit(Infinity)}
+                    >
+                        show more
+                    </Button>
+                )}
+            </div>
         </>
     );
 }

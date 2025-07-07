@@ -9,13 +9,12 @@ type Props = {
 };
 
 export default function UniqueBaseItem({ uniqueBase, selectedUniqueBase, onClick }: Props) {
-    const { base, uniqueItems } = uniqueBase;
+    const { base, notFoundUniqueItems } = uniqueBase;
 
     return (
         <Button
             key={base.name}
-            variant="ghost"
-            color="primary"
+            variant="ghost-primary"
             size="sm"
             className={clsx(
                 "item-trigger justify-start border border-transparent inline-flex w-fit max-w-full",
@@ -26,9 +25,9 @@ export default function UniqueBaseItem({ uniqueBase, selectedUniqueBase, onClick
             aria-label={`View details for ${base.name}`}
         >
             <div className="text-nowrap truncate text-primary">{base.name}</div>
-            {uniqueItems.length > 1 ? (
+            {notFoundUniqueItems.length > 1 ? (
                 <div className="pl-0 sm:pl-1 text-foreground/60 truncate">
-                    {uniqueItems.length} items
+                    {notFoundUniqueItems.length} items
                 </div>
             ) : null}
         </Button>

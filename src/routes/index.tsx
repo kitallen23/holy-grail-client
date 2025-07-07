@@ -46,7 +46,7 @@ function GrailPage() {
             </div>
 
             <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight pb-1 [&:not(:first-child)]:mt-10 text-destructive font-diablo text-center">
-                Pickup List
+                Remaining Grail Items
             </h2>
             <GrailRemainingItemSummary
                 uniqueItems={uniqueItems!}

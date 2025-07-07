@@ -9,13 +9,12 @@ type Props = {
 };
 
 export default function SetBaseItem({ setBase, selectedSetBase, onClick }: Props) {
-    const { base, setItems } = setBase;
+    const { base, notFoundSetItems } = setBase;
 
     return (
         <Button
             key={base.name}
-            variant="ghost"
-            color="primary"
+            variant="ghost-green"
             size="sm"
             className={clsx(
                 "item-trigger justify-start border border-transparent inline-flex w-fit max-w-full",
@@ -25,10 +24,10 @@ export default function SetBaseItem({ setBase, selectedSetBase, onClick }: Props
             aria-haspopup="dialog"
             aria-label={`View details for ${base.name}`}
         >
-            <div className="text-nowrap truncate text-diablo-green">{base.name}</div>
-            {setItems.length > 1 ? (
+            <div className="text-nowrap truncate">{base.name}</div>
+            {notFoundSetItems.length > 1 ? (
                 <div className="pl-0 sm:pl-1 text-foreground/60 truncate">
-                    {setItems.length} items
+                    {notFoundSetItems.length} items
                 </div>
             ) : null}
         </Button>

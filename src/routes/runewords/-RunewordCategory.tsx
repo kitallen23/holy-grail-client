@@ -63,7 +63,6 @@ export default function RunewordCategory({
                     <Button
                         key={runeword.key}
                         variant="ghost"
-                        color="primary"
                         size="sm"
                         className={clsx(
                             "runeword-trigger justify-start border border-transparent inline-flex w-fit max-w-full",

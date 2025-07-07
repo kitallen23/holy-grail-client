@@ -6,12 +6,14 @@ import { ITEM_CATEGORIES } from "@/routes/items/-utils";
 
 export type UniqueBase = {
     base: Partial<BaseItem>;
-    uniqueItems: UniqueItem[];
+    foundUniqueItems: UniqueItem[];
+    notFoundUniqueItems: UniqueItem[];
 };
 
 export type SetBase = {
     base: Partial<BaseItem>;
-    setItems: SetItem[];
+    foundSetItems: SetItem[];
+    notFoundSetItems: SetItem[];
 };
 
 export const buildTableRows = (
@@ -121,17 +123,21 @@ export const getRemainingUniqueBases = (
 
     const uniqueBases: Record<string, UniqueBase> = {};
     Object.entries(uniqueItems).forEach(([key, item]) => {
-        if (foundItemKeys.includes(key)) {
-            return;
-        }
+        const isItemFound = foundItemKeys.includes(key);
 
         if (uniqueBases[item.type]) {
-            uniqueBases[item.type].uniqueItems.push(item);
+            if (isItemFound) {
+                uniqueBases[item.type].foundUniqueItems.push(item);
+            } else {
+                uniqueBases[item.type].notFoundUniqueItems.push(item);
+            }
         } else {
             const baseItem = Object.values(baseItems).find(baseItem => baseItem.name === item.type);
             uniqueBases[item.type] = {
                 base: baseItem || { name: item.type },
-                uniqueItems: [item],
+                ...(isItemFound
+                    ? { foundUniqueItems: [item], notFoundUniqueItems: [] }
+                    : { foundUniqueItems: [], notFoundUniqueItems: [item] }),
             };
         }
     });
@@ -148,17 +154,21 @@ export const getRemainingSetBases = (
 
     const setBases: Record<string, SetBase> = {};
     Object.entries(setItems).forEach(([key, item]) => {
-        if (foundItemKeys.includes(key)) {
-            return;
-        }
+        const isItemFound = foundItemKeys.includes(key);
 
         if (setBases[item.type]) {
-            setBases[item.type].setItems.push(item);
+            if (isItemFound) {
+                setBases[item.type].foundSetItems.push(item);
+            } else {
+                setBases[item.type].notFoundSetItems.push(item);
+            }
         } else {
             const baseItem = Object.values(baseItems).find(baseItem => baseItem.name === item.type);
             setBases[item.type] = {
                 base: baseItem || { name: item.type },
-                setItems: [item],
+                ...(isItemFound
+                    ? { foundSetItems: [item], notFoundSetItems: [] }
+                    : { foundSetItems: [], notFoundSetItems: [item] }),
             };
         }
     });

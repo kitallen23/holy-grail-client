@@ -53,7 +53,6 @@ export default function BaseItemSubcategory({
                     <Button
                         key={item.key}
                         variant="ghost"
-                        color="primary"
                         size="sm"
                         className={clsx(
                             "item-trigger justify-start border border-transparent inline-flex w-fit max-w-full",
