@@ -41,7 +41,7 @@ export function getSearchableText(item: UniqueItem | SetItem | Rune | BaseItem):
     // Add rune-specific attributes
     if ("requiredLevel" in item) {
         const searchableRuneImplicits = Object.values(item.implicits);
-        searchableFields.push(...searchableRuneImplicits);
+        searchableFields.push(...searchableRuneImplicits, "rune");
     }
 
     return searchableFields.join(" ").toLowerCase();
