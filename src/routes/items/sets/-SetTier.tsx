@@ -1,7 +1,9 @@
+import Heading from "@/components/Heading";
 import type { SetItemArrayItem, WithKey } from "@/routes/items/-types";
 import ItemSet from "@/routes/items/sets/-ItemSet";
 import { SETS } from "@/routes/items/sets/-utils";
 import type { SetItem, Tier } from "@/types/items";
+import clsx from "clsx";
 import { useMemo } from "react";
 
 function getFilteredTierSetItems(
@@ -35,6 +37,7 @@ interface SetTierProps {
 
 export default function SetTier({ data, tier, selectedItem, onClick }: SetTierProps) {
     const displayedSetItems = useMemo(() => getFilteredTierSetItems(data, tier), [data, tier]);
+    const numberOfDisplayedSets = new Set(displayedSetItems.map(item => item.category)).size;
 
     if (!displayedSetItems.length) {
         return null;
@@ -42,10 +45,10 @@ export default function SetTier({ data, tier, selectedItem, onClick }: SetTierPr
 
     return (
         <div className="grid gap-4 content-start [&:not(:first-child)]:mt-4">
-            <h2 className="text-2xl font-semibold tracking-tight pb-1 text-destructive font-diablo text-center">
-                {tier}
-            </h2>
-            <div className="grid md:grid-cols-2 gap-4">
+            <Heading className="text-destructive">{tier}</Heading>
+            <div
+                className={clsx("grid gap-4", numberOfDisplayedSets === 1 ? "" : "md:grid-cols-2")}
+            >
                 {SETS.map(({ name }) => (
                     <ItemSet
                         key={name}
