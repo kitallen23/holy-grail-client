@@ -82,7 +82,7 @@ export default function GrailRemainingItemSummary({
         <>
             <div className="grid md:grid-cols-2 gap-4">
                 <div className="grid gap-4 content-start">
-                    <HeadingSeparator color="text-primary">Unique Bases</HeadingSeparator>
+                    <HeadingSeparator className="text-primary">Unique Bases</HeadingSeparator>
                     <div className="grid gap-1 grid-cols-2 sm:grid-cols-3">
                         {displayedUniqueBases
                             .slice(0, itemLimit)
@@ -101,7 +101,7 @@ export default function GrailRemainingItemSummary({
                     </div>
                 </div>
                 <div className="grid gap-4 content-start">
-                    <HeadingSeparator color="text-diablo-green">Set Bases</HeadingSeparator>
+                    <HeadingSeparator className="text-diablo-green">Set Bases</HeadingSeparator>
                     <div className="grid gap-1 grid-cols-2 sm:grid-cols-3">
                         {displayedSetBases
                             .slice(0, itemLimit)

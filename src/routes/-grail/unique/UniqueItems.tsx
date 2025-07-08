@@ -51,19 +51,17 @@ export default function UniqueItems({ uniqueItems, baseItems }: Props) {
     }
     return (
         <>
-            <div className="grid gap-4">
-                {Object.entries(ITEM_CATEGORIES).map(([category, subcategories]) => (
-                    <UniqueItemCategory
-                        key={category}
-                        data={displayedItems}
-                        category={category as TopLevelCategory}
-                        label={category}
-                        subcategories={subcategories as UniqueBaseCategory[]}
-                        selectedItem={selectedItem}
-                        onClick={item => setSelectedItem(item ? item : null)}
-                    />
-                ))}
-            </div>
+            {Object.entries(ITEM_CATEGORIES).map(([category, subcategories]) => (
+                <UniqueItemCategory
+                    key={category}
+                    data={displayedItems}
+                    category={category as TopLevelCategory}
+                    label={category}
+                    subcategories={subcategories as UniqueBaseCategory[]}
+                    selectedItem={selectedItem}
+                    onClick={item => setSelectedItem(item ? item : null)}
+                />
+            ))}
             <UniqueItemDialog
                 open={!!selectedItem}
                 onOpenChange={open => !open && setSelectedItem(null)}

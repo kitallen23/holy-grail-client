@@ -60,7 +60,7 @@ export default function UniqueItemCategory({
     }
 
     return (
-        <div key={category} className="grid gap-4 [&:not(:first-child)]:mt-4">
+        <div className="grid gap-4 [&:not(:first-child)]:mt-4">
             <Heading className="text-destructive">{label}</Heading>
             {subcategories.map(subcategory => (
                 <UniqueItemSubcategory

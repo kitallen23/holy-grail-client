@@ -39,7 +39,7 @@ export default function ItemSet({ data, set, label, selectedItem, onClick }: Set
 
     return (
         <div className="grid gap-4 content-start">
-            <HeadingSeparator color="text-diablo-green">{label}</HeadingSeparator>
+            <HeadingSeparator className="text-diablo-green">{label}</HeadingSeparator>
             <div className="grid gap-1">
                 {displayedSetItems.map(item => (
                     <CheckboxItem

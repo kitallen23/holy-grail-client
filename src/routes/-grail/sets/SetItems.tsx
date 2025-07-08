@@ -1,17 +1,33 @@
 import type { DialogContent } from "@/components/ui/dialog";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
-import type { WithKey } from "@/routes/items/-types";
+import type { SetItemArrayItem, WithKey } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
 import { useDebouncedSearch } from "@/stores/useSearchStore";
-import type { BaseItem, SetItem, Tier } from "@/types/items";
+import type { BaseItem, SetItem } from "@/types/items";
 import { useMemo, useRef, useState } from "react";
 import BaseItemDialog from "@/components/ItemTooltip/BaseItemDialog";
 import SetItemDialog from "@/components/ItemTooltip/SetItemDialog";
-import SetTier from "@/routes/-grail/sets/SetTier";
+import { SETS } from "@/routes/items/sets/-utils";
+import ItemSet from "@/routes/-grail/sets/ItemSet";
+import clsx from "clsx";
+import Heading from "@/components/Heading";
 
 type Props = { setItems: Record<string, SetItem>; baseItems: Record<string, BaseItem> };
 
-const TIERS: Tier[] = ["Normal", "Exceptional", "Elite"];
+function getSetItems(data: Record<string, SetItem> | null): SetItemArrayItem[] {
+    if (!data) {
+        return [];
+    }
+
+    const tierSetItems = Object.entries(data)
+        .map(([key, value]) => ({
+            ...value,
+            key,
+        }))
+        .sort((a, b) => (a.name > b.name ? 1 : 0));
+
+    return tierSetItems;
+}
 
 export default function SetItems({ setItems, baseItems }: Props) {
     const { debouncedSearchString } = useDebouncedSearch();
@@ -58,21 +74,33 @@ export default function SetItems({ setItems, baseItems }: Props) {
         baseDialogRef.current?.scrollTo(0, 0);
     };
 
+    const displayedSetItems = useMemo(() => getSetItems(displayedItems), [displayedItems]);
+    const numberOfDisplayedSets = new Set(displayedSetItems.map(item => item.category)).size;
+
     if (!Object.keys(displayedItems).length) {
         return null;
     }
     return (
         <>
-            <div className="grid gap-4">
-                {TIERS.map(tier => (
-                    <SetTier
-                        key={tier}
-                        data={displayedItems}
-                        tier={tier}
-                        selectedItem={selectedItem}
-                        onClick={item => setSelectedItem(item || null)}
-                    />
-                ))}
+            <div className="grid gap-4 [&:not(:first-child)]:mt-4">
+                <Heading className="text-destructive">Sets</Heading>
+                <div
+                    className={clsx(
+                        "grid gap-4",
+                        numberOfDisplayedSets === 1 ? "" : "md:grid-cols-2"
+                    )}
+                >
+                    {SETS.map(({ name }) => (
+                        <ItemSet
+                            key={name}
+                            data={displayedSetItems}
+                            set={name}
+                            label={name}
+                            selectedItem={selectedItem}
+                            onClick={item => setSelectedItem(item || null)}
+                        />
+                    ))}
+                </div>
             </div>
             <SetItemDialog
                 ref={dialogRef}

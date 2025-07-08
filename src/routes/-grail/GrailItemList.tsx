@@ -1,6 +1,7 @@
 import type { BaseItem, Rune, SetItem, UniqueItem } from "@/types/items";
 import UniqueItems from "@/routes/-grail/unique/UniqueItems";
 import SetItems from "@/routes/-grail/sets/SetItems";
+import Runes from "@/routes/-grail/runes/Runes";
 
 type Props = {
     data: {
@@ -16,6 +17,7 @@ export default function GrailSearchResults({ data }: Props) {
         <>
             <UniqueItems uniqueItems={data.uniqueItems} baseItems={data.baseItems} />
             <SetItems setItems={data.setItems} baseItems={data.baseItems} />
+            <Runes runes={data.runes} />
         </>
     );
 }

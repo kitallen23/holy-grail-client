@@ -117,7 +117,7 @@ function RunesPage() {
     return Object.keys(displayedRunes).length ? (
         <>
             <div className="grid gap-4">
-                <HeadingSeparator color="text-diablo-orange">Runes</HeadingSeparator>
+                <HeadingSeparator className="text-diablo-orange">Runes</HeadingSeparator>
                 <div className="grid gap-1 grid-cols-3 md:grid-cols-6 justify-items-center">
                     {displayedRunes.map(rune => (
                         <div className="flex w-28 justify-start" key={rune.key}>

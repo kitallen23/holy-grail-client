@@ -47,7 +47,7 @@ export default function BaseItemSubcategory({
 
     return (
         <>
-            <HeadingSeparator color="text-foreground">{label}</HeadingSeparator>
+            <HeadingSeparator className="text-foreground">{label}</HeadingSeparator>
             <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                 {displayedSubcategoryItems.map(item => (
                     <Button

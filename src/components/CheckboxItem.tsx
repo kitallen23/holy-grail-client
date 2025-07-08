@@ -9,6 +9,7 @@ type Props<T> = Omit<React.ComponentProps<typeof CheckboxPrimitive.Root>, "onCli
     subtext?: string;
     isSelected: boolean;
     selectedColor?: string;
+    imageSrc?: string;
     data: T;
     onClick?: (data: T) => void;
 };
@@ -18,6 +19,7 @@ export default function CheckboxItem<T>({
     uniqueName,
     subtext,
     isSelected,
+    imageSrc,
     data,
     onClick,
     ...props
@@ -37,6 +39,7 @@ export default function CheckboxItem<T>({
                 aria-haspopup="dialog"
                 aria-label={`View details for ${name}`}
             >
+                {imageSrc ? <img src={imageSrc} className="h-[2em]" /> : null}
                 <div className="text-nowrap truncate">{uniqueName}</div>
                 {subtext ? (
                     <div className="pl-0 sm:pl-1 text-foreground/60 truncate">{subtext}</div>

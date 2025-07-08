@@ -57,7 +57,7 @@ export default function RunewordCategory({
 
     return (
         <>
-            <HeadingSeparator color="text-primary">{label}</HeadingSeparator>
+            <HeadingSeparator className="text-primary">{label}</HeadingSeparator>
             <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {displayedRunewords.map(runeword => (
                     <Button
