@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import type { UniqueItem } from "@/types/items";
-import UniqueItemSubcategory from "@/routes/items/unique/-UniqueItemSubcategory";
+import UniqueItemSubcategory from "./UniqueItemSubcategory.tsx";
 import type {
     TopLevelCategory,
     UniqueBaseCategory,
@@ -61,7 +61,7 @@ export default function UniqueItemCategory({
 
     return (
         <div key={category} className="grid gap-4 [&:not(:first-child)]:mt-4">
-            <Heading className="text-destructive">{label}</Heading>
+            <Heading className="text-destructive">Unique {label}</Heading>
             {subcategories.map(subcategory => (
                 <UniqueItemSubcategory
                     key={`${category}-${subcategory}`}

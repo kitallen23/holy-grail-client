@@ -2,12 +2,17 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useGrailProgress, useItems } from "@/hooks/queries";
 import GrailStatsTable from "./-grail/GrailStatsTable";
 import GrailRemainingItemSummary from "./-grail/GrailRemainingItemSummary";
+import Heading from "@/components/Heading";
+import { useDebouncedSearch } from "@/stores/useSearchStore";
+import GrailItemList from "@/routes/-grail/GrailItemList";
+import type { Items } from "@/types/items";
 
 export const Route = createFileRoute("/")({
     component: GrailPage,
 });
 
 function GrailPage() {
+    const { debouncedSearchString } = useDebouncedSearch();
     const {
         data,
         isFetching: isFetchingItems,
@@ -32,28 +37,30 @@ function GrailPage() {
     }
 
     return (
-        <div className="pt-2 pb-8 grid grid-cols-1 gap-4">
-            <div className="grid max-w-lg mx-auto w-full">
-                <h2 className="text-2xl font-semibold tracking-tight pb-1 text-destructive font-diablo text-center">
-                    Statistics
-                </h2>
-                <GrailStatsTable
-                    uniqueItems={uniqueItems!}
-                    setItems={setItems!}
-                    runes={runes!}
-                    grailProgress={grailProgress}
-                />
-            </div>
+        <div className="pt-4 pb-8 grid grid-cols-1 gap-4">
+            {debouncedSearchString ? (
+                <GrailItemList data={data as Items} />
+            ) : (
+                <>
+                    <div className="grid max-w-lg mx-auto w-full">
+                        <Heading className="text-destructive">Statistics</Heading>
+                        <GrailStatsTable
+                            uniqueItems={uniqueItems!}
+                            setItems={setItems!}
+                            runes={runes!}
+                            grailProgress={grailProgress}
+                        />
+                    </div>
 
-            <h2 className="text-2xl font-semibold tracking-tight pb-1 text-destructive font-diablo text-center mt-4">
-                Remaining Grail Items
-            </h2>
-            <GrailRemainingItemSummary
-                uniqueItems={uniqueItems!}
-                setItems={setItems!}
-                baseItems={baseItems!}
-                grailProgress={grailProgress}
-            />
+                    <Heading className="text-destructive">Remaining Grail Items</Heading>
+                    <GrailRemainingItemSummary
+                        uniqueItems={uniqueItems!}
+                        setItems={setItems!}
+                        baseItems={baseItems!}
+                        grailProgress={grailProgress}
+                    />
+                </>
+            )}
         </div>
     );
 }

@@ -124,7 +124,7 @@ function RunewordsPage() {
 
     return Object.keys(displayedRunewords).length ? (
         <>
-            <div className="pt-4 grid grid-cols-1 gap-4">
+            <div className="pt-4 grid grid-cols-1 gap-4 pb-8">
                 <div className="grid gap-4">
                     {RUNEWORD_BASE_TYPES.map(runewordBaseType => (
                         <RunewordCategory

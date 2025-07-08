@@ -5,6 +5,7 @@ import type { BaseItemArrayItem, TopLevelCategory, WithKey } from "@/routes/item
 import { ITEM_CATEGORIES } from "@/routes/items/-utils";
 import BaseItemSubcategory from "@/routes/items/bases/-BaseItemSubcategory";
 import { tierOrder } from "@/routes/items/bases/-utils";
+import Heading from "@/components/Heading";
 
 function getFilteredBaseItems(
     data: Record<string, BaseItem> | null,
@@ -55,9 +56,7 @@ export default function BaseItemCategory({
 
     return (
         <div className="grid gap-4 [&:not(:first-child)]:mt-4">
-            <h2 className="text-2xl font-semibold tracking-tight pb-1 text-destructive font-diablo text-center">
-                {label}
-            </h2>
+            <Heading className="text-destructive">{label}</Heading>
             {subcategories.map(subcategory => (
                 <BaseItemSubcategory
                     key={`${category}-${subcategory}`}

@@ -18,7 +18,7 @@ export default function SetBaseItem({ setBase, selectedSetBase, onClick }: Props
             size="sm"
             className={clsx(
                 "item-trigger justify-start border border-transparent inline-flex w-fit max-w-full",
-                base.name === selectedSetBase?.base.name ? "border-primary" : ""
+                base.name === selectedSetBase?.base.name ? "border-diablo-green" : ""
             )}
             onClick={() => onClick(setBase)}
             aria-haspopup="dialog"
