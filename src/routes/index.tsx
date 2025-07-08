@@ -34,7 +34,7 @@ function GrailPage() {
     return (
         <div className="pt-2 pb-8 grid grid-cols-1 gap-4">
             <div className="grid max-w-lg mx-auto w-full">
-                <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight pb-1 [&:not(:first-child)]:mt-10 text-destructive font-diablo text-center">
+                <h2 className="text-2xl font-semibold tracking-tight pb-1 text-destructive font-diablo text-center">
                     Statistics
                 </h2>
                 <GrailStatsTable
@@ -45,7 +45,7 @@ function GrailPage() {
                 />
             </div>
 
-            <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight pb-1 [&:not(:first-child)]:mt-10 text-destructive font-diablo text-center">
+            <h2 className="text-2xl font-semibold tracking-tight pb-1 text-destructive font-diablo text-center mt-4">
                 Remaining Grail Items
             </h2>
             <GrailRemainingItemSummary

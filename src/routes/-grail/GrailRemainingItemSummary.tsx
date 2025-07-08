@@ -21,7 +21,8 @@ type Props = {
     grailProgress: Record<string, GrailProgressItem>;
 };
 
-const DEFAULT_ITEM_LIMIT = 24; // Must be divisible by 2 and 3
+// Must be divisible by 2 and 3 for our 3-column layout to be responsive
+const DEFAULT_ITEM_LIMIT = 24;
 
 type SelectedItemState =
     | { type: "UniqueBase"; item: UniqueBase }
