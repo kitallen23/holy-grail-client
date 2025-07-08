@@ -51,7 +51,11 @@ export default function GrailStatsTable({
                     ))}
                 </TableBody>
             </Table>
-            <Progress value={totalPercentage} className="mt-4" />
+
+            <div className="font-diablo text-primary text-lg text-center mt-2">
+                {totalFound} / {totalItems}
+            </div>
+            <Progress value={totalPercentage} />
 
             <div className="relative">
                 {totalPercentage < 20 ? (
