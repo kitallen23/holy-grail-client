@@ -57,8 +57,7 @@ export default function GrailRemainingItemSummary({
             };
         })
         .filter(entry => entry.notFoundUniqueItems.length)
-        .sort((a, b) => (a.key > b.key ? 1 : 0))
-        .slice(0, itemLimit);
+        .sort((a, b) => (a.key > b.key ? 1 : 0));
     const displayedSetBases = Object.entries(remainingSetBases)
         .map(([key, item]) => {
             return {
@@ -67,8 +66,7 @@ export default function GrailRemainingItemSummary({
             };
         })
         .filter(entry => entry.notFoundSetItems.length)
-        .sort((a, b) => (a.key > b.key ? 1 : 0))
-        .slice(0, itemLimit);
+        .sort((a, b) => (a.key > b.key ? 1 : 0));
 
     const [selectedItem, setSelectedItem] = useState<SelectedItemState>(null);
     useEffect(() => {
@@ -76,14 +74,19 @@ export default function GrailRemainingItemSummary({
         console.info(`selectedItem: `, selectedItem);
     }, [selectedItem]);
 
+    const hasItemOverflow =
+        displayedUniqueBases.length > DEFAULT_ITEM_LIMIT ||
+        displayedSetBases.length > DEFAULT_ITEM_LIMIT;
+
     return (
         <>
             <div className="grid md:grid-cols-2 gap-4">
                 <div className="grid gap-4 content-start">
                     <HeadingSeparator color="text-primary">Unique Bases</HeadingSeparator>
                     <div className="grid gap-1 grid-cols-2 sm:grid-cols-3">
-                        {displayedUniqueBases.map(
-                            ({ key, base, notFoundUniqueItems, foundUniqueItems }) => (
+                        {displayedUniqueBases
+                            .slice(0, itemLimit)
+                            .map(({ key, base, notFoundUniqueItems, foundUniqueItems }) => (
                                 <UniqueBaseItem
                                     key={key}
                                     uniqueBase={{ base, notFoundUniqueItems, foundUniqueItems }}
@@ -94,47 +97,50 @@ export default function GrailRemainingItemSummary({
                                     }
                                     onClick={item => setSelectedItem({ type: "UniqueBase", item })}
                                 />
-                            )
-                        )}
+                            ))}
                     </div>
                 </div>
                 <div className="grid gap-4 content-start">
                     <HeadingSeparator color="text-diablo-green">Set Bases</HeadingSeparator>
                     <div className="grid gap-1 grid-cols-2 sm:grid-cols-3">
-                        {displayedSetBases.map(({ key, base, notFoundSetItems, foundSetItems }) => (
-                            <SetBaseItem
-                                key={key}
-                                setBase={{ base, notFoundSetItems, foundSetItems }}
-                                selectedSetBase={
-                                    selectedItem?.type === "SetBase" ? selectedItem.item : null
-                                }
-                                onClick={item => setSelectedItem({ type: "SetBase", item })}
-                            />
-                        ))}
+                        {displayedSetBases
+                            .slice(0, itemLimit)
+                            .map(({ key, base, notFoundSetItems, foundSetItems }) => (
+                                <SetBaseItem
+                                    key={key}
+                                    setBase={{ base, notFoundSetItems, foundSetItems }}
+                                    selectedSetBase={
+                                        selectedItem?.type === "SetBase" ? selectedItem.item : null
+                                    }
+                                    onClick={item => setSelectedItem({ type: "SetBase", item })}
+                                />
+                            ))}
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center">
-                {itemLimit === Infinity ? (
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="italic text-muted-foreground"
-                        onClick={() => setItemLimit(DEFAULT_ITEM_LIMIT)}
-                    >
-                        show less
-                    </Button>
-                ) : (
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="italic text-muted-foreground"
-                        onClick={() => setItemLimit(Infinity)}
-                    >
-                        show more
-                    </Button>
-                )}
-            </div>
+            {hasItemOverflow ? (
+                <div className="flex justify-center">
+                    {itemLimit === Infinity ? (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="italic text-muted-foreground"
+                            onClick={() => setItemLimit(DEFAULT_ITEM_LIMIT)}
+                        >
+                            show less
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="italic text-muted-foreground"
+                            onClick={() => setItemLimit(Infinity)}
+                        >
+                            show more
+                        </Button>
+                    )}
+                </div>
+            ) : null}
             <GrailUniqueBaseDialog
                 open={selectedItem?.type === "UniqueBase"}
                 onOpenChange={open => !open && setSelectedItem(null)}
