@@ -1,17 +1,20 @@
 import CheckboxItem from "@/components/CheckboxItem";
 import HeadingSeparator from "@/components/HeadingSeparator";
 import RuneDialog from "@/components/ItemTooltip/RuneDialog";
+import { useShowItemList } from "@/hooks/useShowItemList";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { RuneArrayItem, WithKey } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
 import { useDebouncedSearch } from "@/stores/useSearchStore";
 import type { Rune } from "@/types/items";
+import clsx from "clsx";
 import { useMemo, useState } from "react";
 
 type Props = { runes: Record<string, Rune> };
 
 export default function Runes({ runes }: Props) {
     const { debouncedSearchString } = useDebouncedSearch();
+    const shouldDisplay = useShowItemList();
 
     const displayedRunes: RuneArrayItem[] = useMemo(() => {
         if (!runes || !debouncedSearchString.trim()) {
@@ -52,7 +55,11 @@ export default function Runes({ runes }: Props) {
 
     return (
         <>
-            <div className="grid gap-4 [&:not(:first-child)]:mt-4">
+            <div
+                className={clsx("grid gap-4 [&:not(:first-child)]:mt-4", {
+                    hidden: !shouldDisplay,
+                })}
+            >
                 <HeadingSeparator className="text-diablo-orange">Runes</HeadingSeparator>
                 <div className="grid gap-1 grid-cols-3 md:grid-cols-6">
                     {displayedRunes.map(rune => (

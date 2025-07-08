@@ -8,11 +8,13 @@ import { useMemo, useRef, useState } from "react";
 import UniqueItemCategory from "@/routes/-grail/unique/UniqueItemCategory";
 import UniqueItemDialog from "@/components/ItemTooltip/UniqueItemDialog";
 import BaseItemDialog from "@/components/ItemTooltip/BaseItemDialog";
+import { useShowItemList } from "@/hooks/useShowItemList";
 
 type Props = { uniqueItems: Record<string, UniqueItem>; baseItems: Record<string, BaseItem> };
 
 export default function UniqueItems({ uniqueItems, baseItems }: Props) {
     const { debouncedSearchString } = useDebouncedSearch();
+    const shouldDisplay = useShowItemList();
 
     const displayedItems: Record<string, UniqueItem> | undefined = useMemo(() => {
         if (!uniqueItems) {
@@ -62,19 +64,23 @@ export default function UniqueItems({ uniqueItems, baseItems }: Props) {
                     onClick={item => setSelectedItem(item ? item : null)}
                 />
             ))}
-            <UniqueItemDialog
-                open={!!selectedItem}
-                onOpenChange={open => !open && setSelectedItem(null)}
-                item={selectedItem as UniqueItem}
-                onBaseItemClick={handleBaseItemClick}
-            />
-            <BaseItemDialog
-                ref={baseDialogRef}
-                open={!!selectedBaseItem}
-                onOpenChange={open => !open && setSelectedBaseItem(null)}
-                item={selectedBaseItem as BaseItem}
-                onBaseItemClick={handleBaseItemClick}
-            />
+            {shouldDisplay ? (
+                <>
+                    <UniqueItemDialog
+                        open={!!selectedItem}
+                        onOpenChange={open => !open && setSelectedItem(null)}
+                        item={selectedItem as UniqueItem}
+                        onBaseItemClick={handleBaseItemClick}
+                    />
+                    <BaseItemDialog
+                        ref={baseDialogRef}
+                        open={!!selectedBaseItem}
+                        onOpenChange={open => !open && setSelectedBaseItem(null)}
+                        item={selectedBaseItem as BaseItem}
+                        onBaseItemClick={handleBaseItemClick}
+                    />
+                </>
+            ) : null}
         </>
     );
 }

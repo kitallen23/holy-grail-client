@@ -6,10 +6,19 @@ import Heading from "@/components/Heading";
 import { useDebouncedSearch } from "@/stores/useSearchStore";
 import GrailItemList from "@/routes/-grail/GrailItemList";
 import type { Items } from "@/types/items";
+import {
+    NavigationMenu,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+} from "@/components/ui/navigation-menu";
+import { useGrailPageStore } from "@/stores/useGrailPageStore";
 
 export const Route = createFileRoute("/")({
     component: GrailPage,
 });
+
+const PAGE_CONTENTS_KEYS = ["Summary", "Item List"] as const;
 
 function GrailPage() {
     const { debouncedSearchString } = useDebouncedSearch();
@@ -22,6 +31,8 @@ function GrailPage() {
     const uniqueItems = data?.uniqueItems;
     const setItems = data?.setItems;
     const runes = data?.runes;
+
+    const { pageContents, setPageContents } = useGrailPageStore();
 
     const {
         data: grailProgress,
@@ -38,9 +49,27 @@ function GrailPage() {
 
     return (
         <div className="pt-4 pb-8 grid grid-cols-1 gap-4">
-            {debouncedSearchString ? (
-                <GrailItemList data={data as Items} />
-            ) : (
+            {debouncedSearchString ? null : (
+                <div className="flex justify-center">
+                    <NavigationMenu orientation="horizontal">
+                        <NavigationMenuList className="bg-popover p-1 rounded-md border">
+                            {PAGE_CONTENTS_KEYS.map(key => (
+                                <NavigationMenuItem key={key}>
+                                    <NavigationMenuLink asChild className="py-1 px-1.5" indicator>
+                                        <button
+                                            onClick={() => setPageContents(key)}
+                                            data-active={pageContents === key}
+                                        >
+                                            {key}
+                                        </button>
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
+                            ))}
+                        </NavigationMenuList>
+                    </NavigationMenu>
+                </div>
+            )}
+            {pageContents === "Summary" && !debouncedSearchString ? (
                 <>
                     <div className="grid max-w-lg mx-auto w-full">
                         <Heading className="text-destructive">Statistics</Heading>
@@ -60,7 +89,8 @@ function GrailPage() {
                         grailProgress={grailProgress}
                     />
                 </>
-            )}
+            ) : null}
+            <GrailItemList data={data as Items} />
         </div>
     );
 }

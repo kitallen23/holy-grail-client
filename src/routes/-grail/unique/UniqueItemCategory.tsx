@@ -10,6 +10,8 @@ import type {
 } from "@/routes/items/-types";
 import { ITEM_CATEGORIES } from "@/routes/items/-utils";
 import Heading from "@/components/Heading";
+import { useShowItemList } from "@/hooks/useShowItemList.ts";
+import clsx from "clsx";
 
 function getFilteredUniqueItems(
     data: Record<string, UniqueItem> | null,
@@ -50,6 +52,7 @@ export default function UniqueItemCategory({
     selectedItem,
     onClick,
 }: UniqueItemCategoryProps) {
+    const shouldDisplay = useShowItemList();
     const displayedCategoryItems = useMemo(
         () => getFilteredUniqueItems(data, category),
         [data, category]
@@ -60,7 +63,7 @@ export default function UniqueItemCategory({
     }
 
     return (
-        <div className="grid gap-4 [&:not(:first-child)]:mt-4">
+        <div className={clsx("grid gap-4 [&:not(:first-child)]:mt-4", { hidden: !shouldDisplay })}>
             <Heading className="text-destructive">Unique {label}</Heading>
             {subcategories.map(subcategory => (
                 <UniqueItemSubcategory

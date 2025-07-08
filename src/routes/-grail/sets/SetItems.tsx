@@ -11,6 +11,7 @@ import { SETS } from "@/routes/items/sets/-utils";
 import ItemSet from "@/routes/-grail/sets/ItemSet";
 import clsx from "clsx";
 import Heading from "@/components/Heading";
+import { useShowItemList } from "@/hooks/useShowItemList";
 
 type Props = { setItems: Record<string, SetItem>; baseItems: Record<string, BaseItem> };
 
@@ -31,6 +32,7 @@ function getSetItems(data: Record<string, SetItem> | null): SetItemArrayItem[] {
 
 export default function SetItems({ setItems, baseItems }: Props) {
     const { debouncedSearchString } = useDebouncedSearch();
+    const shouldDisplay = useShowItemList();
 
     const displayedItems: Record<string, SetItem> | undefined = useMemo(() => {
         if (!setItems) {
@@ -82,7 +84,11 @@ export default function SetItems({ setItems, baseItems }: Props) {
     }
     return (
         <>
-            <div className="grid gap-4 [&:not(:first-child)]:mt-4">
+            <div
+                className={clsx("grid gap-4 [&:not(:first-child)]:mt-4", {
+                    hidden: !shouldDisplay,
+                })}
+            >
                 <Heading className="text-destructive">Sets</Heading>
                 <div
                     className={clsx(
@@ -102,21 +108,25 @@ export default function SetItems({ setItems, baseItems }: Props) {
                     ))}
                 </div>
             </div>
-            <SetItemDialog
-                ref={dialogRef}
-                open={!!selectedItem}
-                onOpenChange={open => !open && setSelectedItem(null)}
-                item={selectedItem as SetItem}
-                onSetItemClick={handleSetItemClick}
-                onBaseItemClick={handleBaseItemClick}
-            />
-            <BaseItemDialog
-                ref={baseDialogRef}
-                open={!!selectedBaseItem}
-                onOpenChange={open => !open && setSelectedBaseItem(null)}
-                item={selectedBaseItem as BaseItem}
-                onBaseItemClick={handleBaseItemClick}
-            />
+            {shouldDisplay ? (
+                <>
+                    <SetItemDialog
+                        ref={dialogRef}
+                        open={!!selectedItem}
+                        onOpenChange={open => !open && setSelectedItem(null)}
+                        item={selectedItem as SetItem}
+                        onSetItemClick={handleSetItemClick}
+                        onBaseItemClick={handleBaseItemClick}
+                    />
+                    <BaseItemDialog
+                        ref={baseDialogRef}
+                        open={!!selectedBaseItem}
+                        onOpenChange={open => !open && setSelectedBaseItem(null)}
+                        item={selectedBaseItem as BaseItem}
+                        onBaseItemClick={handleBaseItemClick}
+                    />
+                </>
+            ) : null}
         </>
     );
 }
