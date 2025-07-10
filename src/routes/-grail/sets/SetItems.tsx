@@ -4,7 +4,7 @@ import type { SetItemArrayItem, WithKey } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
 import { useDebouncedSearch } from "@/stores/useSearchStore";
 import type { BaseItem, SetItem } from "@/types/items";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import BaseItemDialog from "@/components/ItemTooltip/BaseItemDialog";
 import SetItemDialog from "@/components/ItemTooltip/SetItemDialog";
 import { SETS } from "@/routes/items/sets/-utils";
@@ -32,7 +32,7 @@ function getSetItems(data: Record<string, SetItem> | null): SetItemArrayItem[] {
 
 export default function SetItems({ setItems, baseItems }: Props) {
     const { debouncedSearchString } = useDebouncedSearch();
-    const shouldDisplay = useShowItemList();
+    const { shouldDisplay, setFilteredItemCount } = useShowItemList();
 
     const displayedItems: Record<string, SetItem> | undefined = useMemo(() => {
         if (!setItems) {
@@ -52,6 +52,10 @@ export default function SetItems({ setItems, baseItems }: Props) {
 
         return filtered;
     }, [setItems, debouncedSearchString]);
+
+    useEffect(() => {
+        setFilteredItemCount("set", Object.keys(displayedItems).length);
+    }, [displayedItems]);
 
     const [selectedItem, setSelectedItem] = useState<WithKey<SetItem> | null>(null);
     const [selectedBaseItem, setSelectedBaseItem] = useState<WithKey<BaseItem> | null>(null);

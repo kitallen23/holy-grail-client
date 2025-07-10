@@ -3,7 +3,30 @@ import { useDebouncedSearch } from "@/stores/useSearchStore";
 
 export const useShowItemList = () => {
     const { debouncedSearchString } = useDebouncedSearch();
-    const { pageContents } = useGrailPageStore();
+    const {
+        pageContents,
+        uniqueItemCount,
+        setItemCount,
+        runeCount,
+        setNumFilteredUniqueItems,
+        setNumFilteredSetItems,
+        setNumFilteredRunes,
+    } = useGrailPageStore();
 
-    return debouncedSearchString || pageContents === "Item List";
+    const setFilteredItemCount = (type: "unique" | "set" | "rune", value: number) => {
+        const setters = {
+            unique: setNumFilteredUniqueItems,
+            set: setNumFilteredSetItems,
+            rune: setNumFilteredRunes,
+        };
+        setters[type](value);
+    };
+
+    const itemCount = uniqueItemCount + setItemCount + runeCount;
+
+    return {
+        shouldDisplay: debouncedSearchString || pageContents === "Item List",
+        itemCount,
+        setFilteredItemCount,
+    };
 };

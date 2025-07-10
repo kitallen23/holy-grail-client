@@ -4,7 +4,7 @@ import type { TopLevelCategory, UniqueBaseCategory, WithKey } from "@/routes/ite
 import { getSearchableText, ITEM_CATEGORIES } from "@/routes/items/-utils";
 import { useDebouncedSearch } from "@/stores/useSearchStore";
 import type { BaseItem, UniqueItem } from "@/types/items";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import UniqueItemCategory from "@/routes/-grail/unique/UniqueItemCategory";
 import UniqueItemDialog from "@/components/ItemTooltip/UniqueItemDialog";
 import BaseItemDialog from "@/components/ItemTooltip/BaseItemDialog";
@@ -14,7 +14,7 @@ type Props = { uniqueItems: Record<string, UniqueItem>; baseItems: Record<string
 
 export default function UniqueItems({ uniqueItems, baseItems }: Props) {
     const { debouncedSearchString } = useDebouncedSearch();
-    const shouldDisplay = useShowItemList();
+    const { shouldDisplay, setFilteredItemCount } = useShowItemList();
 
     const displayedItems: Record<string, UniqueItem> | undefined = useMemo(() => {
         if (!uniqueItems) {
@@ -33,6 +33,10 @@ export default function UniqueItems({ uniqueItems, baseItems }: Props) {
 
         return filtered;
     }, [uniqueItems, debouncedSearchString]);
+
+    useEffect(() => {
+        setFilteredItemCount("unique", Object.keys(displayedItems).length);
+    }, [displayedItems]);
 
     const [selectedItem, setSelectedItem] = useState<WithKey<UniqueItem> | null>(null);
     const [selectedBaseItem, setSelectedBaseItem] = useState<WithKey<BaseItem> | null>(null);

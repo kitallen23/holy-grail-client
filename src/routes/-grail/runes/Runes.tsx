@@ -8,13 +8,13 @@ import { getSearchableText } from "@/routes/items/-utils";
 import { useDebouncedSearch } from "@/stores/useSearchStore";
 import type { Rune } from "@/types/items";
 import clsx from "clsx";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Props = { runes: Record<string, Rune> };
 
 export default function Runes({ runes }: Props) {
     const { debouncedSearchString } = useDebouncedSearch();
-    const shouldDisplay = useShowItemList();
+    const { shouldDisplay, setFilteredItemCount } = useShowItemList();
 
     const displayedRunes: RuneArrayItem[] = useMemo(() => {
         if (!runes || !debouncedSearchString.trim()) {
@@ -46,6 +46,10 @@ export default function Runes({ runes }: Props) {
             key,
         }));
     }, [runes, debouncedSearchString]);
+
+    useEffect(() => {
+        setFilteredItemCount("rune", displayedRunes.length);
+    }, [displayedRunes]);
 
     const [selectedRune, setSelectedRune] = useState<WithKey<Rune> | null>(null);
 
