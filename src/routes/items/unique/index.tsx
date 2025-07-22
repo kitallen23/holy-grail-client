@@ -23,7 +23,7 @@ function UniqueItemsPage() {
     const { data, isFetching, error } = useItems(["uniqueItems", "baseItems"]);
     const uniqueItems = data?.uniqueItems;
 
-    const { item: selectedItem, type: selectedItemType, setItem, onClose } = useItemDialogStore();
+    const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
     const { debouncedSearchString, clearSearch } = useDebouncedSearch();
     const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
 
@@ -143,7 +143,7 @@ function UniqueItemsPage() {
                                 ? (selectedItem as WithKey<UniqueItem>)
                                 : undefined
                         }
-                        onClick={item => (item ? setItem("unique-item", item) : onClose)}
+                        onClick={item => setItem("unique-item", item)}
                     />
                 ))}
             </div>

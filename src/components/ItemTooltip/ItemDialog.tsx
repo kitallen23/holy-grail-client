@@ -2,13 +2,14 @@ import { useItemDialogStore } from "@/stores/useItemDialogStore";
 import UniqueItemDialog from "./UniqueItemDialog";
 import { useItems } from "@/hooks/queries";
 import { useRef } from "react";
-import type { BaseItem, SetItem, UniqueItem } from "@/types/items";
+import type { BaseItem, Rune, SetItem, UniqueItem } from "@/types/items";
 import BaseItemDialog from "./BaseItemDialog";
 import type { DialogContent } from "@/components/ui/dialog";
 import SetItemDialog from "./SetItemDialog";
+import RuneDialog from "./RuneDialog";
 
 const ItemDialog = () => {
-    const { item, type, setItem, onClose } = useItemDialogStore();
+    const { item, type, setItem } = useItemDialogStore();
     // Lazy load base items
     const { data: baseData } = useItems(["baseItems"], {
         enabled: !!item,
@@ -44,24 +45,29 @@ const ItemDialog = () => {
         <>
             <UniqueItemDialog
                 open={(item && type === "unique-item") ?? false}
-                onOpenChange={onClose}
+                onOpenChange={() => setItem()}
                 item={type === "unique-item" ? (item as UniqueItem) : undefined}
                 onBaseItemClick={handleBaseItemClick}
             />
             <BaseItemDialog
                 ref={baseDialogRef}
                 open={(item && type === "base-item") ?? false}
-                onOpenChange={onClose}
+                onOpenChange={() => setItem()}
                 item={type === "base-item" ? (item as BaseItem) : undefined}
                 onBaseItemClick={handleBaseItemClick}
             />
             <SetItemDialog
                 ref={setDialogRef}
                 open={(item && type === "set-item") ?? false}
-                onOpenChange={onClose}
+                onOpenChange={() => setItem()}
                 item={type === "set-item" ? (item as SetItem) : undefined}
                 onSetItemClick={handleSetItemClick}
                 onBaseItemClick={handleBaseItemClick}
+            />
+            <RuneDialog
+                open={(item && type === "rune") ?? false}
+                onOpenChange={() => setItem()}
+                rune={type === "rune" ? (item as Rune) : undefined}
             />
         </>
     );

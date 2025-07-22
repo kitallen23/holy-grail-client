@@ -1,18 +1,18 @@
 import HeadingSeparator from "@/components/HeadingSeparator";
-import RuneDialog from "@/components/ItemTooltip/RuneDialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useItems } from "@/hooks/queries";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
-import type { RuneArrayItem, WithKey } from "@/routes/items/-types";
+import type { RuneArrayItem } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
+import { useItemDialogStore } from "@/stores/useItemDialogStore";
 import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import type { Rune } from "@/types/items";
 import { createFileRoute } from "@tanstack/react-router";
 import clsx from "clsx";
 import { CircleAlert } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 export const Route = createFileRoute("/items/runes/")({
     component: RunesPage,
@@ -22,6 +22,7 @@ function RunesPage() {
     const { data, isFetching, error } = useItems(["runes"]);
     const runes = data?.runes;
 
+    const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
     const { debouncedSearchString, clearSearch } = useDebouncedSearch();
     const { clearFilters } = useSearchFilters();
 
@@ -55,8 +56,6 @@ function RunesPage() {
             key,
         }));
     }, [runes, debouncedSearchString]);
-
-    const [selectedRune, setSelectedRune] = useState<WithKey<Rune> | null>(null);
 
     if (error) {
         return (
@@ -127,9 +126,11 @@ function RunesPage() {
                                 size="sm"
                                 className={clsx(
                                     "item-trigger justify-start border border-transparent inline-flex w-fit max-w-full",
-                                    rune.key === selectedRune?.key ? "border-primary" : ""
+                                    selectedItemType === "rune" && rune.key === selectedItem?.key
+                                        ? "border-primary"
+                                        : ""
                                 )}
-                                onClick={() => setSelectedRune(rune)}
+                                onClick={() => setItem("rune", rune)}
                                 aria-haspopup="dialog"
                                 aria-label={`View details for ${rune.name}`}
                             >
@@ -143,11 +144,6 @@ function RunesPage() {
                     ))}
                 </div>
             </div>
-            <RuneDialog
-                open={!!selectedRune}
-                onOpenChange={open => !open && setSelectedRune(null)}
-                rune={selectedRune as Rune}
-            />
         </>
     ) : (
         <div className="mt-4 flex flex-col gap-2">

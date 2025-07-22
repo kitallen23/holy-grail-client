@@ -25,8 +25,8 @@ interface BaseItemSubcategoryProps {
     data: BaseItemArrayItem[];
     subcategory: BaseCategory;
     label: string;
-    selectedItem?: WithKey<BaseItem> | null;
-    onClick: (item: BaseItemArrayItem | null) => void;
+    selectedItem?: WithKey<BaseItem>;
+    onClick: (item?: BaseItemArrayItem) => void;
 }
 
 export default function BaseItemSubcategory({

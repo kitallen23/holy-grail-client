@@ -1,18 +1,17 @@
-import BaseItemDialog from "@/components/ItemTooltip/BaseItemDialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import type { DialogContent } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useItems } from "@/hooks/queries";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { TopLevelCategory, WithKey } from "@/routes/items/-types";
 import { getSearchableText, ITEM_CATEGORIES } from "@/routes/items/-utils";
 import BaseItemCategory from "@/routes/items/bases/-BaseItemCategory";
+import { useItemDialogStore } from "@/stores/useItemDialogStore";
 import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import type { BaseCategory, BaseItem, Tier } from "@/types/items";
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo } from "react";
 
 export const Route = createFileRoute("/items/bases/")({
     component: BaseItemsPage,
@@ -22,6 +21,7 @@ function BaseItemsPage() {
     const { data, isFetching, error } = useItems(["baseItems"]);
     const baseItems = data?.baseItems;
 
+    const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
     const { debouncedSearchString, clearSearch } = useDebouncedSearch();
     const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
 
@@ -88,18 +88,6 @@ function BaseItemsPage() {
 
         return filtered;
     }, [baseItems, debouncedSearchString, selectedFilters]);
-
-    const [selectedItem, setSelectedItem] = useState<WithKey<BaseItem> | null>(null);
-    const dialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
-
-    const handleBaseItemClick = (itemName: string) => {
-        const [key, baseItem] =
-            Object.entries(baseItems || {}).find(([, item]) => item.name === itemName) || [];
-        if (key && baseItem) {
-            setSelectedItem({ ...baseItem, key });
-        }
-        dialogRef.current?.scrollTo(0, 0);
-    };
 
     if (error) {
         return (
@@ -168,17 +156,15 @@ function BaseItemsPage() {
                         category={category as TopLevelCategory}
                         label={category}
                         subcategories={subcategories as BaseCategory[]}
-                        selectedItem={selectedItem}
-                        onClick={item => setSelectedItem(item ? item : null)}
+                        selectedItem={
+                            selectedItemType === "base-item"
+                                ? (selectedItem as WithKey<BaseItem>)
+                                : undefined
+                        }
+                        onClick={item => setItem("base-item", item)}
                     />
                 ))}
             </div>
-            <BaseItemDialog
-                open={!!selectedItem}
-                onOpenChange={open => !open && setSelectedItem(null)}
-                item={selectedItem as BaseItem}
-                onBaseItemClick={handleBaseItemClick}
-            />
         </>
     ) : (
         <div className="mt-4 flex flex-col gap-2">

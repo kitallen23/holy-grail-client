@@ -32,7 +32,7 @@ interface SetTierProps {
     data: Record<string, SetItem> | null;
     tier: Tier;
     selectedItem?: WithKey<SetItem>;
-    onClick: (item: SetItemArrayItem | null) => void;
+    onClick: (item?: SetItemArrayItem) => void;
 }
 
 export default function SetTier({ data, tier, selectedItem, onClick }: SetTierProps) {

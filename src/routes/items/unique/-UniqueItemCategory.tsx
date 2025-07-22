@@ -39,7 +39,7 @@ interface UniqueItemCategoryProps {
     subcategories: UniqueBaseCategory[];
     label: string;
     selectedItem?: WithKey<UniqueItem>;
-    onClick: (item: UniqueItemArrayItem | null) => void;
+    onClick: (item?: UniqueItemArrayItem) => void;
 }
 
 export default function UniqueItemCategory({
