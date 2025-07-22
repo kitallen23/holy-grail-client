@@ -9,11 +9,16 @@ import SetItemDialog from "./SetItemDialog";
 
 const ItemDialog = () => {
     const { item, type, setItem, onClose } = useItemDialogStore();
-    const { data } = useItems(["baseItems", "setItems"], {
+    // Lazy load base items
+    const { data: baseData } = useItems(["baseItems"], {
         enabled: !!item,
     });
-    const baseItems = data?.baseItems;
-    const setItems = data?.setItems;
+    // Lazy load set items (only if a set item is viewed)
+    const { data: setData } = useItems(["setItems"], {
+        enabled: !!item && type === "set-item",
+    });
+    const baseItems = baseData?.baseItems;
+    const setItems = setData?.setItems;
 
     const baseDialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
     const setDialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
