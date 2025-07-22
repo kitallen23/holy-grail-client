@@ -4,11 +4,14 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import type { UniqueItem } from "@/types/items";
 import ItemAffix from "@/components/ItemTooltip/ItemAffix";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { useAuth } from "@/hooks/useAuth";
+import type { WithKey } from "@/routes/items/-types";
+import GrailIndicator from "./GrailIndicator";
 
 const EXCLUDED_BASES = ["Amulet", "Ring", "Jewel", "Small Charm", "Large Charm", "Grand Charm"];
 
 interface UniqueItemDialogProps extends React.ComponentProps<typeof DialogPrimitive.Root> {
-    item?: UniqueItem;
+    item?: WithKey<UniqueItem>;
     onBaseItemClick: (itemName: string) => void;
 }
 
@@ -16,6 +19,9 @@ export const UniqueItemDialog = React.forwardRef<
     React.ComponentRef<typeof DialogContent>,
     UniqueItemDialogProps
 >(({ item, onBaseItemClick, ...props }, ref) => {
+    const { user } = useAuth();
+    const isLoggedIn = !!user;
+
     return (
         <Dialog {...props}>
             {item ? (
@@ -57,6 +63,7 @@ export const UniqueItemDialog = React.forwardRef<
                             />
                         )) || null}
                     </div>
+                    {isLoggedIn ? <GrailIndicator itemKey={item?.key} /> : null}
                 </DialogContent>
             ) : null}
         </Dialog>

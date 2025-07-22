@@ -34,7 +34,7 @@ function RouteComponent() {
 
     if (!user) {
         return (
-            <div className="max-w-xs mx-auto pt-16 flex flex-col gap-4">
+            <div className="max-w-xs mx-auto pt-16 flex flex-col gap-8 text-center">
                 <h2 className="text-lg leading-none font-semibold">
                     Sign in to access the Holy Grail
                 </h2>

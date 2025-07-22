@@ -7,6 +7,7 @@ import BaseItemDialog from "./BaseItemDialog";
 import type { DialogContent } from "@/components/ui/dialog";
 import SetItemDialog from "./SetItemDialog";
 import RuneDialog from "./RuneDialog";
+import type { WithKey } from "@/routes/items/-types";
 
 const ItemDialog = () => {
     const { item, type, setItem } = useItemDialogStore();
@@ -46,28 +47,28 @@ const ItemDialog = () => {
             <UniqueItemDialog
                 open={(item && type === "unique-item") ?? false}
                 onOpenChange={() => setItem()}
-                item={type === "unique-item" ? (item as UniqueItem) : undefined}
+                item={type === "unique-item" ? (item as WithKey<UniqueItem>) : undefined}
                 onBaseItemClick={handleBaseItemClick}
             />
             <BaseItemDialog
                 ref={baseDialogRef}
                 open={(item && type === "base-item") ?? false}
                 onOpenChange={() => setItem()}
-                item={type === "base-item" ? (item as BaseItem) : undefined}
+                item={type === "base-item" ? (item as WithKey<BaseItem>) : undefined}
                 onBaseItemClick={handleBaseItemClick}
             />
             <SetItemDialog
                 ref={setDialogRef}
                 open={(item && type === "set-item") ?? false}
                 onOpenChange={() => setItem()}
-                item={type === "set-item" ? (item as SetItem) : undefined}
+                item={type === "set-item" ? (item as WithKey<SetItem>) : undefined}
                 onSetItemClick={handleSetItemClick}
                 onBaseItemClick={handleBaseItemClick}
             />
             <RuneDialog
                 open={(item && type === "rune") ?? false}
                 onOpenChange={() => setItem()}
-                rune={type === "rune" ? (item as Rune) : undefined}
+                rune={type === "rune" ? (item as WithKey<Rune>) : undefined}
             />
         </>
     );

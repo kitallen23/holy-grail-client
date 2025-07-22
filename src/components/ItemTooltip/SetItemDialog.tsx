@@ -6,11 +6,14 @@ import ItemAffix from "@/components/ItemTooltip/ItemAffix";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import SetItemBonusAffix from "@/components/ItemTooltip/SetItemBonusAffix";
 import clsx from "clsx";
+import { useAuth } from "@/hooks/useAuth";
+import GrailIndicator from "./GrailIndicator";
+import type { WithKey } from "@/routes/items/-types";
 
 const EXCLUDED_BASES = ["Amulet", "Ring"];
 
 interface SetItemDialogProps extends React.ComponentProps<typeof DialogPrimitive.Root> {
-    item?: SetItem;
+    item?: WithKey<SetItem>;
     onBaseItemClick: (itemName: string) => void;
     onSetItemClick: (itemName: string) => void;
 }
@@ -19,6 +22,9 @@ const SetItemDialog = React.forwardRef<
     React.ComponentRef<typeof DialogContent>,
     SetItemDialogProps
 >(({ item, onSetItemClick, onBaseItemClick, ...props }, ref) => {
+    const { user } = useAuth();
+    const isLoggedIn = !!user;
+
     const displayedItemBonuses = Object.entries(item?.itemBonuses || {}).sort((a, b) =>
         a[0] > b[0] ? 0 : 1
     );
@@ -103,6 +109,7 @@ const SetItemDialog = React.forwardRef<
                             </div>
                         ))}
                     </div>
+                    {isLoggedIn ? <GrailIndicator itemKey={item?.key} /> : null}
                 </DialogContent>
             ) : null}
         </Dialog>
