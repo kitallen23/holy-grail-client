@@ -40,8 +40,8 @@ interface UniqueItemCategoryProps {
     category: "Weapons" | "Armor" | "Other";
     subcategories: UniqueBaseCategory[];
     label: string;
-    selectedItem?: WithKey<UniqueItem> | null;
-    onClick: (item: UniqueItemArrayItem | null) => void;
+    selectedItem?: WithKey<UniqueItem>;
+    onClick: (item: UniqueItemArrayItem) => void;
 }
 
 export default function UniqueItemCategory({

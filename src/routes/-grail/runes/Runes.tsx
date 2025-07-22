@@ -1,20 +1,21 @@
 import CheckboxItem from "@/components/CheckboxItem";
 import HeadingSeparator from "@/components/HeadingSeparator";
-import RuneDialog from "@/components/ItemTooltip/RuneDialog";
 import { useShowItemList } from "@/hooks/useShowItemList";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
-import type { RuneArrayItem, WithKey } from "@/routes/items/-types";
+import type { RuneArrayItem } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
+import { useItemDialogStore } from "@/stores/useItemDialogStore";
 import { useDebouncedSearch } from "@/stores/useSearchStore";
 import type { Rune } from "@/types/items";
 import clsx from "clsx";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 
 type Props = { runes: Record<string, Rune> };
 
 export default function Runes({ runes }: Props) {
     const { debouncedSearchString } = useDebouncedSearch();
     const { shouldDisplay, setFilteredItemCount } = useShowItemList();
+    const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
 
     const displayedRunes: RuneArrayItem[] = useMemo(() => {
         if (!runes || !debouncedSearchString.trim()) {
@@ -51,8 +52,6 @@ export default function Runes({ runes }: Props) {
         setFilteredItemCount("rune", displayedRunes.length);
     }, [displayedRunes]);
 
-    const [selectedRune, setSelectedRune] = useState<WithKey<Rune> | null>(null);
-
     if (!Object.keys(displayedRunes).length) {
         return null;
     }
@@ -71,19 +70,16 @@ export default function Runes({ runes }: Props) {
                             key={rune.key}
                             name={rune.name}
                             uniqueName={rune.key}
-                            isSelected={selectedRune?.key === rune.key}
+                            isSelected={
+                                selectedItemType === "rune" && selectedItem?.key === rune.key
+                            }
                             data={rune}
-                            onClick={() => setSelectedRune(rune)}
+                            onClick={() => setItem("rune", rune)}
                             imageSrc={`/img/${rune.key.toLowerCase()}.webp`}
                         />
                     ))}
                 </div>
             </div>
-            <RuneDialog
-                open={!!selectedRune}
-                onOpenChange={open => !open && setSelectedRune(null)}
-                rune={selectedRune as Rune}
-            />
         </>
     );
 }

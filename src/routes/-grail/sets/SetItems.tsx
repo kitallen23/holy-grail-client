@@ -1,19 +1,17 @@
-import type { DialogContent } from "@/components/ui/dialog";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { SetItemArrayItem, WithKey } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
 import { useDebouncedSearch } from "@/stores/useSearchStore";
-import type { BaseItem, SetItem } from "@/types/items";
-import { useEffect, useMemo, useRef, useState } from "react";
-import BaseItemDialog from "@/components/ItemTooltip/BaseItemDialog";
-import SetItemDialog from "@/components/ItemTooltip/SetItemDialog";
+import type { SetItem } from "@/types/items";
+import { useEffect, useMemo } from "react";
 import { SETS } from "@/routes/items/sets/-utils";
 import ItemSet from "@/routes/-grail/sets/ItemSet";
 import clsx from "clsx";
 import Heading from "@/components/Heading";
 import { useShowItemList } from "@/hooks/useShowItemList";
+import { useItemDialogStore } from "@/stores/useItemDialogStore";
 
-type Props = { setItems: Record<string, SetItem>; baseItems: Record<string, BaseItem> };
+type Props = { setItems: Record<string, SetItem> };
 
 function getSetItems(data: Record<string, SetItem> | null): SetItemArrayItem[] {
     if (!data) {
@@ -30,9 +28,10 @@ function getSetItems(data: Record<string, SetItem> | null): SetItemArrayItem[] {
     return tierSetItems;
 }
 
-export default function SetItems({ setItems, baseItems }: Props) {
+export default function SetItems({ setItems }: Props) {
     const { debouncedSearchString } = useDebouncedSearch();
     const { shouldDisplay, setFilteredItemCount } = useShowItemList();
+    const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
 
     const displayedItems: Record<string, SetItem> | undefined = useMemo(() => {
         if (!setItems) {
@@ -56,29 +55,6 @@ export default function SetItems({ setItems, baseItems }: Props) {
     useEffect(() => {
         setFilteredItemCount("set", Object.keys(displayedItems).length);
     }, [displayedItems]);
-
-    const [selectedItem, setSelectedItem] = useState<WithKey<SetItem> | null>(null);
-    const [selectedBaseItem, setSelectedBaseItem] = useState<WithKey<BaseItem> | null>(null);
-    const dialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
-    const baseDialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
-
-    const handleSetItemClick = (itemName: string) => {
-        const [key, setItem] =
-            Object.entries(setItems || {}).find(([, item]) => item.name === itemName) || [];
-        if (key && setItem) {
-            setSelectedItem({ ...setItem, key });
-        }
-        dialogRef.current?.scrollTo(0, 0);
-    };
-    const handleBaseItemClick = (itemName: string) => {
-        const [key, baseItem] =
-            Object.entries(baseItems || {}).find(([, item]) => item.name === itemName) || [];
-        if (key && baseItem) {
-            setSelectedBaseItem({ ...baseItem, key });
-        }
-        setSelectedItem(null);
-        baseDialogRef.current?.scrollTo(0, 0);
-    };
 
     const displayedSetItems = useMemo(() => getSetItems(displayedItems), [displayedItems]);
     const numberOfDisplayedSets = new Set(displayedSetItems.map(item => item.category)).size;
@@ -106,31 +82,16 @@ export default function SetItems({ setItems, baseItems }: Props) {
                             data={displayedSetItems}
                             set={name}
                             label={name}
-                            selectedItem={selectedItem}
-                            onClick={item => setSelectedItem(item || null)}
+                            selectedItem={
+                                selectedItemType === "set-item"
+                                    ? (selectedItem as WithKey<SetItem>)
+                                    : undefined
+                            }
+                            onClick={item => setItem("set-item", item)}
                         />
                     ))}
                 </div>
             </div>
-            {shouldDisplay ? (
-                <>
-                    <SetItemDialog
-                        ref={dialogRef}
-                        open={!!selectedItem}
-                        onOpenChange={open => !open && setSelectedItem(null)}
-                        item={selectedItem as SetItem}
-                        onSetItemClick={handleSetItemClick}
-                        onBaseItemClick={handleBaseItemClick}
-                    />
-                    <BaseItemDialog
-                        ref={baseDialogRef}
-                        open={!!selectedBaseItem}
-                        onOpenChange={open => !open && setSelectedBaseItem(null)}
-                        item={selectedBaseItem as BaseItem}
-                        onBaseItemClick={handleBaseItemClick}
-                    />
-                </>
-            ) : null}
         </>
     );
 }

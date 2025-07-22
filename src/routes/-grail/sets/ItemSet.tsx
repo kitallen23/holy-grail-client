@@ -26,8 +26,8 @@ interface SetCategoryProps {
     data: SetItemArrayItem[];
     set: SetCategory;
     label: string;
-    selectedItem?: WithKey<SetItem> | null;
-    onClick: (item: SetItemArrayItem | null) => void;
+    selectedItem?: WithKey<SetItem>;
+    onClick: (item: SetItemArrayItem) => void;
 }
 
 export default function ItemSet({ data, set, label, selectedItem, onClick }: SetCategoryProps) {
