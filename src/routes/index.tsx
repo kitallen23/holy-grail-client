@@ -13,6 +13,8 @@ import {
     NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { useGrailPageStore } from "@/stores/useGrailPageStore";
+import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/")({
     component: GrailPage,
@@ -39,6 +41,14 @@ function GrailPage() {
         isFetching: isFetchingGrailProgress,
         // error: grailProgressError,
     } = useGrailProgress();
+
+    const { setItems: setGrailItems } = useGrailProgressStore();
+
+    useEffect(() => {
+        if (grailProgress) {
+            setGrailItems(grailProgress);
+        }
+    }, [grailProgress]);
 
     const isFetching = isFetchingItems || isFetchingGrailProgress;
     // const error = itemsError || grailProgressError;

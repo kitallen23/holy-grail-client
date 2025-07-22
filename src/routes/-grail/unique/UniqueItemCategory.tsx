@@ -52,7 +52,7 @@ export default function UniqueItemCategory({
     selectedItem,
     onClick,
 }: UniqueItemCategoryProps) {
-    const shouldDisplay = useShowItemList();
+    const { shouldDisplay } = useShowItemList();
     const displayedCategoryItems = useMemo(
         () => getFilteredUniqueItems(data, category),
         [data, category]

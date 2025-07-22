@@ -2,6 +2,7 @@ import clsx from "clsx";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useGrailItem } from "@/hooks/useGrailItem";
 
 type Props<T> = Omit<React.ComponentProps<typeof CheckboxPrimitive.Root>, "onClick"> & {
     name: string;
@@ -24,9 +25,11 @@ export default function CheckboxItem<T>({
     onClick,
     ...props
 }: Props<T>) {
+    const { found, setFound } = useGrailItem(uniqueName);
+
     return (
-        <div className="inline-grid gap-2 grid-cols-[auto_1fr] items-center w-fit">
-            <Checkbox {...props} />
+        <label className="inline-grid gap-2 grid-cols-[auto_1fr] items-center w-fit">
+            <Checkbox {...props} checked={found} onCheckedChange={setFound} />
             <Button
                 key={uniqueName}
                 variant="ghost"
@@ -45,6 +48,6 @@ export default function CheckboxItem<T>({
                     <div className="pl-0 sm:pl-1 text-foreground/60 truncate">{subtext}</div>
                 ) : null}
             </Button>
-        </div>
+        </label>
     );
 }
