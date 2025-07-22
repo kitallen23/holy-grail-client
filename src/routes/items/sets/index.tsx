@@ -3,18 +3,16 @@ import { useItems } from "@/hooks/queries";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { WithKey } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
-import type { BaseItem, SetItem, Tier } from "@/types/items";
+import type { SetItem, Tier } from "@/types/items";
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert } from "lucide-react";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import SetItemDialog from "@/components/ItemTooltip/SetItemDialog";
+import { useEffect, useMemo } from "react";
 import SetTier from "@/routes/items/sets/-SetTier";
 import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { SETS } from "@/routes/items/sets/-utils";
-import { DialogContent } from "@/components/ui/dialog";
-import BaseItemDialog from "@/components/ItemTooltip/BaseItemDialog";
+import { useItemDialogStore } from "@/stores/useItemDialogStore";
 
 export const Route = createFileRoute("/items/sets/")({
     component: SetItemsPage,
@@ -25,8 +23,8 @@ const TIERS: Tier[] = ["Normal", "Exceptional", "Elite"];
 function SetItemsPage() {
     const { data, isFetching, error } = useItems(["setItems", "baseItems"]);
     const setItems = data?.setItems;
-    const baseItems = data?.baseItems;
 
+    const { item: selectedItem, type: selectedItemType, setItem, onClose } = useItemDialogStore();
     const { debouncedSearchString, clearSearch } = useDebouncedSearch();
     const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
 
@@ -69,29 +67,6 @@ function SetItemsPage() {
 
         return filtered;
     }, [setItems, debouncedSearchString, selectedFilters]);
-
-    const [selectedItem, setSelectedItem] = useState<WithKey<SetItem> | null>(null);
-    const [selectedBaseItem, setSelectedBaseItem] = useState<WithKey<BaseItem> | null>(null);
-    const dialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
-    const baseDialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
-
-    const handleSetItemClick = (itemName: string) => {
-        const [key, setItem] =
-            Object.entries(setItems || {}).find(([, item]) => item.name === itemName) || [];
-        if (key && setItem) {
-            setSelectedItem({ ...setItem, key });
-        }
-        dialogRef.current?.scrollTo(0, 0);
-    };
-    const handleBaseItemClick = (itemName: string) => {
-        const [key, baseItem] =
-            Object.entries(baseItems || {}).find(([, item]) => item.name === itemName) || [];
-        if (key && baseItem) {
-            setSelectedBaseItem({ ...baseItem, key });
-        }
-        setSelectedItem(null);
-        baseDialogRef.current?.scrollTo(0, 0);
-    };
 
     if (error) {
         return (
@@ -158,26 +133,15 @@ function SetItemsPage() {
                         key={tier}
                         data={displayedItems}
                         tier={tier}
-                        selectedItem={selectedItem}
-                        onClick={item => setSelectedItem(item || null)}
+                        selectedItem={
+                            selectedItemType === "set-item"
+                                ? (selectedItem as WithKey<SetItem>)
+                                : undefined
+                        }
+                        onClick={item => (item ? setItem("set-item", item) : onClose)}
                     />
                 ))}
             </div>
-            <SetItemDialog
-                ref={dialogRef}
-                open={!!selectedItem}
-                onOpenChange={open => !open && setSelectedItem(null)}
-                item={selectedItem as SetItem}
-                onSetItemClick={handleSetItemClick}
-                onBaseItemClick={handleBaseItemClick}
-            />
-            <BaseItemDialog
-                ref={baseDialogRef}
-                open={!!selectedBaseItem}
-                onOpenChange={open => !open && setSelectedBaseItem(null)}
-                item={selectedBaseItem as BaseItem}
-                onBaseItemClick={handleBaseItemClick}
-            />
         </>
     ) : (
         <div className="mt-4 flex flex-col gap-2">

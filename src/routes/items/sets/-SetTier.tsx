@@ -31,7 +31,7 @@ function getFilteredTierSetItems(
 interface SetTierProps {
     data: Record<string, SetItem> | null;
     tier: Tier;
-    selectedItem?: WithKey<SetItem> | null;
+    selectedItem?: WithKey<SetItem>;
     onClick: (item: SetItemArrayItem | null) => void;
 }
 
