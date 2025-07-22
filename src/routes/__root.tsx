@@ -1,10 +1,12 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
-// import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import Header from "@/components/layout/Header";
 import { useSearchBar } from "@/stores/useSearchStore";
 import LoginModal from "@/components/LoginModal";
 import { Toaster } from "@/components/ui/sonner";
 import ItemDialog from "@/components/ItemTooltip/ItemDialog";
+
+// import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const RootLayout = () => {
     const { isVisible } = useSearchBar();
@@ -21,7 +23,9 @@ const RootLayout = () => {
             </main>
             <Toaster />
             {/* <footer></footer> */}
+
             {/* <TanStackRouterDevtools /> */}
+            {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         </>
     );
 };
