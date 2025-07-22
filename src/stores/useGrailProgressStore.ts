@@ -1,5 +1,9 @@
-import type { GrailProgressItem } from "@/lib/api";
+import { setUserItem, type GrailProgressItem } from "@/lib/api";
+import { API_CALL_DEBOUNCE_DELAY } from "@/lib/constants";
 import { createWithEqualityFn as create } from "zustand/traditional";
+
+// Cache updates
+const pendingUpdates = new Map<string, NodeJS.Timeout>();
 
 interface GrailProgressStore {
     items: Record<string, GrailProgressItem>;
@@ -10,7 +14,11 @@ interface GrailProgressStore {
 export const useGrailProgressStore = create<GrailProgressStore>(set => ({
     items: {},
 
-    setFound: (itemKey, found) =>
+    setFound: (itemKey, found) => {
+        // Clear existing timeout for this item
+        const existing = pendingUpdates.get(itemKey);
+        if (existing) clearTimeout(existing);
+
         set(state => {
             const existing = state.items[itemKey];
             const now = new Date().toISOString();
@@ -29,12 +37,16 @@ export const useGrailProgressStore = create<GrailProgressStore>(set => ({
                           },
                 },
             };
-        }),
+        });
+
+        // Debounced API call
+        const timeout = setTimeout(() => {
+            setUserItem(itemKey, found);
+            pendingUpdates.delete(itemKey);
+        }, API_CALL_DEBOUNCE_DELAY);
+
+        pendingUpdates.set(itemKey, timeout);
+    },
 
     setItems: items => set({ items }),
 }));
-
-// TODO: Remove me
-useGrailProgressStore.subscribe(state => {
-    console.info("Grail items changed:", state.items);
-});

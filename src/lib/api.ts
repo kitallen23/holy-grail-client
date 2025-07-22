@@ -40,6 +40,8 @@ export const fetchItems = (types?: QueryType[]) => {
 };
 export const fetchRunewords = () => api.get("runewords").json();
 export const fetchUserItems = () => api.get("user-items").json<UserItemsResponse>();
+export const setUserItem = (itemKey: string, found: boolean) =>
+    api.post("user-items/set", { json: { itemKey, found } });
 
 export const checkAuth = () => api.get("auth/me").json<User>();
 export const logout = () => api.post("auth/logout");

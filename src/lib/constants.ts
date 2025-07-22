@@ -1,1 +1,2 @@
 export const SEARCH_DEBOUNCE_DELAY = 400;
+export const API_CALL_DEBOUNCE_DELAY = 500;

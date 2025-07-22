@@ -119,7 +119,9 @@ export const getRemainingUniqueBases = (
     baseItems: Record<string, BaseItem>,
     grailProgress: Record<string, GrailProgressItem>
 ): Record<string, UniqueBase> => {
-    const foundItemKeys = Object.values(grailProgress).map(item => item.itemKey);
+    const foundItemKeys = Object.values(grailProgress)
+        .filter(item => !!item.found)
+        .map(item => item.itemKey);
 
     const uniqueBases: Record<string, UniqueBase> = {};
     Object.entries(uniqueItems).forEach(([key, item]) => {
@@ -153,7 +155,9 @@ export const getRemainingSetBases = (
     baseItems: Record<string, BaseItem>,
     grailProgress: Record<string, GrailProgressItem>
 ): Record<string, SetBase> => {
-    const foundItemKeys = Object.values(grailProgress).map(item => item.itemKey);
+    const foundItemKeys = Object.values(grailProgress)
+        .filter(item => !!item.found)
+        .map(item => item.itemKey);
 
     const setBases: Record<string, SetBase> = {};
     Object.entries(setItems).forEach(([key, item]) => {

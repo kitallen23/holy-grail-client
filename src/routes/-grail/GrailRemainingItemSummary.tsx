@@ -155,7 +155,10 @@ export default function GrailRemainingItemSummary({
                         ? selectedItemBase.item.notFoundUniqueItems
                         : undefined
                 }
-                onClick={item => setItem("unique-item", item)}
+                onClick={item => {
+                    setItem("unique-item", item);
+                    setSelectedItemBase(undefined);
+                }}
             />
             <GrailSetBaseDialog
                 open={selectedItemBase?.type === "SetBase"}
@@ -171,7 +174,10 @@ export default function GrailRemainingItemSummary({
                         ? selectedItemBase.item.notFoundSetItems
                         : undefined
                 }
-                onClick={item => setItem("set-item", item)}
+                onClick={item => {
+                    setItem("set-item", item);
+                    setSelectedItemBase(undefined);
+                }}
             />
         </>
     );
