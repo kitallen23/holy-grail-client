@@ -38,7 +38,7 @@ interface UniqueItemCategoryProps {
     category: "Weapons" | "Armor" | "Other";
     subcategories: UniqueBaseCategory[];
     label: string;
-    selectedItem?: WithKey<UniqueItem> | null;
+    selectedItem?: WithKey<UniqueItem>;
     onClick: (item: UniqueItemArrayItem | null) => void;
 }
 

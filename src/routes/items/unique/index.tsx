@@ -1,8 +1,5 @@
-import BaseItemDialog from "@/components/ItemTooltip/BaseItemDialog";
-import UniqueItemDialog from "@/components/ItemTooltip/UniqueItemDialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import type { DialogContent } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useItems } from "@/hooks/queries";
@@ -10,12 +7,13 @@ import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { TopLevelCategory, UniqueBaseCategory, WithKey } from "@/routes/items/-types";
 import { getSearchableText, ITEM_CATEGORIES } from "@/routes/items/-utils";
 import UniqueItemCategory from "@/routes/items/unique/-UniqueItemCategory";
+import { useItemDialogStore } from "@/stores/useItemDialogStore";
 import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
-import type { BaseItem, UniqueItem } from "@/types/items";
+import type { UniqueItem } from "@/types/items";
 
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlert } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo } from "react";
 
 export const Route = createFileRoute("/items/unique/")({
     component: UniqueItemsPage,
@@ -24,8 +22,8 @@ export const Route = createFileRoute("/items/unique/")({
 function UniqueItemsPage() {
     const { data, isFetching, error } = useItems(["uniqueItems", "baseItems"]);
     const uniqueItems = data?.uniqueItems;
-    const baseItems = data?.baseItems;
 
+    const { item: selectedItem, type: selectedItemType, setItem, onClose } = useItemDialogStore();
     const { debouncedSearchString, clearSearch } = useDebouncedSearch();
     const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
 
@@ -72,20 +70,6 @@ function UniqueItemsPage() {
 
         return filtered;
     }, [uniqueItems, debouncedSearchString, selectedFilters]);
-
-    const [selectedItem, setSelectedItem] = useState<WithKey<UniqueItem> | null>(null);
-    const [selectedBaseItem, setSelectedBaseItem] = useState<WithKey<BaseItem> | null>(null);
-    const baseDialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
-
-    const handleBaseItemClick = (itemName: string) => {
-        const [key, baseItem] =
-            Object.entries(baseItems || {}).find(([, item]) => item.name === itemName) || [];
-        if (key && baseItem) {
-            setSelectedBaseItem({ ...baseItem, key });
-        }
-        setSelectedItem(null);
-        baseDialogRef.current?.scrollTo(0, 0);
-    };
 
     if (error) {
         return (
@@ -154,24 +138,15 @@ function UniqueItemsPage() {
                         category={category as TopLevelCategory}
                         label={category}
                         subcategories={subcategories as UniqueBaseCategory[]}
-                        selectedItem={selectedItem}
-                        onClick={item => setSelectedItem(item ? item : null)}
+                        selectedItem={
+                            selectedItemType === "unique-item"
+                                ? (selectedItem as WithKey<UniqueItem>)
+                                : undefined
+                        }
+                        onClick={item => (item ? setItem("unique-item", item) : onClose)}
                     />
                 ))}
             </div>
-            <UniqueItemDialog
-                open={!!selectedItem}
-                onOpenChange={open => !open && setSelectedItem(null)}
-                item={selectedItem as UniqueItem}
-                onBaseItemClick={handleBaseItemClick}
-            />
-            <BaseItemDialog
-                ref={baseDialogRef}
-                open={!!selectedBaseItem}
-                onOpenChange={open => !open && setSelectedBaseItem(null)}
-                item={selectedBaseItem as BaseItem}
-                onBaseItemClick={handleBaseItemClick}
-            />
         </>
     ) : (
         <div className="mt-4 flex flex-col gap-2">

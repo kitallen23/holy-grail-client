@@ -4,6 +4,7 @@ import Header from "@/components/layout/Header";
 import { useSearchBar } from "@/stores/useSearchStore";
 import LoginModal from "@/components/LoginModal";
 import { Toaster } from "@/components/ui/sonner";
+import ItemDialog from "@/components/ItemTooltip/ItemDialog";
 
 const RootLayout = () => {
     const { isVisible } = useSearchBar();
@@ -16,6 +17,7 @@ const RootLayout = () => {
             >
                 <Outlet />
                 <LoginModal />
+                <ItemDialog />
             </main>
             <Toaster />
             {/* <footer></footer> */}
