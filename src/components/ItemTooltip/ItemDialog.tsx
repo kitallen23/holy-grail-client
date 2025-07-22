@@ -9,7 +9,7 @@ import SetItemDialog from "./SetItemDialog";
 
 const ItemDialog = () => {
     const { item, type, setItem, onClose } = useItemDialogStore();
-    const { data, isFetching } = useItems(["baseItems", "setItems"], {
+    const { data } = useItems(["baseItems", "setItems"], {
         enabled: !!item,
     });
     const baseItems = data?.baseItems;
@@ -34,10 +34,6 @@ const ItemDialog = () => {
         }
         setDialogRef.current?.scrollTo(0, 0);
     };
-
-    if (isFetching) {
-        return null;
-    }
 
     return (
         <>
