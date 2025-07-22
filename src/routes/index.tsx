@@ -1,123 +1,56 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useGrailProgress, useItems } from "@/hooks/queries";
-import GrailStatsTable from "./-grail/GrailStatsTable";
-import GrailRemainingItemSummary from "./-grail/GrailRemainingItemSummary";
-import Heading from "@/components/Heading";
-import { useDebouncedSearch } from "@/stores/useSearchStore";
-import GrailItemList from "@/routes/-grail/GrailItemList";
-import type { Items } from "@/types/items";
-import {
-    NavigationMenu,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-} from "@/components/ui/navigation-menu";
-import { useGrailPageStore } from "@/stores/useGrailPageStore";
-import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
+import GrailPage from "@/routes/-grail/GrailPage";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import DiscordIcon from "@/components/DiscordIcon";
+import GoogleIcon from "@/components/GoogleIcon";
 import { useEffect } from "react";
-import { CircleAlertIcon } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useSearchBar } from "@/stores/useSearchStore";
 
 export const Route = createFileRoute("/")({
-    component: GrailPage,
+    component: RouteComponent,
 });
 
-const PAGE_CONTENTS_KEYS = ["Summary", "Item List"] as const;
+function RouteComponent() {
+    const { user, isLoading } = useAuth();
+    const { setVisibility } = useSearchBar();
 
-function GrailPage() {
-    const { debouncedSearchString } = useDebouncedSearch();
-    const {
-        data,
-        isFetching: isFetchingItems,
-        error: itemsError,
-    } = useItems(["baseItems", "runes", "uniqueItems", "setItems"]);
-    const baseItems = data?.baseItems;
-    const uniqueItems = data?.uniqueItems;
-    const setItems = data?.setItems;
-    const runes = data?.runes;
+    const handleGoogleLogin = () => {
+        window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
+    };
 
-    const { pageContents, setPageContents } = useGrailPageStore();
-
-    const {
-        data: _grailProgress,
-        isFetching: isFetchingGrailProgress,
-        error: grailProgressError,
-    } = useGrailProgress();
-
-    const { items: grailProgress, setItems: setGrailItems } = useGrailProgressStore();
+    const handleDiscordLogin = () => {
+        window.location.href = `${import.meta.env.VITE_API_URL}/auth/discord`;
+    };
 
     useEffect(() => {
-        if (_grailProgress) {
-            setGrailItems(_grailProgress);
-        }
-    }, [_grailProgress]);
+        setVisibility(!!user);
+        return () => setVisibility(true);
+    }, [user]);
 
-    const isFetching = isFetchingItems || isFetchingGrailProgress;
-    const error = itemsError || grailProgressError;
+    if (isLoading) {
+        return null;
+    }
 
-    if (error) {
+    if (!user) {
         return (
-            <div className="max-w-2xl mx-auto pt-4">
-                <Alert variant="destructive">
-                    <CircleAlertIcon />
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>
-                        Something went wrong when loading holy grail. Please refresh the page or try
-                        again later.
-                    </AlertDescription>
-                </Alert>
+            <div className="max-w-xs mx-auto pt-16 flex flex-col gap-4">
+                <h2 className="text-lg leading-none font-semibold">
+                    Sign in to access the Holy Grail
+                </h2>
+                <div className="flex flex-col gap-4">
+                    <Button className="gap-2" onClick={handleDiscordLogin}>
+                        <DiscordIcon />
+                        Continue with Discord
+                    </Button>
+                    <Button className="gap-2" onClick={handleGoogleLogin}>
+                        <GoogleIcon />
+                        Continue with Google
+                    </Button>
+                </div>
             </div>
         );
     }
 
-    if (isFetching || !data || !grailProgress) {
-        return null;
-    }
-
-    return (
-        <div className="pt-4 pb-8 grid grid-cols-1 gap-4">
-            {debouncedSearchString ? null : (
-                <div className="flex justify-center">
-                    <NavigationMenu orientation="horizontal">
-                        <NavigationMenuList className="bg-popover p-1 rounded-md border">
-                            {PAGE_CONTENTS_KEYS.map(key => (
-                                <NavigationMenuItem key={key}>
-                                    <NavigationMenuLink asChild className="py-1 px-1.5" indicator>
-                                        <button
-                                            onClick={() => setPageContents(key)}
-                                            data-active={pageContents === key}
-                                        >
-                                            {key}
-                                        </button>
-                                    </NavigationMenuLink>
-                                </NavigationMenuItem>
-                            ))}
-                        </NavigationMenuList>
-                    </NavigationMenu>
-                </div>
-            )}
-            {pageContents === "Summary" && !debouncedSearchString ? (
-                <>
-                    <div className="grid max-w-lg mx-auto w-full">
-                        <Heading className="text-destructive">Statistics</Heading>
-                        <GrailStatsTable
-                            uniqueItems={uniqueItems!}
-                            setItems={setItems!}
-                            runes={runes!}
-                            grailProgress={grailProgress}
-                        />
-                    </div>
-
-                    <Heading className="text-destructive">Remaining Grail Items</Heading>
-                    <GrailRemainingItemSummary
-                        uniqueItems={uniqueItems!}
-                        setItems={setItems!}
-                        baseItems={baseItems!}
-                        grailProgress={grailProgress}
-                    />
-                </>
-            ) : null}
-            <GrailItemList data={data as Items} />
-        </div>
-    );
+    return <GrailPage />;
 }
