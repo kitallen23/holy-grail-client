@@ -1,6 +1,6 @@
 import type { GrailProgressItem } from "@/lib/api";
 import type { BaseItem, SetItem, UniqueItem } from "@/types/items";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import {
     getRemainingSetBases,
     getRemainingUniqueBases,
@@ -12,12 +12,8 @@ import { Button } from "@/components/ui/button";
 import UniqueBaseItem from "./UniqueBaseItem";
 import SetBaseItem from "./SetBaseItem";
 import GrailUniqueBaseDialog from "./GrailUniqueBaseDialog";
-import type { WithKey } from "@/routes/items/-types";
-import UniqueItemDialog from "@/components/ItemTooltip/UniqueItemDialog";
-import BaseItemDialog from "@/components/ItemTooltip/BaseItemDialog";
-import type { DialogContent } from "@/components/ui/dialog";
 import GrailSetBaseDialog from "./GrailSetBaseDialog";
-import SetItemDialog from "@/components/ItemTooltip/SetItemDialog";
+import { useItemDialogStore } from "@/stores/useItemDialogStore";
 
 type Props = {
     uniqueItems: Record<string, UniqueItem>;
@@ -31,11 +27,7 @@ const DEFAULT_ITEM_LIMIT = 24;
 
 type SelectedItemState =
     | { type: "UniqueBase"; item: UniqueBase }
-    | { type: "SetBase"; item: SetBase }
-    | { type: "UniqueItem"; item: WithKey<UniqueItem> }
-    | { type: "SetItem"; item: WithKey<SetItem> }
-    | { type: "BaseItem"; item: WithKey<BaseItem> }
-    | null;
+    | { type: "SetBase"; item: SetBase };
 
 export default function GrailRemainingItemSummary({
     uniqueItems,
@@ -44,6 +36,7 @@ export default function GrailRemainingItemSummary({
     grailProgress,
 }: Props) {
     const [itemLimit, setItemLimit] = useState(DEFAULT_ITEM_LIMIT);
+    const { setItem } = useItemDialogStore();
 
     const remainingUniqueBases = useMemo(
         () => getRemainingUniqueBases(uniqueItems, baseItems, grailProgress),
@@ -73,26 +66,7 @@ export default function GrailRemainingItemSummary({
         .filter(entry => entry.notFoundSetItems.length)
         .sort((a, b) => (a.key > b.key ? 1 : 0));
 
-    const [selectedItem, setSelectedItem] = useState<SelectedItemState>(null);
-    const setDialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
-    const baseDialogRef = useRef<React.ComponentRef<typeof DialogContent>>(null);
-
-    const handleSetItemClick = (itemName: string) => {
-        const [key, setItem] =
-            Object.entries(setItems || {}).find(([, item]) => item.name === itemName) || [];
-        if (key && setItem) {
-            setSelectedItem({ type: "SetItem", item: { ...setItem, key } });
-        }
-        setDialogRef.current?.scrollTo(0, 0);
-    };
-    const handleBaseItemClick = (itemName: string) => {
-        const [key, baseItem] =
-            Object.entries(baseItems || {}).find(([, item]) => item.name === itemName) || [];
-        if (key && baseItem) {
-            setSelectedItem({ type: "BaseItem", item: { ...baseItem, key } });
-        }
-        baseDialogRef.current?.scrollTo(0, 0);
-    };
+    const [selectedItemBase, setSelectedItemBase] = useState<SelectedItemState>();
 
     const hasItemOverflow =
         displayedUniqueBases.length > DEFAULT_ITEM_LIMIT ||
@@ -111,11 +85,13 @@ export default function GrailRemainingItemSummary({
                                     key={key}
                                     uniqueBase={{ base, notFoundUniqueItems, foundUniqueItems }}
                                     selectedUniqueBase={
-                                        selectedItem?.type === "UniqueBase"
-                                            ? selectedItem.item
+                                        selectedItemBase?.type === "UniqueBase"
+                                            ? selectedItemBase.item
                                             : null
                                     }
-                                    onClick={item => setSelectedItem({ type: "UniqueBase", item })}
+                                    onClick={item =>
+                                        setSelectedItemBase({ type: "UniqueBase", item })
+                                    }
                                 />
                             ))}
                     </div>
@@ -130,9 +106,11 @@ export default function GrailRemainingItemSummary({
                                     key={key}
                                     setBase={{ base, notFoundSetItems, foundSetItems }}
                                     selectedSetBase={
-                                        selectedItem?.type === "SetBase" ? selectedItem.item : null
+                                        selectedItemBase?.type === "SetBase"
+                                            ? selectedItemBase.item
+                                            : null
                                     }
-                                    onClick={item => setSelectedItem({ type: "SetBase", item })}
+                                    onClick={item => setSelectedItemBase({ type: "SetBase", item })}
                                 />
                             ))}
                     </div>
@@ -162,67 +140,38 @@ export default function GrailRemainingItemSummary({
                 </div>
             ) : null}
             <GrailUniqueBaseDialog
-                open={selectedItem?.type === "UniqueBase"}
-                onOpenChange={open => !open && setSelectedItem(null)}
-                base={selectedItem?.type === "UniqueBase" ? selectedItem.item.base : undefined}
+                open={selectedItemBase?.type === "UniqueBase"}
+                onOpenChange={open => !open && setSelectedItemBase(undefined)}
+                base={
+                    selectedItemBase?.type === "UniqueBase" ? selectedItemBase.item.base : undefined
+                }
                 foundUniqueItems={
-                    selectedItem?.type === "UniqueBase"
-                        ? selectedItem.item.foundUniqueItems
+                    selectedItemBase?.type === "UniqueBase"
+                        ? selectedItemBase.item.foundUniqueItems
                         : undefined
                 }
                 notFoundUniqueItems={
-                    selectedItem?.type === "UniqueBase"
-                        ? selectedItem.item.notFoundUniqueItems
+                    selectedItemBase?.type === "UniqueBase"
+                        ? selectedItemBase.item.notFoundUniqueItems
                         : undefined
                 }
-                onClick={uniqueItem => setSelectedItem({ type: "UniqueItem", item: uniqueItem })}
+                onClick={item => setItem("unique-item", item)}
             />
             <GrailSetBaseDialog
-                open={selectedItem?.type === "SetBase"}
-                onOpenChange={open => !open && setSelectedItem(null)}
-                base={selectedItem?.type === "SetBase" ? selectedItem.item.base : undefined}
+                open={selectedItemBase?.type === "SetBase"}
+                onOpenChange={open => !open && setSelectedItemBase(undefined)}
+                base={selectedItemBase?.type === "SetBase" ? selectedItemBase.item.base : undefined}
                 foundSetItems={
-                    selectedItem?.type === "SetBase" ? selectedItem.item.foundSetItems : undefined
+                    selectedItemBase?.type === "SetBase"
+                        ? selectedItemBase.item.foundSetItems
+                        : undefined
                 }
                 notFoundSetItems={
-                    selectedItem?.type === "SetBase"
-                        ? selectedItem.item.notFoundSetItems
+                    selectedItemBase?.type === "SetBase"
+                        ? selectedItemBase.item.notFoundSetItems
                         : undefined
                 }
-                onClick={setItem => setSelectedItem({ type: "SetItem", item: setItem })}
-            />
-            <UniqueItemDialog
-                open={selectedItem?.type === "UniqueItem"}
-                onOpenChange={open => !open && setSelectedItem(null)}
-                item={
-                    selectedItem?.type === "UniqueItem"
-                        ? (selectedItem?.item as WithKey<UniqueItem>)
-                        : undefined
-                }
-                onBaseItemClick={handleBaseItemClick}
-            />
-            <SetItemDialog
-                ref={setDialogRef}
-                open={selectedItem?.type === "SetItem"}
-                onOpenChange={open => !open && setSelectedItem(null)}
-                item={
-                    selectedItem?.type === "SetItem"
-                        ? (selectedItem?.item as WithKey<SetItem>)
-                        : undefined
-                }
-                onSetItemClick={handleSetItemClick}
-                onBaseItemClick={handleBaseItemClick}
-            />
-            <BaseItemDialog
-                ref={baseDialogRef}
-                open={selectedItem?.type === "BaseItem"}
-                onOpenChange={open => !open && setSelectedItem(null)}
-                item={
-                    selectedItem?.type === "BaseItem"
-                        ? (selectedItem?.item as WithKey<BaseItem>)
-                        : undefined
-                }
-                onBaseItemClick={handleBaseItemClick}
+                onClick={item => setItem("set-item", item)}
             />
         </>
     );
