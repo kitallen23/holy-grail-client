@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, type UseQueryOptions } from "@tanstack/react-query";
 import {
     fetchItems,
     fetchRunewords,
@@ -8,7 +8,12 @@ import {
 } from "@/lib/api";
 import type { Items, Runewords } from "@/types/items";
 
-export const useItems = (types: QueryType[]) => {
+type UseItemsOptions = Omit<
+    UseQueryOptions<{ items: Partial<Items> }, Error, Partial<Items>>,
+    "queryKey" | "queryFn" | "select"
+>;
+
+export const useItems = (types: QueryType[], options?: UseItemsOptions) => {
     const queryClient = useQueryClient();
 
     return useQuery({
@@ -51,6 +56,7 @@ export const useItems = (types: QueryType[]) => {
             return { items: combinedItems };
         },
         select: data => data.items,
+        ...options,
     });
 };
 
