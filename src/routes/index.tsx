@@ -15,6 +15,8 @@ import {
 import { useGrailPageStore } from "@/stores/useGrailPageStore";
 import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
 import { useEffect } from "react";
+import { CircleAlertIcon } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export const Route = createFileRoute("/")({
     component: GrailPage,
@@ -27,7 +29,7 @@ function GrailPage() {
     const {
         data,
         isFetching: isFetchingItems,
-        // error: itemsError,
+        error: itemsError,
     } = useItems(["baseItems", "runes", "uniqueItems", "setItems"]);
     const baseItems = data?.baseItems;
     const uniqueItems = data?.uniqueItems;
@@ -37,21 +39,36 @@ function GrailPage() {
     const { pageContents, setPageContents } = useGrailPageStore();
 
     const {
-        data: grailProgress,
+        data: _grailProgress,
         isFetching: isFetchingGrailProgress,
-        // error: grailProgressError,
+        error: grailProgressError,
     } = useGrailProgress();
 
-    const { setItems: setGrailItems } = useGrailProgressStore();
+    const { items: grailProgress, setItems: setGrailItems } = useGrailProgressStore();
 
     useEffect(() => {
-        if (grailProgress) {
-            setGrailItems(grailProgress);
+        if (_grailProgress) {
+            setGrailItems(_grailProgress);
         }
-    }, [grailProgress]);
+    }, [_grailProgress]);
 
     const isFetching = isFetchingItems || isFetchingGrailProgress;
-    // const error = itemsError || grailProgressError;
+    const error = itemsError || grailProgressError;
+
+    if (error) {
+        return (
+            <div className="max-w-2xl mx-auto pt-4">
+                <Alert variant="destructive">
+                    <CircleAlertIcon />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        Something went wrong when loading holy grail. Please refresh the page or try
+                        again later.
+                    </AlertDescription>
+                </Alert>
+            </div>
+        );
+    }
 
     if (isFetching || !data || !grailProgress) {
         return null;
