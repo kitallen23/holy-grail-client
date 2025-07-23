@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from "./routes/__root"
 import { Route as ItemsRouteImport } from "./routes/items"
 import { Route as IndexRouteImport } from "./routes/index"
+import { Route as SettingsIndexRouteImport } from "./routes/settings/index"
 import { Route as RunewordsIndexRouteImport } from "./routes/runewords/index"
 import { Route as ItemsIndexRouteImport } from "./routes/items/index"
 import { Route as ItemsUniqueIndexRouteImport } from "./routes/items/unique/index"
@@ -26,6 +27,11 @@ const ItemsRoute = ItemsRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: "/",
   path: "/",
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: "/settings/",
+  path: "/settings/",
   getParentRoute: () => rootRouteImport,
 } as any)
 const RunewordsIndexRoute = RunewordsIndexRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   "/items": typeof ItemsRouteWithChildren
   "/items/": typeof ItemsIndexRoute
   "/runewords": typeof RunewordsIndexRoute
+  "/settings": typeof SettingsIndexRoute
   "/items/bases": typeof ItemsBasesIndexRoute
   "/items/runes": typeof ItemsRunesIndexRoute
   "/items/sets": typeof ItemsSetsIndexRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   "/": typeof IndexRoute
   "/items": typeof ItemsIndexRoute
   "/runewords": typeof RunewordsIndexRoute
+  "/settings": typeof SettingsIndexRoute
   "/items/bases": typeof ItemsBasesIndexRoute
   "/items/runes": typeof ItemsRunesIndexRoute
   "/items/sets": typeof ItemsSetsIndexRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   "/items": typeof ItemsRouteWithChildren
   "/items/": typeof ItemsIndexRoute
   "/runewords/": typeof RunewordsIndexRoute
+  "/settings/": typeof SettingsIndexRoute
   "/items/bases/": typeof ItemsBasesIndexRoute
   "/items/runes/": typeof ItemsRunesIndexRoute
   "/items/sets/": typeof ItemsSetsIndexRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | "/items"
     | "/items/"
     | "/runewords"
+    | "/settings"
     | "/items/bases"
     | "/items/runes"
     | "/items/sets"
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
     | "/"
     | "/items"
     | "/runewords"
+    | "/settings"
     | "/items/bases"
     | "/items/runes"
     | "/items/sets"
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | "/items"
     | "/items/"
     | "/runewords/"
+    | "/settings/"
     | "/items/bases/"
     | "/items/runes/"
     | "/items/sets/"
@@ -125,6 +137,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ItemsRoute: typeof ItemsRouteWithChildren
   RunewordsIndexRoute: typeof RunewordsIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
 declare module "@tanstack/react-router" {
@@ -141,6 +154,13 @@ declare module "@tanstack/react-router" {
       path: "/"
       fullPath: "/"
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    "/settings/": {
+      id: "/settings/"
+      path: "/settings"
+      fullPath: "/settings"
+      preLoaderRoute: typeof SettingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     "/runewords/": {
@@ -210,6 +230,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ItemsRoute: ItemsRouteWithChildren,
   RunewordsIndexRoute: RunewordsIndexRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

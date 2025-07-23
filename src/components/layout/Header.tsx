@@ -10,7 +10,15 @@ import {
     NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
-import { LoaderCircleIcon, LogInIcon, LogOutIcon, MenuIcon, UserIcon, XIcon } from "lucide-react";
+import {
+    LoaderCircleIcon,
+    LogInIcon,
+    LogOutIcon,
+    MenuIcon,
+    SettingsIcon,
+    UserIcon,
+    XIcon,
+} from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -206,6 +214,12 @@ export default function Header() {
                                     <div className="text-muted-foreground">Signed in as:</div>
                                     <div>{user.email}</div>
                                 </DropdownMenuLabel>
+                                <DropdownMenuItem asChild>
+                                    <Link to="/settings">
+                                        <SettingsIcon />
+                                        Settings
+                                    </Link>
+                                </DropdownMenuItem>
                                 <DropdownMenuItem onClick={logout}>
                                     <LogOutIcon />
                                     Sign out
