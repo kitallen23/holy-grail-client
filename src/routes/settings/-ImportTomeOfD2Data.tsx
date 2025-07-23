@@ -1,6 +1,7 @@
 import Heading from "@/components/Heading";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGrailProgress, useItems } from "@/hooks/queries";
 import { getItemsToImport_TomeOfD2, type TomeOfD2GrailItem } from "@/lib/adapters/import";
@@ -83,6 +84,9 @@ const ImportTomeOfD2Data = () => {
         console.info("Import clicked: ", tod2ImportData);
     };
 
+    const [toSkipDialog, setToSkipDialog] = useState(false);
+    const [toAddDialog, setToAddDialog] = useState(false);
+
     if (error || grailProgressError) {
         return (
             <div className="max-w-lg mx-auto pt-4">
@@ -149,32 +153,89 @@ const ImportTomeOfD2Data = () => {
     }
 
     return (
-        <div className="max-w-lg mx-auto pt-8 flex flex-col gap-4">
-            <Heading className="text-destructive">Import Data from Tome of D2</Heading>
-            <div className="flex flex-col gap-1">
-                <div>
-                    Grail items before import: {foundItemCount} / {totalItemCount}
+        <>
+            <div className="max-w-lg mx-auto pt-8 flex flex-col gap-4">
+                <Heading className="text-destructive">Import Data from Tome of D2</Heading>
+                <div className="flex flex-col gap-1">
+                    <div>
+                        Grail items before import: {foundItemCount} / {totalItemCount}
+                    </div>
+                    <div>Items to import: {externalCount}</div>
+                    <div className="ml-8 flex">
+                        {tod2ImportData?.found.length ? (
+                            <div
+                                className="text-muted-foreground underline-offset-4 hover:underline cursor-default"
+                                onClick={() => setToSkipDialog(true)}
+                            >
+                                To skip (already found in current grail):{" "}
+                                {tod2ImportData?.found.length}
+                            </div>
+                        ) : (
+                            <div className="text-muted-foreground">
+                                To skip (already found in current grail):{" "}
+                                {tod2ImportData?.found.length}
+                            </div>
+                        )}
+                    </div>
+                    <div className="ml-8">
+                        {tod2ImportData?.notFound.length ? (
+                            <div
+                                className="underline-offset-4 hover:underline cursor-default"
+                                onClick={() => setToAddDialog(true)}
+                            >
+                                To add to grail: {tod2ImportData?.notFound.length}
+                            </div>
+                        ) : (
+                            <div className="underline-offset-4">
+                                To add to grail: {tod2ImportData?.notFound.length}
+                            </div>
+                        )}
+                    </div>
+                    <div className="font-semibold">
+                        Grail items after import:{" "}
+                        {foundItemCount + (tod2ImportData?.notFound.length ?? 0)} / {totalItemCount}
+                    </div>
                 </div>
-                <div>Items to import: {externalCount}</div>
-                <div className="ml-8 text-muted-foreground">
-                    To skip (already found in current grail): {tod2ImportData?.found.length}
-                </div>
-                <div className="ml-8">To add to grail: {tod2ImportData?.notFound.length}</div>
-                <div className="font-semibold text-lg">
-                    Grail items after import:{" "}
-                    {foundItemCount + (tod2ImportData?.notFound.length ?? 0)}
+                <div className="flex justify-center gap-4 mt-4">
+                    <Button variant="secondary" onClick={onCancel}>
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={onImport}
+                        disabled={(tod2ImportData?.notFound.length ?? 0) < 1}
+                    >
+                        <CloudCheckIcon />
+                        Import {tod2ImportData?.notFound.length || 0} items into grail
+                    </Button>
                 </div>
             </div>
-            <div className="flex justify-center gap-4 mt-4">
-                <Button variant="secondary" onClick={onCancel}>
-                    Cancel
-                </Button>
-                <Button onClick={onImport} disabled={(tod2ImportData?.notFound.length ?? 0) < 1}>
-                    <CloudCheckIcon />
-                    Import {tod2ImportData?.notFound.length || 0} items into grail
-                </Button>
-            </div>
-        </div>
+            <Dialog open={toAddDialog} onOpenChange={() => setToAddDialog(false)}>
+                <DialogContent
+                    className="w-[90vw] max-w-xs max-h-[calc(100dvh-2rem)] overflow-y-auto"
+                    aria-describedby={undefined}
+                >
+                    <DialogHeader className="mb-4">
+                        <DialogTitle>Items To Add</DialogTitle>
+                    </DialogHeader>
+                    <ul className="space-y-1 list-disc list-inside">
+                        {tod2ImportData?.notFound.map(item => <li key={item}>{item}</li>)}
+                    </ul>
+                </DialogContent>
+            </Dialog>
+            <Dialog open={toSkipDialog} onOpenChange={() => setToSkipDialog(false)}>
+                <DialogContent
+                    className="w-[90vw] max-w-xs max-h-[calc(100dvh-2rem)] overflow-y-auto"
+                    aria-describedby={undefined}
+                >
+                    <DialogHeader className="mb-4">
+                        <DialogTitle>Items To Skip (Already Found)</DialogTitle>
+                    </DialogHeader>
+                    <ul className="space-y-1 list-disc list-inside">
+                        {tod2ImportData?.found.map(item => <li key={item}>{item}</li>)}
+                    </ul>
+                </DialogContent>
+            </Dialog>
+        </>
     );
 };
 
