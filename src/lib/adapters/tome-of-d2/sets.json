@@ -1,0 +1,510 @@
+[
+    {
+        "id": 384,
+        "name": "Angelic Mantle"
+    },
+    {
+        "id": 385,
+        "name": "Angelic Sickle"
+    },
+    {
+        "id": 386,
+        "name": "Angelic Halo"
+    },
+    {
+        "id": 387,
+        "name": "Angelic Wings"
+    },
+    {
+        "id": 388,
+        "name": "Arcanna's Head"
+    },
+    {
+        "id": 389,
+        "name": "Arcanna's Flesh"
+    },
+    {
+        "id": 390,
+        "name": "Arcanna's Deathwand"
+    },
+    {
+        "id": 391,
+        "name": "Arcanna's Sign"
+    },
+    {
+        "id": 392,
+        "name": "Arctic Furs"
+    },
+    {
+        "id": 393,
+        "name": "Arctic Binding"
+    },
+    {
+        "id": 394,
+        "name": "Arctic Mitts"
+    },
+    {
+        "id": 395,
+        "name": "Arctic Horn"
+    },
+    {
+        "id": 396,
+        "name": "Berserker's Headgear"
+    },
+    {
+        "id": 397,
+        "name": "Berserker's Hauberk"
+    },
+    {
+        "id": 398,
+        "name": "Berserker's Hatchet"
+    },
+    {
+        "id": 399,
+        "name": "Cathan's Visage"
+    },
+    {
+        "id": 400,
+        "name": "Cathan's Mesh"
+    },
+    {
+        "id": 401,
+        "name": "Cathan's Rule"
+    },
+    {
+        "id": 402,
+        "name": "Cathan's Sigil"
+    },
+    {
+        "id": 403,
+        "name": "Cathan's Seal"
+    },
+    {
+        "id": 404,
+        "name": "Civerb's Cudgel"
+    },
+    {
+        "id": 405,
+        "name": "Civerb's Icon"
+    },
+    {
+        "id": 406,
+        "name": "Civerb's Ward"
+    },
+    {
+        "id": 407,
+        "name": "Cleglaw's Tooth"
+    },
+    {
+        "id": 408,
+        "name": "Cleglaw's Pincers"
+    },
+    {
+        "id": 409,
+        "name": "Cleglaw's Claw"
+    },
+    {
+        "id": 410,
+        "name": "Death's Touch"
+    },
+    {
+        "id": 411,
+        "name": "Death's Hand"
+    },
+    {
+        "id": 412,
+        "name": "Death's Guard"
+    },
+    {
+        "id": 413,
+        "name": "Hsarus' Iron Fist"
+    },
+    {
+        "id": 414,
+        "name": "Hsarus' Iron Stay"
+    },
+    {
+        "id": 415,
+        "name": "Hsarus' Iron Heel"
+    },
+    {
+        "id": 416,
+        "name": "Infernal Cranium"
+    },
+    {
+        "id": 417,
+        "name": "Infernal Sign"
+    },
+    {
+        "id": 418,
+        "name": "Infernal Torch"
+    },
+    {
+        "id": 419,
+        "name": "Iratha's Coil"
+    },
+    {
+        "id": 420,
+        "name": "Iratha's Collar"
+    },
+    {
+        "id": 421,
+        "name": "Iratha's Cord"
+    },
+    {
+        "id": 422,
+        "name": "Iratha's Cuff"
+    },
+    {
+        "id": 423,
+        "name": "Isenhart's Lightbrand"
+    },
+    {
+        "id": 424,
+        "name": "Isenhart's Horns"
+    },
+    {
+        "id": 425,
+        "name": "Isenhart's Case"
+    },
+    {
+        "id": 426,
+        "name": "Isenhart's Parry"
+    },
+    {
+        "id": 427,
+        "name": "Milabrega's Diadem"
+    },
+    {
+        "id": 428,
+        "name": "Milabrega's Robe"
+    },
+    {
+        "id": 429,
+        "name": "Milabrega's Orb"
+    },
+    {
+        "id": 430,
+        "name": "Milabrega's Rod"
+    },
+    {
+        "id": 431,
+        "name": "Sigon's Visor"
+    },
+    {
+        "id": 432,
+        "name": "Sigon's Shelter"
+    },
+    {
+        "id": 433,
+        "name": "Sigon's Sabot"
+    },
+    {
+        "id": 434,
+        "name": "Sigon's Guard"
+    },
+    {
+        "id": 435,
+        "name": "Sigon's Wrap"
+    },
+    {
+        "id": 436,
+        "name": "Sigon's Gage"
+    },
+    {
+        "id": 437,
+        "name": "Tancred's Skull"
+    },
+    {
+        "id": 438,
+        "name": "Tancred's Spine"
+    },
+    {
+        "id": 439,
+        "name": "Tancred's Hobnails"
+    },
+    {
+        "id": 440,
+        "name": "Tancred's Crowbill"
+    },
+    {
+        "id": 441,
+        "name": "Tancred's Weird"
+    },
+    {
+        "id": 442,
+        "name": "Vidala's Barb"
+    },
+    {
+        "id": 443,
+        "name": "Vidala's Ambush"
+    },
+    {
+        "id": 444,
+        "name": "Vidala's Fetlock"
+    },
+    {
+        "id": 445,
+        "name": "Vidala's Snare"
+    },
+    {
+        "id": 446,
+        "name": "Aldur's Stony Gaze"
+    },
+    {
+        "id": 447,
+        "name": "Aldur's Advance"
+    },
+    {
+        "id": 448,
+        "name": "Aldur's Deception"
+    },
+    {
+        "id": 449,
+        "name": "Aldur's Rhythm"
+    },
+    {
+        "id": 450,
+        "name": "Bul-Kathos' Sacred Charge"
+    },
+    {
+        "id": 451,
+        "name": "Bul-Kathos' Tribal Guardian"
+    },
+    {
+        "id": 452,
+        "name": "Cow King's Horns"
+    },
+    {
+        "id": 453,
+        "name": "Cow King's Hide"
+    },
+    {
+        "id": 454,
+        "name": "Cow King's Hooves"
+    },
+    {
+        "id": 455,
+        "name": "Telling of Beads"
+    },
+    {
+        "id": 456,
+        "name": "Laying of Hands"
+    },
+    {
+        "id": 457,
+        "name": "Dark Adherent"
+    },
+    {
+        "id": 458,
+        "name": "Rite of Passage"
+    },
+    {
+        "id": 459,
+        "name": "Credendum"
+    },
+    {
+        "id": 460,
+        "name": "Griswold's Heart"
+    },
+    {
+        "id": 461,
+        "name": "Griswold's Valor"
+    },
+    {
+        "id": 462,
+        "name": "Griswold's Redemption"
+    },
+    {
+        "id": 463,
+        "name": "Griswold's Honor"
+    },
+    {
+        "id": 464,
+        "name": "Haemosu's Adamant"
+    },
+    {
+        "id": 465,
+        "name": "Dangoon's Teaching"
+    },
+    {
+        "id": 466,
+        "name": "Taebaek's Glory"
+    },
+    {
+        "id": 467,
+        "name": "Ondal's Almighty"
+    },
+    {
+        "id": 468,
+        "name": "Hwanin's Splendor"
+    },
+    {
+        "id": 469,
+        "name": "Hwanin's Justice"
+    },
+    {
+        "id": 470,
+        "name": "Hwanin's Refuge"
+    },
+    {
+        "id": 471,
+        "name": "Hwanin's Blessing"
+    },
+    {
+        "id": 472,
+        "name": "Immortal King's Will"
+    },
+    {
+        "id": 473,
+        "name": "Immortal King's Stone Crusher"
+    },
+    {
+        "id": 474,
+        "name": "Immortal King's Soul Cage"
+    },
+    {
+        "id": 475,
+        "name": "Immortal King's Detail"
+    },
+    {
+        "id": 476,
+        "name": "Immortal King's Forge"
+    },
+    {
+        "id": 477,
+        "name": "Immortal King's Pillar"
+    },
+    {
+        "id": 478,
+        "name": "M'avina's True Sight"
+    },
+    {
+        "id": 479,
+        "name": "M'avina's Caster"
+    },
+    {
+        "id": 480,
+        "name": "M'avina's Embrace"
+    },
+    {
+        "id": 481,
+        "name": "M'avina's Icy Clutch"
+    },
+    {
+        "id": 482,
+        "name": "M'avina's Tenet"
+    },
+    {
+        "id": 483,
+        "name": "Naj's Circlet"
+    },
+    {
+        "id": 484,
+        "name": "Naj's Light Plate"
+    },
+    {
+        "id": 485,
+        "name": "Naj's Puzzler"
+    },
+    {
+        "id": 486,
+        "name": "Natalya's Totem"
+    },
+    {
+        "id": 487,
+        "name": "Natalya's Mark"
+    },
+    {
+        "id": 488,
+        "name": "Natalya's Shadow"
+    },
+    {
+        "id": 489,
+        "name": "Natalya's Soul"
+    },
+    {
+        "id": 490,
+        "name": "Guillaume's Face"
+    },
+    {
+        "id": 491,
+        "name": "Whitstan's Guard"
+    },
+    {
+        "id": 492,
+        "name": "Magnus' Skin"
+    },
+    {
+        "id": 493,
+        "name": "Wilhelm's Pride"
+    },
+    {
+        "id": 494,
+        "name": "Sander's Paragon"
+    },
+    {
+        "id": 495,
+        "name": "Sander's Superstition"
+    },
+    {
+        "id": 496,
+        "name": "Sander's Taboo"
+    },
+    {
+        "id": 497,
+        "name": "Sander's Riprap"
+    },
+    {
+        "id": 498,
+        "name": "Sazabi's Mental Sheath"
+    },
+    {
+        "id": 499,
+        "name": "Sazabi's Cobalt Redeemer"
+    },
+    {
+        "id": 500,
+        "name": "Sazabi's Ghost Liberator"
+    },
+    {
+        "id": 501,
+        "name": "Tal Rasha's Lidless Eye"
+    },
+    {
+        "id": 502,
+        "name": "Tal Rasha's Horadric Crest"
+    },
+    {
+        "id": 503,
+        "name": "Tal Rasha's Guardianship"
+    },
+    {
+        "id": 504,
+        "name": "Tal Rasha's Fine Spun Cloth"
+    },
+    {
+        "id": 505,
+        "name": "Tal Rasha's Adjudication"
+    },
+    {
+        "id": 506,
+        "name": "Trang-Oul's Guise"
+    },
+    {
+        "id": 507,
+        "name": "Trang-Oul's Scales"
+    },
+    {
+        "id": 508,
+        "name": "Trang-Oul's Wing"
+    },
+    {
+        "id": 509,
+        "name": "Trang-Oul's Girth"
+    },
+    {
+        "id": 510,
+        "name": "Trang-Oul's Claws"
+    }
+]

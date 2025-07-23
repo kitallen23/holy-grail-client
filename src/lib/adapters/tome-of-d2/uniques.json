@@ -1,0 +1,1526 @@
+[
+    {
+        "id": 0,
+        "name": "Greyform"
+    },
+    {
+        "id": 1,
+        "name": "Blinkbat's Form"
+    },
+    {
+        "id": 2,
+        "name": "The Centurion"
+    },
+    {
+        "id": 3,
+        "name": "Twitchthroe"
+    },
+    {
+        "id": 4,
+        "name": "Darkglow"
+    },
+    {
+        "id": 5,
+        "name": "Hawkmail"
+    },
+    {
+        "id": 6,
+        "name": "Venom Ward"
+    },
+    {
+        "id": 7,
+        "name": "Sparking Mail"
+    },
+    {
+        "id": 8,
+        "name": "Iceblink"
+    },
+    {
+        "id": 9,
+        "name": "Heavenly Garb"
+    },
+    {
+        "id": 10,
+        "name": "Boneflesh"
+    },
+    {
+        "id": 11,
+        "name": "Rockfleece"
+    },
+    {
+        "id": 12,
+        "name": "Rattlecage"
+    },
+    {
+        "id": 13,
+        "name": "Goldskin"
+    },
+    {
+        "id": 14,
+        "name": "Silks of the Victor"
+    },
+    {
+        "id": 15,
+        "name": "The Spirit Shroud"
+    },
+    {
+        "id": 16,
+        "name": "Skin of the Vipermagi"
+    },
+    {
+        "id": 17,
+        "name": "Skin of the Flayed One"
+    },
+    {
+        "id": 18,
+        "name": "Iron Pelt"
+    },
+    {
+        "id": 19,
+        "name": "Spirit Forge"
+    },
+    {
+        "id": 20,
+        "name": "Crow Caw"
+    },
+    {
+        "id": 21,
+        "name": "Duriel's Shell"
+    },
+    {
+        "id": 22,
+        "name": "Shaftstop"
+    },
+    {
+        "id": 23,
+        "name": "Skullder's Ire"
+    },
+    {
+        "id": 24,
+        "name": "Que-Hegan's Wisdom"
+    },
+    {
+        "id": 25,
+        "name": "Guardian Angel"
+    },
+    {
+        "id": 26,
+        "name": "Toothrow"
+    },
+    {
+        "id": 27,
+        "name": "Atma's Wail"
+    },
+    {
+        "id": 28,
+        "name": "Black Hades"
+    },
+    {
+        "id": 29,
+        "name": "Corpsemourn"
+    },
+    {
+        "id": 30,
+        "name": "Ormus' Robes"
+    },
+    {
+        "id": 31,
+        "name": "The Gladiator's Bane"
+    },
+    {
+        "id": 32,
+        "name": "Arkaine's Valor"
+    },
+    {
+        "id": 33,
+        "name": "Leviathan"
+    },
+    {
+        "id": 34,
+        "name": "Steel Carapace"
+    },
+    {
+        "id": 35,
+        "name": "Templar's Might"
+    },
+    {
+        "id": 36,
+        "name": "Tyrael's Might"
+    },
+    {
+        "id": 37,
+        "name": "The Gnasher"
+    },
+    {
+        "id": 38,
+        "name": "Deathspade"
+    },
+    {
+        "id": 39,
+        "name": "Bladebone"
+    },
+    {
+        "id": 40,
+        "name": "Skull Splitter"
+    },
+    {
+        "id": 41,
+        "name": "Rakescar"
+    },
+    {
+        "id": 42,
+        "name": "Axe of Fechmar"
+    },
+    {
+        "id": 43,
+        "name": "Goreshovel"
+    },
+    {
+        "id": 44,
+        "name": "The Chieftain"
+    },
+    {
+        "id": 45,
+        "name": "Brainhew"
+    },
+    {
+        "id": 46,
+        "name": "Humongous"
+    },
+    {
+        "id": 47,
+        "name": "Coldkill"
+    },
+    {
+        "id": 48,
+        "name": "Butcher's Pupil"
+    },
+    {
+        "id": 49,
+        "name": "Islestrike"
+    },
+    {
+        "id": 50,
+        "name": "Pompeii's Wrath"
+    },
+    {
+        "id": 51,
+        "name": "Guardian Naga"
+    },
+    {
+        "id": 52,
+        "name": "Warlord's Trust"
+    },
+    {
+        "id": 53,
+        "name": "Spellsteel"
+    },
+    {
+        "id": 54,
+        "name": "Stormrider"
+    },
+    {
+        "id": 55,
+        "name": "Boneslayer Blade"
+    },
+    {
+        "id": 56,
+        "name": "The Minotaur"
+    },
+    {
+        "id": 57,
+        "name": "Razor's Edge"
+    },
+    {
+        "id": 58,
+        "name": "Rune Master"
+    },
+    {
+        "id": 59,
+        "name": "Cranebeak"
+    },
+    {
+        "id": 60,
+        "name": "Death Cleaver"
+    },
+    {
+        "id": 61,
+        "name": "Ethereal Edge"
+    },
+    {
+        "id": 62,
+        "name": "Hellslayer"
+    },
+    {
+        "id": 63,
+        "name": "Messerschmidt's Reaver"
+    },
+    {
+        "id": 64,
+        "name": "Executioner's Justice"
+    },
+    {
+        "id": 65,
+        "name": "Lenymo"
+    },
+    {
+        "id": 66,
+        "name": "Snakecord"
+    },
+    {
+        "id": 67,
+        "name": "Nightsmoke"
+    },
+    {
+        "id": 68,
+        "name": "Goldwrap"
+    },
+    {
+        "id": 69,
+        "name": "Bladebuckle"
+    },
+    {
+        "id": 70,
+        "name": "String of Ears"
+    },
+    {
+        "id": 71,
+        "name": "Razortail"
+    },
+    {
+        "id": 72,
+        "name": "Gloom's Trap"
+    },
+    {
+        "id": 73,
+        "name": "Snowclash"
+    },
+    {
+        "id": 74,
+        "name": "Thundergod's Vigor"
+    },
+    {
+        "id": 75,
+        "name": "Arachnid Mesh"
+    },
+    {
+        "id": 76,
+        "name": "Nosferatu's Coil"
+    },
+    {
+        "id": 77,
+        "name": "Verdungo's Hearty Cord"
+    },
+    {
+        "id": 78,
+        "name": "Hotspur"
+    },
+    {
+        "id": 79,
+        "name": "Gorefoot"
+    },
+    {
+        "id": 80,
+        "name": "Treads of Cthon"
+    },
+    {
+        "id": 81,
+        "name": "Goblin Toe"
+    },
+    {
+        "id": 82,
+        "name": "Tearhaunch"
+    },
+    {
+        "id": 83,
+        "name": "Infernostride"
+    },
+    {
+        "id": 84,
+        "name": "Waterwalk"
+    },
+    {
+        "id": 85,
+        "name": "Silkweave"
+    },
+    {
+        "id": 86,
+        "name": "War Traveler"
+    },
+    {
+        "id": 87,
+        "name": "Gore Rider"
+    },
+    {
+        "id": 88,
+        "name": "Sandstorm Trek"
+    },
+    {
+        "id": 89,
+        "name": "Marrowwalk"
+    },
+    {
+        "id": 90,
+        "name": "Shadow Dancer"
+    },
+    {
+        "id": 91,
+        "name": "Pluckeye"
+    },
+    {
+        "id": 92,
+        "name": "Witherstring"
+    },
+    {
+        "id": 93,
+        "name": "Raven Claw"
+    },
+    {
+        "id": 94,
+        "name": "Rogue's Bow"
+    },
+    {
+        "id": 95,
+        "name": "Stormstrike"
+    },
+    {
+        "id": 96,
+        "name": "Wizendraw"
+    },
+    {
+        "id": 97,
+        "name": "Hellclap"
+    },
+    {
+        "id": 98,
+        "name": "Blastbark"
+    },
+    {
+        "id": 99,
+        "name": "Skystrike"
+    },
+    {
+        "id": 100,
+        "name": "Riphook"
+    },
+    {
+        "id": 101,
+        "name": "Kuko Shakaku"
+    },
+    {
+        "id": 102,
+        "name": "Endlesshail"
+    },
+    {
+        "id": 103,
+        "name": "Witchwild String"
+    },
+    {
+        "id": 104,
+        "name": "Cliffkiller"
+    },
+    {
+        "id": 105,
+        "name": "Magewrath"
+    },
+    {
+        "id": 106,
+        "name": "Goldstrike Arch"
+    },
+    {
+        "id": 107,
+        "name": "Eaglehorn"
+    },
+    {
+        "id": 108,
+        "name": "Widowmaker"
+    },
+    {
+        "id": 109,
+        "name": "Windforce"
+    },
+    {
+        "id": 110,
+        "name": "Leadcrow"
+    },
+    {
+        "id": 111,
+        "name": "Ichorsting"
+    },
+    {
+        "id": 112,
+        "name": "Hellcast"
+    },
+    {
+        "id": 113,
+        "name": "Doomslinger"
+    },
+    {
+        "id": 114,
+        "name": "Langer Briser"
+    },
+    {
+        "id": 115,
+        "name": "Pus Spitter"
+    },
+    {
+        "id": 116,
+        "name": "Buriza-Do Kyanon"
+    },
+    {
+        "id": 117,
+        "name": "Demon Machine"
+    },
+    {
+        "id": 118,
+        "name": "Hellrack"
+    },
+    {
+        "id": 119,
+        "name": "Gut Siphon"
+    },
+    {
+        "id": 120,
+        "name": "Gull"
+    },
+    {
+        "id": 121,
+        "name": "The Diggler"
+    },
+    {
+        "id": 122,
+        "name": "The Jade Tan Do"
+    },
+    {
+        "id": 123,
+        "name": "Spectral Shard"
+    },
+    {
+        "id": 124,
+        "name": "Spineripper"
+    },
+    {
+        "id": 125,
+        "name": "Heart Carver"
+    },
+    {
+        "id": 126,
+        "name": "Blackbog's Sharp"
+    },
+    {
+        "id": 127,
+        "name": "Stormspike"
+    },
+    {
+        "id": 128,
+        "name": "Wizardspike"
+    },
+    {
+        "id": 129,
+        "name": "Fleshripper"
+    },
+    {
+        "id": 130,
+        "name": "Ghostflame"
+    },
+    {
+        "id": 131,
+        "name": "The Hand of Broc"
+    },
+    {
+        "id": 132,
+        "name": "Bloodfist"
+    },
+    {
+        "id": 133,
+        "name": "Chance Guards"
+    },
+    {
+        "id": 134,
+        "name": "Magefist"
+    },
+    {
+        "id": 135,
+        "name": "Frostburn"
+    },
+    {
+        "id": 136,
+        "name": "Venom Grip"
+    },
+    {
+        "id": 137,
+        "name": "Gravepalm"
+    },
+    {
+        "id": 138,
+        "name": "Ghoulhide"
+    },
+    {
+        "id": 139,
+        "name": "Lava Gout"
+    },
+    {
+        "id": 140,
+        "name": "Hellmouth"
+    },
+    {
+        "id": 141,
+        "name": "Dracul's Grasp"
+    },
+    {
+        "id": 142,
+        "name": "Soul Drainer"
+    },
+    {
+        "id": 143,
+        "name": "Steelrend"
+    },
+    {
+        "id": 144,
+        "name": "Biggin's Bonnet"
+    },
+    {
+        "id": 145,
+        "name": "Tarnhelm"
+    },
+    {
+        "id": 146,
+        "name": "Coif of Glory"
+    },
+    {
+        "id": 147,
+        "name": "Duskdeep"
+    },
+    {
+        "id": 148,
+        "name": "Howltusk"
+    },
+    {
+        "id": 149,
+        "name": "The Face of Horror"
+    },
+    {
+        "id": 150,
+        "name": "Undead Crown"
+    },
+    {
+        "id": 151,
+        "name": "Wormskull"
+    },
+    {
+        "id": 152,
+        "name": "Peasant Crown"
+    },
+    {
+        "id": 153,
+        "name": "Rockstopper"
+    },
+    {
+        "id": 154,
+        "name": "Stealskull"
+    },
+    {
+        "id": 155,
+        "name": "Darksight Helm"
+    },
+    {
+        "id": 156,
+        "name": "Valkyrie Wing"
+    },
+    {
+        "id": 157,
+        "name": "Blackhorn's Face"
+    },
+    {
+        "id": 158,
+        "name": "Crown of Thieves"
+    },
+    {
+        "id": 159,
+        "name": "Vampire Gaze"
+    },
+    {
+        "id": 160,
+        "name": "Harlequin Crest"
+    },
+    {
+        "id": 161,
+        "name": "Steel Shade"
+    },
+    {
+        "id": 162,
+        "name": "Veil of Steel"
+    },
+    {
+        "id": 163,
+        "name": "Nightwing's Veil"
+    },
+    {
+        "id": 164,
+        "name": "Andariel's Visage"
+    },
+    {
+        "id": 165,
+        "name": "Crown of Ages"
+    },
+    {
+        "id": 166,
+        "name": "Giant Skull"
+    },
+    {
+        "id": 167,
+        "name": "Kira's Guardian"
+    },
+    {
+        "id": 168,
+        "name": "Griffon's Eye"
+    },
+    {
+        "id": 172,
+        "name": "Demon's Arch"
+    },
+    {
+        "id": 173,
+        "name": "Wraith Flight"
+    },
+    {
+        "id": 174,
+        "name": "Gargoyle's Bite"
+    },
+    {
+        "id": 175,
+        "name": "Nokozan Relic"
+    },
+    {
+        "id": 176,
+        "name": "The Eye of Etlich"
+    },
+    {
+        "id": 177,
+        "name": "The Mahim-Oak Curio"
+    },
+    {
+        "id": 178,
+        "name": "Saracen's Chance"
+    },
+    {
+        "id": 179,
+        "name": "The Cat's Eye"
+    },
+    {
+        "id": 180,
+        "name": "Crescent Moon"
+    },
+    {
+        "id": 181,
+        "name": "Atma's Scarab"
+    },
+    {
+        "id": 182,
+        "name": "The Rising Sun"
+    },
+    {
+        "id": 183,
+        "name": "Highlord's Wrath"
+    },
+    {
+        "id": 184,
+        "name": "Mara's Kaleidoscope"
+    },
+    {
+        "id": 185,
+        "name": "Seraph's Hymn"
+    },
+    {
+        "id": 186,
+        "name": "Metalgrid"
+    },
+    {
+        "id": 187,
+        "name": "Nagelring"
+    },
+    {
+        "id": 188,
+        "name": "Manald Heal"
+    },
+    {
+        "id": 189,
+        "name": "Stone of Jordan"
+    },
+    {
+        "id": 190,
+        "name": "Dwarf Star"
+    },
+    {
+        "id": 191,
+        "name": "Raven Frost"
+    },
+    {
+        "id": 192,
+        "name": "Bul-Kathos' Wedding Band"
+    },
+    {
+        "id": 193,
+        "name": "Carrion Wind"
+    },
+    {
+        "id": 194,
+        "name": "Nature's Peace"
+    },
+    {
+        "id": 195,
+        "name": "Wisp Projector"
+    },
+    {
+        "id": 196,
+        "name": "Felloak"
+    },
+    {
+        "id": 197,
+        "name": "Stoutnail"
+    },
+    {
+        "id": 198,
+        "name": "Crushflange"
+    },
+    {
+        "id": 199,
+        "name": "Bloodrise"
+    },
+    {
+        "id": 200,
+        "name": "The General's Tan Do Li Ga"
+    },
+    {
+        "id": 201,
+        "name": "Ironstone"
+    },
+    {
+        "id": 202,
+        "name": "Bonesnap"
+    },
+    {
+        "id": 203,
+        "name": "Steeldriver"
+    },
+    {
+        "id": 204,
+        "name": "Dark Clan Crusher"
+    },
+    {
+        "id": 205,
+        "name": "Fleshrender"
+    },
+    {
+        "id": 206,
+        "name": "Sureshrill Frost"
+    },
+    {
+        "id": 207,
+        "name": "Moonfall"
+    },
+    {
+        "id": 208,
+        "name": "Baezil's Vortex"
+    },
+    {
+        "id": 209,
+        "name": "Earthshaker"
+    },
+    {
+        "id": 210,
+        "name": "Bloodtree Stump"
+    },
+    {
+        "id": 211,
+        "name": "The Gavel of Pain"
+    },
+    {
+        "id": 212,
+        "name": "Nord's Tenderizer"
+    },
+    {
+        "id": 213,
+        "name": "Demon Limb"
+    },
+    {
+        "id": 214,
+        "name": "Baranar's Star"
+    },
+    {
+        "id": 215,
+        "name": "Horizon's Tornado"
+    },
+    {
+        "id": 216,
+        "name": "Stormlash"
+    },
+    {
+        "id": 217,
+        "name": "Schaefer's Hammer"
+    },
+    {
+        "id": 218,
+        "name": "Stone Crusher"
+    },
+    {
+        "id": 219,
+        "name": "Windhammer"
+    },
+    {
+        "id": 220,
+        "name": "The Cranium Basher"
+    },
+    {
+        "id": 221,
+        "name": "Earth Shifter"
+    },
+    {
+        "id": 222,
+        "name": "Dimoak's Hew"
+    },
+    {
+        "id": 223,
+        "name": "Steelgoad"
+    },
+    {
+        "id": 224,
+        "name": "Soul Harvest"
+    },
+    {
+        "id": 225,
+        "name": "The Battlebranch"
+    },
+    {
+        "id": 226,
+        "name": "Woestave"
+    },
+    {
+        "id": 227,
+        "name": "The Grim Reaper"
+    },
+    {
+        "id": 228,
+        "name": "The Meat Scraper"
+    },
+    {
+        "id": 229,
+        "name": "Blackleach Blade"
+    },
+    {
+        "id": 230,
+        "name": "Athena's Wrath"
+    },
+    {
+        "id": 231,
+        "name": "Pierre Tombale Couant"
+    },
+    {
+        "id": 232,
+        "name": "Husoldal Evo"
+    },
+    {
+        "id": 233,
+        "name": "Grim's Burning Dead"
+    },
+    {
+        "id": 234,
+        "name": "Bonehew"
+    },
+    {
+        "id": 235,
+        "name": "The Reaper's Toll"
+    },
+    {
+        "id": 236,
+        "name": "Tomb Reaver"
+    },
+    {
+        "id": 237,
+        "name": "Stormspire"
+    },
+    {
+        "id": 238,
+        "name": "Knell Striker"
+    },
+    {
+        "id": 239,
+        "name": "Rusthandle"
+    },
+    {
+        "id": 240,
+        "name": "Stormeye"
+    },
+    {
+        "id": 241,
+        "name": "Zakarum's Hand"
+    },
+    {
+        "id": 242,
+        "name": "The Fetid Sprinkler"
+    },
+    {
+        "id": 243,
+        "name": "Hand of Blessed Light"
+    },
+    {
+        "id": 244,
+        "name": "Heaven's Light"
+    },
+    {
+        "id": 245,
+        "name": "The Redeemer"
+    },
+    {
+        "id": 246,
+        "name": "Astreon's Iron Ward"
+    },
+    {
+        "id": 247,
+        "name": "Pelta Lunata"
+    },
+    {
+        "id": 248,
+        "name": "Umbral Disk"
+    },
+    {
+        "id": 249,
+        "name": "Stormguild"
+    },
+    {
+        "id": 250,
+        "name": "Steelclash"
+    },
+    {
+        "id": 251,
+        "name": "Swordback Hold"
+    },
+    {
+        "id": 252,
+        "name": "Bverrit Keep"
+    },
+    {
+        "id": 253,
+        "name": "Wall of the Eyeless"
+    },
+    {
+        "id": 254,
+        "name": "The Ward"
+    },
+    {
+        "id": 255,
+        "name": "Visceratuant"
+    },
+    {
+        "id": 256,
+        "name": "Moser's Blessed Circle"
+    },
+    {
+        "id": 257,
+        "name": "Stormchaser"
+    },
+    {
+        "id": 258,
+        "name": "Tiamat's Rebuke"
+    },
+    {
+        "id": 259,
+        "name": "Lance Guard"
+    },
+    {
+        "id": 260,
+        "name": "Gerke's Sanctuary"
+    },
+    {
+        "id": 261,
+        "name": "Lidless Wall"
+    },
+    {
+        "id": 262,
+        "name": "Radament's Sphere"
+    },
+    {
+        "id": 263,
+        "name": "Blackoak Shield"
+    },
+    {
+        "id": 264,
+        "name": "Stormshield"
+    },
+    {
+        "id": 265,
+        "name": "Spike Thorn"
+    },
+    {
+        "id": 266,
+        "name": "Medusa's Gaze"
+    },
+    {
+        "id": 267,
+        "name": "Head Hunter's Glory"
+    },
+    {
+        "id": 268,
+        "name": "Spirit Ward"
+    },
+    {
+        "id": 269,
+        "name": "The Dragon Chang"
+    },
+    {
+        "id": 270,
+        "name": "Razortine"
+    },
+    {
+        "id": 271,
+        "name": "Bloodthief"
+    },
+    {
+        "id": 272,
+        "name": "Lance of Yaggai"
+    },
+    {
+        "id": 273,
+        "name": "The Tannr Gorerod"
+    },
+    {
+        "id": 274,
+        "name": "The Impaler"
+    },
+    {
+        "id": 275,
+        "name": "Kelpie Snare"
+    },
+    {
+        "id": 276,
+        "name": "Soulfeast Tine"
+    },
+    {
+        "id": 277,
+        "name": "Hone Sundan"
+    },
+    {
+        "id": 278,
+        "name": "Spire of Honor"
+    },
+    {
+        "id": 279,
+        "name": "Arioc's Needle"
+    },
+    {
+        "id": 280,
+        "name": "Viperfork"
+    },
+    {
+        "id": 281,
+        "name": "Steel Pillar"
+    },
+    {
+        "id": 282,
+        "name": "Bane Ash"
+    },
+    {
+        "id": 283,
+        "name": "Serpent Lord"
+    },
+    {
+        "id": 284,
+        "name": "Spire of Lazarus"
+    },
+    {
+        "id": 285,
+        "name": "The Salamander"
+    },
+    {
+        "id": 286,
+        "name": "The Iron Jang Bong"
+    },
+    {
+        "id": 287,
+        "name": "Razorswitch"
+    },
+    {
+        "id": 288,
+        "name": "Ribcracker"
+    },
+    {
+        "id": 289,
+        "name": "Chromatic Ire"
+    },
+    {
+        "id": 290,
+        "name": "Warpspear"
+    },
+    {
+        "id": 291,
+        "name": "Skull Collector"
+    },
+    {
+        "id": 292,
+        "name": "Ondal's Wisdom"
+    },
+    {
+        "id": 293,
+        "name": "Mang Song's Lesson"
+    },
+    {
+        "id": 294,
+        "name": "Rixot's Keen"
+    },
+    {
+        "id": 295,
+        "name": "Blood Crescent"
+    },
+    {
+        "id": 296,
+        "name": "Skewer of Krintiz"
+    },
+    {
+        "id": 297,
+        "name": "Gleamscythe"
+    },
+    {
+        "id": 298,
+        "name": "Griswold's Edge"
+    },
+    {
+        "id": 299,
+        "name": "Hellplague"
+    },
+    {
+        "id": 300,
+        "name": "Culwen's Point"
+    },
+    {
+        "id": 301,
+        "name": "Shadowfang"
+    },
+    {
+        "id": 302,
+        "name": "Soulflay"
+    },
+    {
+        "id": 303,
+        "name": "Kinemil's Awl"
+    },
+    {
+        "id": 304,
+        "name": "Blacktongue"
+    },
+    {
+        "id": 305,
+        "name": "Ripsaw"
+    },
+    {
+        "id": 306,
+        "name": "The Patriarch"
+    },
+    {
+        "id": 307,
+        "name": "Bloodletter"
+    },
+    {
+        "id": 308,
+        "name": "Coldsteel Eye"
+    },
+    {
+        "id": 309,
+        "name": "Hexfire"
+    },
+    {
+        "id": 310,
+        "name": "Blade of Ali Baba"
+    },
+    {
+        "id": 311,
+        "name": "Ginther's Rift"
+    },
+    {
+        "id": 312,
+        "name": "Headstriker"
+    },
+    {
+        "id": 313,
+        "name": "Plague Bearer"
+    },
+    {
+        "id": 314,
+        "name": "The Atlantean"
+    },
+    {
+        "id": 315,
+        "name": "Crainte Vomir"
+    },
+    {
+        "id": 316,
+        "name": "Bing Sz Wang"
+    },
+    {
+        "id": 317,
+        "name": "The Vile Husk"
+    },
+    {
+        "id": 318,
+        "name": "Cloudcrack"
+    },
+    {
+        "id": 319,
+        "name": "Todesfaelle Flamme"
+    },
+    {
+        "id": 320,
+        "name": "Swordguard"
+    },
+    {
+        "id": 321,
+        "name": "Djinn Slayer"
+    },
+    {
+        "id": 322,
+        "name": "Bloodmoon"
+    },
+    {
+        "id": 323,
+        "name": "Azurewrath"
+    },
+    {
+        "id": 324,
+        "name": "Lightsabre"
+    },
+    {
+        "id": 325,
+        "name": "Frostwind"
+    },
+    {
+        "id": 326,
+        "name": "Flamebellow"
+    },
+    {
+        "id": 327,
+        "name": "Doombringer"
+    },
+    {
+        "id": 328,
+        "name": "The Grandfather"
+    },
+    {
+        "id": 333,
+        "name": "Deathbit"
+    },
+    {
+        "id": 334,
+        "name": "The Scalper"
+    },
+    {
+        "id": 335,
+        "name": "Warshrike"
+    },
+    {
+        "id": 336,
+        "name": "Gimmershred"
+    },
+    {
+        "id": 337,
+        "name": "Lacerator"
+    },
+    {
+        "id": 338,
+        "name": "Torch of Iro"
+    },
+    {
+        "id": 339,
+        "name": "Maelstrom"
+    },
+    {
+        "id": 340,
+        "name": "Gravenspine"
+    },
+    {
+        "id": 341,
+        "name": "Ume's Lament"
+    },
+    {
+        "id": 342,
+        "name": "Suicide Branch"
+    },
+    {
+        "id": 343,
+        "name": "Carin Shard"
+    },
+    {
+        "id": 344,
+        "name": "Arm of King Leoric"
+    },
+    {
+        "id": 345,
+        "name": "Blackhand Key"
+    },
+    {
+        "id": 346,
+        "name": "Boneshade"
+    },
+    {
+        "id": 347,
+        "name": "Death's Web"
+    },
+    {
+        "id": 348,
+        "name": "Stoneraven"
+    },
+    {
+        "id": 349,
+        "name": "Lycander's Flank"
+    },
+    {
+        "id": 350,
+        "name": "Lycander's Aim"
+    },
+    {
+        "id": 351,
+        "name": "Titan's Revenge"
+    },
+    {
+        "id": 352,
+        "name": "Thunderstroke"
+    },
+    {
+        "id": 353,
+        "name": "Blood Raven's Charge"
+    },
+    {
+        "id": 354,
+        "name": "Shadow Killer"
+    },
+    {
+        "id": 355,
+        "name": "Bartuc's Cut-Throat"
+    },
+    {
+        "id": 356,
+        "name": "Jade Talon"
+    },
+    {
+        "id": 357,
+        "name": "Firelizard's Talons"
+    },
+    {
+        "id": 358,
+        "name": "Arreat's Face"
+    },
+    {
+        "id": 359,
+        "name": "Wolfhowl"
+    },
+    {
+        "id": 360,
+        "name": "Demonhorn's Edge"
+    },
+    {
+        "id": 361,
+        "name": "Halaberd's Reign"
+    },
+    {
+        "id": 362,
+        "name": "Jalal's Mane"
+    },
+    {
+        "id": 363,
+        "name": "Cerebus' Bite"
+    },
+    {
+        "id": 364,
+        "name": "Spirit Keeper"
+    },
+    {
+        "id": 365,
+        "name": "Ravenlore"
+    },
+    {
+        "id": 366,
+        "name": "Homunculus"
+    },
+    {
+        "id": 367,
+        "name": "Boneflame"
+    },
+    {
+        "id": 368,
+        "name": "Darkforce Spawn"
+    },
+    {
+        "id": 370,
+        "name": "Herald of Zakarum"
+    },
+    {
+        "id": 371,
+        "name": "Alma Negra"
+    },
+    {
+        "id": 372,
+        "name": "Dragonscale"
+    },
+    {
+        "id": 374,
+        "name": "The Oculus"
+    },
+    {
+        "id": 375,
+        "name": "Eschuta's Temper"
+    },
+    {
+        "id": 376,
+        "name": "Death's Fathom"
+    },
+    {
+        "id": 377,
+        "name": "Annihilus"
+    },
+    {
+        "id": 378,
+        "name": "Gheed's Fortune"
+    },
+    {
+        "id": 379,
+        "name": "Hellfire Torch"
+    },
+    {
+        "id": 380,
+        "name": "Rainbow Facet Cold"
+    },
+    {
+        "id": 381,
+        "name": "Rainbow Facet Fire"
+    },
+    {
+        "id": 382,
+        "name": "Rainbow Facet Lightning"
+    },
+    {
+        "id": 383,
+        "name": "Rainbow Facet Poison"
+    },
+    {
+        "id": 384,
+        "name": "Black Cleft"
+    },
+    {
+        "id": 385,
+        "name": "Bone Break"
+    },
+    {
+        "id": 386,
+        "name": "Cold Rupture"
+    },
+    {
+        "id": 387,
+        "name": "Crack of the Heavens"
+    },
+    {
+        "id": 388,
+        "name": "Flame Rift"
+    },
+    {
+        "id": 389,
+        "name": "Rotting Fissure"
+    }
+]

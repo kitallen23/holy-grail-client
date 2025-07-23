@@ -42,10 +42,10 @@ export default function GrailPage() {
     const { items: grailProgress, setItems: setGrailItems } = useGrailProgressStore();
 
     useEffect(() => {
-        if (_grailProgress) {
+        if (_grailProgress && !grailProgress) {
             setGrailItems(_grailProgress);
         }
-    }, [_grailProgress]);
+    }, [_grailProgress, grailProgress]);
 
     const isFetching = isFetchingItems || isFetchingGrailProgress;
     const error = itemsError || grailProgressError;

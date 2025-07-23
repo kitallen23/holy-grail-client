@@ -3,7 +3,7 @@ import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
 export const useGrailItem = (itemKey: string) => {
     return useGrailProgressStore(
         state => {
-            const item = state.items[itemKey];
+            const item = state.items?.[itemKey];
             return {
                 found: item?.found ?? false,
                 foundAt: item?.foundAt ?? "",

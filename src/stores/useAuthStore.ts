@@ -31,7 +31,7 @@ export const useAuthStore = create<AuthState>(set => ({
             console.error("Logout error:", error);
         } finally {
             // Clear our progress store
-            useGrailProgressStore.getState().setItems({});
+            useGrailProgressStore.getState().setItems(undefined);
 
             // Remove cached user data from react-query
             queryClient.removeQueries({ queryKey: ["grail-progress"] });

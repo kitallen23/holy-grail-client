@@ -6,13 +6,13 @@ import { createWithEqualityFn as create } from "zustand/traditional";
 const pendingUpdates = new Map<string, NodeJS.Timeout>();
 
 interface GrailProgressStore {
-    items: Record<string, GrailProgressItem>;
+    items?: Record<string, GrailProgressItem>;
     setFound: (key: string, value: boolean) => void;
-    setItems: (value: Record<string, GrailProgressItem>) => void;
+    setItems: (value?: Record<string, GrailProgressItem>) => void;
 }
 
 export const useGrailProgressStore = create<GrailProgressStore>(set => ({
-    items: {},
+    items: undefined,
 
     setFound: (itemKey, found) => {
         // Clear existing timeout for this item
@@ -20,20 +20,27 @@ export const useGrailProgressStore = create<GrailProgressStore>(set => ({
         if (existing) clearTimeout(existing);
 
         set(state => {
-            const existing = state.items[itemKey];
+            if (!found) {
+                // Remove item from state when found is false
+                const newItems = { ...state.items };
+                delete newItems[itemKey];
+                return { items: newItems };
+            }
+
+            const existing = state.items?.[itemKey];
             const now = new Date().toISOString();
 
             return {
                 items: {
                     ...state.items,
                     [itemKey]: existing
-                        ? { ...existing, found, foundAt: found ? now : "" }
+                        ? { ...existing, found, foundAt: now }
                         : {
                               id: crypto.randomUUID(),
                               userId: "",
                               itemKey,
                               found,
-                              foundAt: found ? now : "",
+                              foundAt: now,
                           },
                 },
             };

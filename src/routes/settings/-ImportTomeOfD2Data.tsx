@@ -1,0 +1,181 @@
+import Heading from "@/components/Heading";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useGrailProgress, useItems } from "@/hooks/queries";
+import { getItemsToImport_TomeOfD2, type TomeOfD2GrailItem } from "@/lib/adapters/import";
+import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
+import { useImportStore } from "@/stores/useImport";
+import { CircleAlert, CloudCheckIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+
+const ImportTomeOfD2Data = () => {
+    const { file, setFile } = useImportStore();
+    const { data, isFetching, error } = useItems(["uniqueItems", "setItems", "runes"]);
+    const uniqueItems = data?.uniqueItems;
+    const setItems = data?.setItems;
+    const runes = data?.runes;
+
+    const totalItemCount =
+        Object.keys(uniqueItems || {}).length +
+        Object.keys(setItems || {}).length +
+        Object.keys(runes || {}).length;
+
+    const {
+        data: _grailProgress,
+        isFetching: isFetchingGrailProgress,
+        error: grailProgressError,
+    } = useGrailProgress();
+
+    const { items: grailProgress, setItems: setGrailItems } = useGrailProgressStore();
+
+    useEffect(() => {
+        // Only initialise our grailProgress store's items if it's not already populated
+        if (_grailProgress && !grailProgress) {
+            setGrailItems(_grailProgress);
+        }
+    }, [_grailProgress, grailProgress]);
+
+    const foundItemCount = Object.keys(grailProgress || {}).length;
+
+    const [tod2GrailData, setTod2GrailData] = useState<TomeOfD2GrailItem[]>();
+    const [fileError, setFileError] = useState(false);
+
+    useEffect(() => {
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const text = e.target?.result as string;
+                    const jsonData = JSON.parse(text);
+
+                    if (!jsonData?.grail?.length) {
+                        throw "No grail data";
+                    }
+
+                    setTod2GrailData(jsonData?.grail || []);
+                } catch (error) {
+                    console.error("Invalid JSON contents of file:", error);
+                    setFileError(true);
+                }
+            };
+            reader.readAsText(file);
+        }
+    }, [file]);
+
+    const [tod2ImportData, setTod2ImportData] = useState<{ found: string[]; notFound: string[] }>();
+    const externalCount =
+        (tod2ImportData?.found.length ?? 0) + (tod2ImportData?.notFound.length ?? 0);
+
+    useEffect(() => {
+        if (grailProgress && tod2GrailData?.length && data) {
+            const tod2ImportData = getItemsToImport_TomeOfD2(grailProgress, tod2GrailData, data);
+            setTod2ImportData(tod2ImportData);
+        }
+    }, [grailProgress, tod2GrailData, data]);
+
+    const onCancel = () => {
+        setFile();
+    };
+
+    const onImport = () => {
+        // TODO: Implement import endpoint, then hit it here
+        console.info("Import clicked: ", tod2ImportData);
+    };
+
+    if (error || grailProgressError) {
+        return (
+            <div className="max-w-lg mx-auto pt-4">
+                <Alert variant="destructive">
+                    <CircleAlert />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        Something went wrong when loading data. Please refresh the page or try again
+                        later.
+                    </AlertDescription>
+                </Alert>
+            </div>
+        );
+    }
+    if (fileError) {
+        return (
+            <div className="max-w-lg mx-auto pt-4">
+                <Alert variant="destructive">
+                    <CircleAlert />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        Something went wrong when processing the file.
+                        <br />
+                        The file you&apos;re importing may be malformed. Please check you exported
+                        it correctly from Tome of D2 and try again.
+                        <br />
+                        <div>
+                            If the issue persists, please open an issue on{" "}
+                            <a
+                                href="https://github.com/kitallen23/holy-grail-client"
+                                className="underline-offset-4 underline text-destructive hover:text-destructive/90"
+                            >
+                                GitHub
+                            </a>
+                            .
+                        </div>
+                    </AlertDescription>
+                </Alert>
+            </div>
+        );
+    }
+
+    const isLoading = isFetching || isFetchingGrailProgress;
+
+    if (isLoading) {
+        return (
+            <div className="max-w-lg mx-auto pt-8 flex flex-col gap-4 opacity-20">
+                <div className="pb-1 flex justify-center items-center h-9">
+                    <Skeleton className="w-48 h-6" />
+                </div>
+                <div className="flex flex-col gap-1">
+                    <div className="h-6 flex items-center">
+                        <Skeleton className="w-64 h-4" />
+                    </div>
+                    <div className="h-6 flex items-center">
+                        <Skeleton className="w-28 h-4" />
+                    </div>
+                    <div className="h-6 flex items-center">
+                        <Skeleton className="w-32 h-4" />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="max-w-lg mx-auto pt-8 flex flex-col gap-4">
+            <Heading className="text-destructive">Import Data from Tome of D2</Heading>
+            <div className="flex flex-col gap-1">
+                <div>
+                    Grail items before import: {foundItemCount} / {totalItemCount}
+                </div>
+                <div>Items to import: {externalCount}</div>
+                <div className="ml-8 text-muted-foreground">
+                    To skip (already found in current grail): {tod2ImportData?.found.length}
+                </div>
+                <div className="ml-8">To add to grail: {tod2ImportData?.notFound.length}</div>
+                <div className="font-semibold text-lg">
+                    Grail items after import:{" "}
+                    {foundItemCount + (tod2ImportData?.notFound.length ?? 0)}
+                </div>
+            </div>
+            <div className="flex justify-center gap-4 mt-4">
+                <Button variant="secondary" onClick={onCancel}>
+                    Cancel
+                </Button>
+                <Button onClick={onImport} disabled={(tod2ImportData?.notFound.length ?? 0) < 1}>
+                    <CloudCheckIcon />
+                    Import {tod2ImportData?.notFound.length || 0} items into grail
+                </Button>
+            </div>
+        </div>
+    );
+};
+
+export default ImportTomeOfD2Data;
