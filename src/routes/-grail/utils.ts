@@ -8,12 +8,14 @@ export type UniqueBase = {
     base: Partial<WithKey<BaseItem>>;
     foundUniqueItems: WithKey<UniqueItem>[];
     notFoundUniqueItems: WithKey<UniqueItem>[];
+    hide: boolean;
 };
 
 export type SetBase = {
     base: Partial<WithKey<BaseItem>>;
     foundSetItems: WithKey<SetItem>[];
     notFoundSetItems: WithKey<SetItem>[];
+    hide: boolean;
 };
 
 export const buildTableRows = (
@@ -117,16 +119,23 @@ export const buildTableRows = (
 export const getRemainingUniqueBases = (
     uniqueItems: Record<string, UniqueItem>,
     baseItems: Record<string, BaseItem>,
-    grailProgress: Record<string, GrailProgressItem>
+    grailProgress: Record<string, GrailProgressItem>,
+    selectedFilters: Record<string, boolean>
 ): Record<string, UniqueBase> => {
     const foundItemKeys = Object.values(grailProgress)
         .filter(item => !!item.found)
         .map(item => item.itemKey);
 
     const uniqueBases: Record<string, UniqueBase> = {};
+    const hasActiveFilter = Object.values(selectedFilters).some(val => val);
+
     Object.entries(uniqueItems).forEach(([key, item]) => {
         const itemWithKey = { ...item, key };
         const isItemFound = foundItemKeys.includes(key);
+
+        const itemType = Object.entries(ITEM_CATEGORIES).find(([, subcategories]) =>
+            subcategories.some(subcategory => item.category.endsWith(`Unique ${subcategory}`))
+        )?.[0];
 
         if (uniqueBases[item.type]) {
             if (isItemFound) {
@@ -143,6 +152,7 @@ export const getRemainingUniqueBases = (
                 ...(isItemFound
                     ? { foundUniqueItems: [itemWithKey], notFoundUniqueItems: [] }
                     : { foundUniqueItems: [], notFoundUniqueItems: [itemWithKey] }),
+                hide: hasActiveFilter && !selectedFilters[`Unique ${itemType}`],
             };
         }
     });
@@ -153,13 +163,16 @@ export const getRemainingUniqueBases = (
 export const getRemainingSetBases = (
     setItems: Record<string, SetItem>,
     baseItems: Record<string, BaseItem>,
-    grailProgress: Record<string, GrailProgressItem>
+    grailProgress: Record<string, GrailProgressItem>,
+    selectedFilters: Record<string, boolean>
 ): Record<string, SetBase> => {
     const foundItemKeys = Object.values(grailProgress)
         .filter(item => !!item.found)
         .map(item => item.itemKey);
 
     const setBases: Record<string, SetBase> = {};
+    const hasActiveFilter = Object.values(selectedFilters).some(val => val);
+
     Object.entries(setItems).forEach(([key, item]) => {
         const itemWithKey = { ...item, key };
         const isItemFound = foundItemKeys.includes(key);
@@ -179,6 +192,7 @@ export const getRemainingSetBases = (
                 ...(isItemFound
                     ? { foundSetItems: [itemWithKey], notFoundSetItems: [] }
                     : { foundSetItems: [], notFoundSetItems: [itemWithKey] }),
+                hide: hasActiveFilter && !selectedFilters["Set Items"],
             };
         }
     });

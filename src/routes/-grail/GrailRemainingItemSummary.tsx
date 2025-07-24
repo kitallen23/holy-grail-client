@@ -14,6 +14,8 @@ import SetBaseItem from "./SetBaseItem";
 import GrailUniqueBaseDialog from "./GrailUniqueBaseDialog";
 import GrailSetBaseDialog from "./GrailSetBaseDialog";
 import { useItemDialogStore } from "@/stores/useItemDialogStore";
+import { useSearchFilters } from "@/stores/useSearchStore";
+import clsx from "clsx";
 
 type Props = {
     uniqueItems: Record<string, UniqueItem>;
@@ -37,14 +39,15 @@ export default function GrailRemainingItemSummary({
 }: Props) {
     const [itemLimit, setItemLimit] = useState(DEFAULT_ITEM_LIMIT);
     const { setItem } = useItemDialogStore();
+    const { selectedFilters } = useSearchFilters();
 
     const remainingUniqueBases = useMemo(
-        () => getRemainingUniqueBases(uniqueItems, baseItems, grailProgress),
-        [uniqueItems, baseItems, grailProgress]
+        () => getRemainingUniqueBases(uniqueItems, baseItems, grailProgress, selectedFilters),
+        [uniqueItems, baseItems, grailProgress, selectedFilters]
     );
     const remainingSetBases = useMemo(
-        () => getRemainingSetBases(setItems, baseItems, grailProgress),
-        [setItems, baseItems, grailProgress]
+        () => getRemainingSetBases(setItems, baseItems, grailProgress, selectedFilters),
+        [setItems, baseItems, grailProgress, selectedFilters]
     );
 
     const displayedUniqueBases = Object.entries(remainingUniqueBases)
@@ -54,7 +57,7 @@ export default function GrailRemainingItemSummary({
                 ...item,
             };
         })
-        .filter(entry => entry.notFoundUniqueItems.length)
+        .filter(entry => entry.notFoundUniqueItems.length && !entry.hide)
         .sort((a, b) => (a.key > b.key ? 1 : 0));
     const displayedSetBases = Object.entries(remainingSetBases)
         .map(([key, item]) => {
@@ -63,7 +66,7 @@ export default function GrailRemainingItemSummary({
                 ...item,
             };
         })
-        .filter(entry => entry.notFoundSetItems.length)
+        .filter(entry => entry.notFoundSetItems.length && !entry.hide)
         .sort((a, b) => (a.key > b.key ? 1 : 0));
 
     const [selectedItemBase, setSelectedItemBase] = useState<SelectedItemState>();
@@ -72,18 +75,24 @@ export default function GrailRemainingItemSummary({
         displayedUniqueBases.length > DEFAULT_ITEM_LIMIT ||
         displayedSetBases.length > DEFAULT_ITEM_LIMIT;
 
+    const showUniqueBases = !!displayedUniqueBases.length;
+    const showSetBases = !!displayedSetBases.length;
+
     return (
         <>
-            <div className="grid md:grid-cols-2 gap-4">
-                <div className="grid gap-4 content-start">
-                    <HeadingSeparator className="text-primary">Unique Bases</HeadingSeparator>
-                    <div className="grid gap-1 grid-cols-2 sm:grid-cols-3">
-                        {displayedUniqueBases
-                            .slice(0, itemLimit)
-                            .map(({ key, base, notFoundUniqueItems, foundUniqueItems }) => (
+            <div
+                className={clsx("grid gap-4", {
+                    "md:grid-cols-2": showUniqueBases && showSetBases,
+                })}
+            >
+                {showUniqueBases ? (
+                    <div className="grid gap-4 content-start">
+                        <HeadingSeparator className="text-primary">Unique Bases</HeadingSeparator>
+                        <div className="grid gap-1 grid-cols-2 sm:grid-cols-3">
+                            {displayedUniqueBases.slice(0, itemLimit).map(({ key, ...rest }) => (
                                 <UniqueBaseItem
                                     key={key}
-                                    uniqueBase={{ base, notFoundUniqueItems, foundUniqueItems }}
+                                    uniqueBase={rest}
                                     selectedUniqueBase={
                                         selectedItemBase?.type === "UniqueBase"
                                             ? selectedItemBase.item
@@ -94,17 +103,17 @@ export default function GrailRemainingItemSummary({
                                     }
                                 />
                             ))}
+                        </div>
                     </div>
-                </div>
-                <div className="grid gap-4 content-start">
-                    <HeadingSeparator className="text-diablo-green">Set Bases</HeadingSeparator>
-                    <div className="grid gap-1 grid-cols-2 sm:grid-cols-3">
-                        {displayedSetBases
-                            .slice(0, itemLimit)
-                            .map(({ key, base, notFoundSetItems, foundSetItems }) => (
+                ) : null}
+                {showSetBases ? (
+                    <div className="grid gap-4 content-start">
+                        <HeadingSeparator className="text-diablo-green">Set Bases</HeadingSeparator>
+                        <div className="grid gap-1 grid-cols-2 sm:grid-cols-3">
+                            {displayedSetBases.slice(0, itemLimit).map(({ key, ...rest }) => (
                                 <SetBaseItem
                                     key={key}
-                                    setBase={{ base, notFoundSetItems, foundSetItems }}
+                                    setBase={rest}
                                     selectedSetBase={
                                         selectedItemBase?.type === "SetBase"
                                             ? selectedItemBase.item
@@ -113,8 +122,9 @@ export default function GrailRemainingItemSummary({
                                     onClick={item => setSelectedItemBase({ type: "SetBase", item })}
                                 />
                             ))}
+                        </div>
                     </div>
-                </div>
+                ) : null}
             </div>
             {hasItemOverflow ? (
                 <div className="flex justify-center">
