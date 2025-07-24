@@ -1,7 +1,7 @@
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { SetItemArrayItem, WithKey } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
-import { useDebouncedSearch } from "@/stores/useSearchStore";
+import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import type { SetItem } from "@/types/items";
 import { useEffect, useMemo } from "react";
 import { SETS } from "@/routes/items/sets/-utils";
@@ -32,6 +32,7 @@ export default function SetItems({ setItems }: Props) {
     const { debouncedSearchString } = useDebouncedSearch();
     const { shouldDisplay, setFilteredItemCount } = useShowItemList();
     const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
+    const { selectedFilters } = useSearchFilters();
 
     const displayedItems: Record<string, SetItem> | undefined = useMemo(() => {
         if (!setItems) {
@@ -41,16 +42,19 @@ export default function SetItems({ setItems }: Props) {
         const searchTerms = getSearchTerms(debouncedSearchString);
 
         const filtered: Record<string, SetItem> = {};
+        const hasActiveFilter = Object.values(selectedFilters).some(val => val);
 
         Object.entries(setItems).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
             if (matchesAllTerms(searchableText, searchTerms)) {
-                filtered[key] = item;
+                if (!hasActiveFilter || selectedFilters["Set Items"]) {
+                    filtered[key] = item;
+                }
             }
         });
 
         return filtered;
-    }, [setItems, debouncedSearchString]);
+    }, [setItems, debouncedSearchString, selectedFilters]);
 
     useEffect(() => {
         setFilteredItemCount("set", Object.keys(displayedItems).length);

@@ -3,7 +3,7 @@ import GrailStatsTable from "./GrailStatsTable";
 import GrailRemainingItemSummary from "./GrailRemainingItemSummary";
 import GrailItemList from "./GrailItemList";
 import Heading from "@/components/Heading";
-import { useDebouncedSearch } from "@/stores/useSearchStore";
+import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import type { Items } from "@/types/items";
 import {
     NavigationMenu,
@@ -21,6 +21,7 @@ const PAGE_CONTENTS_KEYS = ["Summary", "Item List"] as const;
 
 export default function GrailPage() {
     const { debouncedSearchString } = useDebouncedSearch();
+    const { setPageFilters } = useSearchFilters();
     const {
         data,
         isFetching: isFetchingItems,
@@ -46,6 +47,25 @@ export default function GrailPage() {
             setGrailItems(_grailProgress);
         }
     }, [_grailProgress, grailProgress]);
+
+    useEffect(() => {
+        const filters = [
+            {
+                id: "item_type",
+                label: "Item Type",
+                options: [
+                    { id: "Unique Weapons", label: "Unique Weapons", value: false },
+                    { id: "Unique Armor", label: "Unique Armor", value: false },
+                    { id: "Unique Other", label: "Unique Other", value: false },
+                    { id: "Set Items", label: "Set Items", value: false },
+                    { id: "Runes", label: "Runes", value: false },
+                ],
+            },
+        ];
+        setPageFilters(filters);
+
+        return () => setPageFilters(null);
+    }, []);
 
     const isFetching = isFetchingItems || isFetchingGrailProgress;
     const error = itemsError || grailProgressError;
