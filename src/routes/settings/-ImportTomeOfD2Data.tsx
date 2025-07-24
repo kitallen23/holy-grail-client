@@ -100,8 +100,10 @@ const ImportTomeOfD2Data = () => {
 
             await Promise.all([bulkSetUserItems(payload), delay(1000)]);
 
+            // Set items in our local store
             bulkSetFound(payload);
 
+            // Clear our import file state & redirect to homepage
             toast.success(`Imported ${tod2ImportData.notFound.length} items successfully.`);
             setPageContents("Summary");
             navigate({ to: "/" });
