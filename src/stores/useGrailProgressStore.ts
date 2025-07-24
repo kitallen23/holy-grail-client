@@ -16,8 +16,10 @@ export const useGrailProgressStore = create<GrailProgressStore>(set => ({
 
     setFound: (itemKey, found) => {
         // Clear existing timeout for this item
-        const existing = pendingUpdates.get(itemKey);
-        if (existing) clearTimeout(existing);
+        const existingUpdate = pendingUpdates.get(itemKey);
+        if (existingUpdate) {
+            clearTimeout(existingUpdate);
+        }
 
         set(state => {
             if (!found) {
@@ -27,14 +29,14 @@ export const useGrailProgressStore = create<GrailProgressStore>(set => ({
                 return { items: newItems };
             }
 
-            const existing = state.items?.[itemKey];
+            const existingItem = state.items?.[itemKey];
             const now = new Date().toISOString();
 
             return {
                 items: {
                     ...state.items,
-                    [itemKey]: existing
-                        ? { ...existing, found, foundAt: now }
+                    [itemKey]: existingItem
+                        ? { ...existingItem, found, foundAt: now }
                         : {
                               id: crypto.randomUUID(),
                               userId: "",
