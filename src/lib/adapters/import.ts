@@ -70,5 +70,8 @@ export function getItemsToImport_TomeOfD2(
         }
     });
 
-    return itemsToImport;
+    return {
+        found: itemsToImport.found.sort(),
+        notFound: itemsToImport.notFound.sort(),
+    };
 }

@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+export const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 /**
  * Combines and merges CSS class names with Tailwind CSS conflict resolution.
  *

@@ -4,9 +4,18 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useImportStore } from "@/stores/useImport";
 import { useSearchBar } from "@/stores/useSearchStore";
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import ImportTomeOfD2Data from "./-ImportTomeOfD2Data";
+import { LoaderCircleIcon, Trash2Icon } from "lucide-react";
+import { Dialog } from "@radix-ui/react-dialog";
+import { DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { clearUserItems } from "@/lib/api";
+import { queryClient } from "@/lib/queryClient";
+import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
+import { toast } from "sonner";
+import { useGrailPageStore } from "@/stores/useGrailPageStore";
+import { delay } from "@/lib/utils";
 
 export const Route = createFileRoute("/settings/")({
     component: RouteComponent,
@@ -15,6 +24,9 @@ export const Route = createFileRoute("/settings/")({
 function RouteComponent() {
     const { user, isLoading } = useAuth();
     const { setVisibility } = useSearchBar();
+    const navigate = useNavigate({ from: "/settings" });
+    const { setItems } = useGrailProgressStore();
+    const { setPageContents } = useGrailPageStore();
 
     const { type, setFile } = useImportStore();
 
@@ -27,6 +39,35 @@ function RouteComponent() {
         const file = event.target.files?.[0];
         if (file) {
             setFile("Tome of D2", file);
+        }
+    };
+
+    const [resetModal, setResetModal] = useState(false);
+    const [isResetting, setIsResetting] = useState(false);
+
+    const onResetHolyGrail = async () => {
+        if (isResetting) {
+            return;
+        }
+
+        setIsResetting(true);
+        try {
+            await Promise.all([clearUserItems(), delay(1000)]);
+
+            // Clear our progress store
+            setItems(undefined);
+            setPageContents("Summary");
+
+            // Remove cached user data from react-query
+            queryClient.removeQueries({ queryKey: ["grail-progress"] });
+
+            toast.success("Your grail has been reset.");
+            navigate({ to: "/" });
+        } catch (error) {
+            console.error(`Error: `, error);
+            toast.error("Something went wrong when resetting your grail. Please try again later.");
+        } finally {
+            setIsResetting(false);
         }
     };
 
@@ -48,52 +89,98 @@ function RouteComponent() {
     }
 
     return (
-        <div className="max-w-lg mx-auto pt-8 flex flex-col gap-4">
-            <Heading className="text-destructive">Import Data</Heading>
-            <div className="flex flex-col gap-2">
+        <>
+            <div className="max-w-lg mx-auto pt-8 flex flex-col gap-8">
                 <div>
-                    Use the button below to import a{" "}
-                    <code className="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
-                        .txt
-                    </code>{" "}
-                    file from the Tome of D2 mobile application.
+                    <Heading className="text-destructive">Import Holy Grail Data</Heading>
+                    <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-2">
+                            <div>
+                                Use the button below to import a{" "}
+                                <code className="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+                                    .txt
+                                </code>{" "}
+                                file from the Tome of D2 mobile application.
+                            </div>
+                            <div className="flex justify-start">
+                                <input
+                                    type="file"
+                                    accept=".txt"
+                                    onChange={onTomeOfD2FileSelect}
+                                    style={{ display: "none" }}
+                                    id="tome-of-d2-file-input"
+                                />
+                                <Button
+                                    onClick={() =>
+                                        document.getElementById("tome-of-d2-file-input")?.click()
+                                    }
+                                >
+                                    Import from Tome of D2
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <div>
+                                Use the button below to import a{" "}
+                                <code className="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+                                    .json
+                                </code>{" "}
+                                file from{" "}
+                                <a
+                                    href="https://d2-holy-grail.herokuapp.com"
+                                    className="underline-offset-4 hover:underline text-primary hover:text-primary/90"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    d2-holy-grail
+                                </a>
+                                .
+                            </div>
+                            <div className="flex justify-start">
+                                <Button>Import from d2-holy-grail</Button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="flex justify-start">
-                    <input
-                        type="file"
-                        accept=".txt"
-                        onChange={onTomeOfD2FileSelect}
-                        style={{ display: "none" }}
-                        id="tome-of-d2-file-input"
-                    />
-                    <Button
-                        onClick={() => document.getElementById("tome-of-d2-file-input")?.click()}
-                    >
-                        Import from Tome of D2
-                    </Button>
+                <div>
+                    <Heading className="text-destructive">Reset Holy Grail</Heading>
+                    <div className="flex flex-col gap-2">
+                        <div>
+                            Use the button below to reset all of your Holy Grail progress. This
+                            cannot be undone. It is recommended that you export your grail data
+                            before doing this.
+                        </div>
+                        <div className="flex justify-start">
+                            <Button variant="destructive" onClick={() => setResetModal(true)}>
+                                <Trash2Icon />
+                                Reset
+                            </Button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div className="flex flex-col gap-2">
-                <div>
-                    Use the button below to import a{" "}
-                    <code className="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
-                        .json
-                    </code>{" "}
-                    file from{" "}
-                    <a
-                        href="https://d2-holy-grail.herokuapp.com"
-                        className="underline-offset-4 hover:underline text-primary hover:text-primary/90"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        d2-holy-grail
-                    </a>
-                    .
-                </div>
-                <div className="flex justify-start">
-                    <Button>Import from d2-holy-grail</Button>
-                </div>
-            </div>
-        </div>
+            <Dialog open={resetModal || isResetting} onOpenChange={() => setResetModal(false)}>
+                <DialogContent className="w-[90vw] max-w-sm" aria-describedby={undefined}>
+                    <DialogHeader className="mb-4">
+                        <DialogTitle>Reset Holy Grail</DialogTitle>
+                    </DialogHeader>
+                    <div>
+                        Doing this will reset all of your Holy Grail progress. This cannot be
+                        undone.
+                    </div>
+                    <div>Are you sure you wish to reset your Holy Grail?</div>
+                    <div className="flex justify-center">
+                        <Button
+                            variant="destructive"
+                            onClick={onResetHolyGrail}
+                            disabled={isResetting}
+                        >
+                            {isResetting ? <LoaderCircleIcon className="animate-spin" /> : null}
+                            Yes, I&apos;m sure
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+        </>
     );
 }

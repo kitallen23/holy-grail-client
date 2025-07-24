@@ -8,6 +8,7 @@ const pendingUpdates = new Map<string, NodeJS.Timeout>();
 interface GrailProgressStore {
     items?: Record<string, GrailProgressItem>;
     setFound: (key: string, value: boolean) => void;
+    bulkSetFound: (items: { itemKey: string; foundAt?: string }[]) => void;
     setItems: (value?: Record<string, GrailProgressItem>) => void;
 }
 
@@ -55,6 +56,24 @@ export const useGrailProgressStore = create<GrailProgressStore>(set => ({
         }, API_CALL_DEBOUNCE_DELAY);
 
         pendingUpdates.set(itemKey, timeout);
+    },
+
+    bulkSetFound: items => {
+        set(state => {
+            const newItems = { ...state.items };
+            items.forEach(({ itemKey, foundAt }) => {
+                newItems[itemKey] = {
+                    id: crypto.randomUUID(),
+                    userId: "",
+                    itemKey,
+                    found: true,
+                    foundAt: foundAt ?? new Date().toISOString(),
+                };
+            });
+            return {
+                items: newItems,
+            };
+        });
     },
 
     setItems: items => set({ items }),

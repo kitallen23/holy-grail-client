@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { create } from "zustand";
 import { useGrailProgressStore } from "./useGrailProgressStore";
 import { queryClient } from "@/lib/queryClient";
+import { useGrailPageStore } from "./useGrailPageStore";
 
 interface AuthState {
     user: User | null;
@@ -32,6 +33,7 @@ export const useAuthStore = create<AuthState>(set => ({
         } finally {
             // Clear our progress store
             useGrailProgressStore.getState().setItems(undefined);
+            useGrailPageStore.getState().setPageContents("Summary");
 
             // Remove cached user data from react-query
             queryClient.removeQueries({ queryKey: ["grail-progress"] });

@@ -5,17 +5,24 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGrailProgress, useItems } from "@/hooks/queries";
 import { getItemsToImport_TomeOfD2, type TomeOfD2GrailItem } from "@/lib/adapters/import";
+import { bulkSetUserItems } from "@/lib/api";
+import { delay } from "@/lib/utils";
+import { useGrailPageStore } from "@/stores/useGrailPageStore";
 import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
 import { useImportStore } from "@/stores/useImport";
-import { CircleAlert, CloudCheckIcon } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { CircleAlert, CloudCheckIcon, LoaderCircleIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const ImportTomeOfD2Data = () => {
+    const navigate = useNavigate({ from: "/settings" });
     const { file, setFile } = useImportStore();
     const { data, isFetching, error } = useItems(["uniqueItems", "setItems", "runes"]);
     const uniqueItems = data?.uniqueItems;
     const setItems = data?.setItems;
     const runes = data?.runes;
+    const { setPageContents } = useGrailPageStore();
 
     const totalItemCount =
         Object.keys(uniqueItems || {}).length +
@@ -28,7 +35,7 @@ const ImportTomeOfD2Data = () => {
         error: grailProgressError,
     } = useGrailProgress();
 
-    const { items: grailProgress, setItems: setGrailItems } = useGrailProgressStore();
+    const { items: grailProgress, setItems: setGrailItems, bulkSetFound } = useGrailProgressStore();
 
     useEffect(() => {
         // Only initialise our grailProgress store's items if it's not already populated
@@ -79,9 +86,32 @@ const ImportTomeOfD2Data = () => {
         setFile();
     };
 
-    const onImport = () => {
-        // TODO: Implement import endpoint, then hit it here
-        console.info("Import clicked: ", tod2ImportData);
+    const [isImporting, setIsImporting] = useState(false);
+    const onImport = async () => {
+        if (isImporting || !tod2ImportData?.notFound || tod2ImportData.notFound.length < 1) {
+            return;
+        }
+
+        setIsImporting(true);
+        try {
+            const payload: { itemKey: string }[] = tod2ImportData?.notFound.map(itemKey => ({
+                itemKey,
+            }));
+
+            await Promise.all([bulkSetUserItems(payload), delay(1000)]);
+
+            bulkSetFound(payload);
+
+            toast.success(`Imported ${tod2ImportData.notFound.length} items successfully.`);
+            setPageContents("Summary");
+            navigate({ to: "/" });
+            setFile();
+        } catch (error) {
+            console.error(`Error: `, error);
+            toast.error("Something went wrong when importing. Please try again later.");
+        } finally {
+            setIsImporting(false);
+        }
     };
 
     const [toSkipDialog, setToSkipDialog] = useState(false);
@@ -202,9 +232,13 @@ const ImportTomeOfD2Data = () => {
                     </Button>
                     <Button
                         onClick={onImport}
-                        disabled={(tod2ImportData?.notFound.length ?? 0) < 1}
+                        disabled={(tod2ImportData?.notFound.length ?? 0) < 1 || isImporting}
                     >
-                        <CloudCheckIcon />
+                        {isImporting ? (
+                            <LoaderCircleIcon className="animate-spin" />
+                        ) : (
+                            <CloudCheckIcon />
+                        )}
                         Import {tod2ImportData?.notFound.length || 0} items into grail
                     </Button>
                 </div>
