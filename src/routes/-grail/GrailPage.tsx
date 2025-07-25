@@ -14,8 +14,9 @@ import {
 import { useGrailPageStore } from "@/stores/useGrailPageStore";
 import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
 import { useEffect } from "react";
-import { CircleAlertIcon } from "lucide-react";
+import { BadgeInfoIcon, CircleAlertIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Link } from "@tanstack/react-router";
 
 const PAGE_CONTENTS_KEYS = ["Summary", "Item List"] as const;
 
@@ -113,6 +114,26 @@ export default function GrailPage() {
             )}
             {pageContents === "Summary" && !debouncedSearchString ? (
                 <>
+                    {Object.keys(grailProgress).length < 1 ? (
+                        <Alert variant="default" className="max-w-lg mx-auto">
+                            <BadgeInfoIcon />
+                            <AlertTitle>Welcome!</AlertTitle>
+                            <AlertDescription>
+                                <div>
+                                    If you have existing Holy Grail data from another application,
+                                    you can import it in the{" "}
+                                    <Link
+                                        to="/settings"
+                                        className="underline-offset-4 underline text-foreground/80 hover:text-foreground/90"
+                                    >
+                                        settings page
+                                    </Link>
+                                    .
+                                </div>
+                                <div>Good luck on your journey!</div>
+                            </AlertDescription>
+                        </Alert>
+                    ) : null}
                     <div className="grid max-w-lg mx-auto w-full">
                         <Heading className="text-destructive">Statistics</Heading>
                         <GrailStatsTable
@@ -123,7 +144,6 @@ export default function GrailPage() {
                         />
                     </div>
 
-                    <Heading className="text-destructive">Remaining Grail Items</Heading>
                     <GrailRemainingItemSummary
                         uniqueItems={uniqueItems!}
                         setItems={setItems!}

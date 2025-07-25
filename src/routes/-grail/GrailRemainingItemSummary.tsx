@@ -16,6 +16,7 @@ import GrailSetBaseDialog from "./GrailSetBaseDialog";
 import { useItemDialogStore } from "@/stores/useItemDialogStore";
 import { useSearchFilters } from "@/stores/useSearchStore";
 import clsx from "clsx";
+import Heading from "@/components/Heading";
 
 type Props = {
     uniqueItems: Record<string, UniqueItem>;
@@ -78,8 +79,13 @@ export default function GrailRemainingItemSummary({
     const showUniqueBases = !!displayedUniqueBases.length;
     const showSetBases = !!displayedSetBases.length;
 
+    if (displayedSetBases.length === 0 && displayedUniqueBases.length === 0) {
+        return null;
+    }
+
     return (
-        <>
+        <div className="grid grid-cols-1 gap-4">
+            <Heading className="text-destructive">Remaining Grail Items</Heading>
             <div
                 className={clsx("grid gap-4", {
                     "md:grid-cols-2": showUniqueBases && showSetBases,
@@ -189,6 +195,6 @@ export default function GrailRemainingItemSummary({
                     setSelectedItemBase(undefined);
                 }}
             />
-        </>
+        </div>
     );
 }

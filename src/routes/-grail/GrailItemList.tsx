@@ -22,7 +22,7 @@ export default function GrailSearchResults({ data }: Props) {
     const showClearButton = itemCount === 0;
 
     return (
-        <>
+        <div className="grid grid-cols-1 gap-4">
             <UniqueItems uniqueItems={data.uniqueItems} />
             <SetItems setItems={data.setItems} />
             <Runes runes={data.runes} />
@@ -42,6 +42,6 @@ export default function GrailSearchResults({ data }: Props) {
                     </Button>
                 </div>
             ) : null}
-        </>
+        </div>
     );
 }
