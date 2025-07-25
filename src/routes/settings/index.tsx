@@ -2,11 +2,10 @@ import Heading from "@/components/Heading";
 import LoginForm from "@/components/LoginForm";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { useImportStore } from "@/stores/useImport";
 import { useSearchBar } from "@/stores/useSearchStore";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import ImportTomeOfD2Data from "./-ImportTomeOfD2Data";
+import ImportGrailData from "./-ImportGrailData";
 import { LoaderCircleIcon, Trash2Icon } from "lucide-react";
 import { Dialog } from "@radix-ui/react-dialog";
 import { DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -16,10 +15,34 @@ import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
 import { toast } from "sonner";
 import { useGrailPageStore } from "@/stores/useGrailPageStore";
 import { delay } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 export const Route = createFileRoute("/settings/")({
     component: RouteComponent,
 });
+
+const IMPORT_TYPES = {
+    Backup: {
+        label: "Backup",
+        accept: ".json",
+    },
+    "Tome of D2": {
+        label: "Tome of D2",
+        accept: ".txt",
+    },
+    "d2-holy-grail": {
+        label: "d2-holy-grail",
+        accept: ".json",
+    },
+} as const;
+export type ImportType = keyof typeof IMPORT_TYPES;
 
 function RouteComponent() {
     const { user, isLoading } = useAuth();
@@ -28,17 +51,28 @@ function RouteComponent() {
     const { setItems } = useGrailProgressStore();
     const { setPageContents } = useGrailPageStore();
 
-    const { type, setFile } = useImportStore();
+    const [importType, setImportType] = useState<ImportType | undefined>(undefined);
+    const [importFile, setImportFile] = useState<File | undefined>(undefined);
+
+    const setFile = (type?: ImportType, file?: File) => {
+        if (type === undefined || file === undefined) {
+            setImportType(undefined);
+            setImportFile(undefined);
+        } else {
+            setImportType(type);
+            setImportFile(file);
+        }
+    };
 
     useEffect(() => {
         setVisibility(false);
         return () => setVisibility(true);
     }, []);
 
-    const onTomeOfD2FileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-            setFile("Tome of D2", file);
+            setImportFile(file);
         }
     };
 
@@ -84,48 +118,73 @@ function RouteComponent() {
         );
     }
 
-    if (type === "Tome of D2") {
-        return <ImportTomeOfD2Data />;
+    if (importType && importFile) {
+        return <ImportGrailData importType={importType} file={importFile} setFile={setFile} />;
     }
 
     return (
         <>
             <div className="max-w-lg mx-auto pt-8 flex flex-col gap-8">
-                <div>
+                <div className="flex flex-col gap-4">
                     <Heading className="text-destructive">Import Holy Grail Data</Heading>
-                    <div className="flex flex-col gap-4">
-                        <div className="flex flex-col gap-2">
-                            <div>
-                                Use the button below to import a{" "}
+                    <div className="flex flex-col gap-2">
+                        <div className="flex gap-2 flex-wrap">
+                            <Select
+                                value={importType || ""}
+                                onValueChange={value => setImportType(value as ImportType)}
+                            >
+                                <SelectTrigger>
+                                    {importType ? (
+                                        <span className="text-muted-foreground">Import from:</span>
+                                    ) : null}
+                                    <SelectValue placeholder="Import from..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {Object.keys(IMPORT_TYPES).map(key => (
+                                        <SelectItem key={key} value={key}>
+                                            {key}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <Input
+                                type="file"
+                                accept={importType ? IMPORT_TYPES[importType].accept : undefined}
+                                onChange={onFileSelect}
+                                disabled={!importType}
+                                style={{ display: "none" }}
+                                id="import-file-input"
+                            />
+                            <Button
+                                onClick={() =>
+                                    document.getElementById("import-file-input")?.click()
+                                }
+                                disabled={!importType}
+                            >
+                                Choose file...
+                            </Button>
+                        </div>
+                        {importType === "Backup" ? (
+                            <div className="text-muted-foreground">
+                                Please choose a backup file that was created using the export
+                                feature.
+                            </div>
+                        ) : importType === "Tome of D2" ? (
+                            <div className="text-muted-foreground">
+                                Please choose a{" "}
                                 <code className="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
                                     .txt
                                 </code>{" "}
-                                file from the Tome of D2 mobile application.
+                                file that was created using the backup feature of the Tome of D2
+                                mobile application.
                             </div>
-                            <div className="flex justify-start">
-                                <input
-                                    type="file"
-                                    accept=".txt"
-                                    onChange={onTomeOfD2FileSelect}
-                                    style={{ display: "none" }}
-                                    id="tome-of-d2-file-input"
-                                />
-                                <Button
-                                    onClick={() =>
-                                        document.getElementById("tome-of-d2-file-input")?.click()
-                                    }
-                                >
-                                    Import from Tome of D2
-                                </Button>
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <div>
-                                Use the button below to import a{" "}
+                        ) : importType === "d2-holy-grail" ? (
+                            <div className="text-muted-foreground">
+                                Please choose a{" "}
                                 <code className="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
                                     .json
                                 </code>{" "}
-                                file from{" "}
+                                file that was created using the export feature of the{" "}
                                 <a
                                     href="https://d2-holy-grail.herokuapp.com"
                                     className="underline-offset-4 hover:underline text-primary hover:text-primary/90"
@@ -133,16 +192,13 @@ function RouteComponent() {
                                     rel="noopener noreferrer"
                                 >
                                     d2-holy-grail
-                                </a>
-                                .
+                                </a>{" "}
+                                website.
                             </div>
-                            <div className="flex justify-start">
-                                <Button>Import from d2-holy-grail</Button>
-                            </div>
-                        </div>
+                        ) : null}
                     </div>
                 </div>
-                <div>
+                <div className="flex flex-col gap-4">
                     <Heading className="text-destructive">Reset Holy Grail</Heading>
                     <div className="flex flex-col gap-2">
                         <div>
