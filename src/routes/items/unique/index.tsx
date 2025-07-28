@@ -12,7 +12,7 @@ import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import type { UniqueItem } from "@/types/items";
 
 import { createFileRoute } from "@tanstack/react-router";
-import { CircleAlert } from "lucide-react";
+import { CircleAlertIcon } from "lucide-react";
 import { useEffect, useMemo } from "react";
 
 export const Route = createFileRoute("/items/unique/")({
@@ -75,7 +75,7 @@ function UniqueItemsPage() {
         return (
             <div className="max-w-2xl mx-auto pt-4">
                 <Alert variant="destructive">
-                    <CircleAlert />
+                    <CircleAlertIcon />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
                         Something went wrong when loading items. Please refresh the page or try

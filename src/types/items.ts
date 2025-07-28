@@ -33,7 +33,7 @@ export type BaseCategory =
     | "Necromancer Shrunken Heads"
     | "Paladin Shields";
 
-type UniqueCategory =
+export type UniqueCategory =
     | "Unique Armor"
     | "Exceptional Unique Armor"
     | "Elite Unique Armor"

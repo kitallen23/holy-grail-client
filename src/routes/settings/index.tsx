@@ -23,6 +23,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import ExportGrailData from "./-ExportGrailData";
 
 export const Route = createFileRoute("/settings/")({
     component: RouteComponent,
@@ -51,6 +52,8 @@ function RouteComponent() {
     const { setItems } = useGrailProgressStore();
     const { setPageContents } = useGrailPageStore();
 
+    const [exportType, setExportType] = useState<ImportType | undefined>(undefined);
+    const [exportPage, setExportPage] = useState<boolean>(false);
     const [importType, setImportType] = useState<ImportType | undefined>(undefined);
     const [importFile, setImportFile] = useState<File | undefined>(undefined);
 
@@ -64,17 +67,17 @@ function RouteComponent() {
         }
     };
 
-    useEffect(() => {
-        setVisibility(false);
-        return () => setVisibility(true);
-    }, []);
-
     const onFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             setImportFile(file);
         }
     };
+
+    useEffect(() => {
+        setVisibility(false);
+        return () => setVisibility(true);
+    }, []);
 
     const [resetModal, setResetModal] = useState(false);
     const [isResetting, setIsResetting] = useState(false);
@@ -121,6 +124,9 @@ function RouteComponent() {
     if (importType && importFile) {
         return <ImportGrailData importType={importType} file={importFile} setFile={setFile} />;
     }
+    if (exportType && exportPage) {
+        return <ExportGrailData exportType={exportType} onCancel={() => setExportPage(false)} />;
+    }
 
     return (
         <>
@@ -142,7 +148,7 @@ function RouteComponent() {
                                 <SelectContent>
                                     {Object.keys(IMPORT_TYPES).map(key => (
                                         <SelectItem key={key} value={key}>
-                                            {key}
+                                            {key === "Backup" ? "Backup (this website)" : key}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
@@ -185,6 +191,67 @@ function RouteComponent() {
                                     .json
                                 </code>{" "}
                                 file that was created using the export feature of the{" "}
+                                <a
+                                    href="https://d2-holy-grail.herokuapp.com"
+                                    className="underline-offset-4 hover:underline text-primary hover:text-primary/90"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    d2-holy-grail
+                                </a>{" "}
+                                website.
+                            </div>
+                        ) : null}
+                    </div>
+                </div>
+                <div className="flex flex-col gap-4">
+                    <Heading className="text-destructive">Export Holy Grail Data</Heading>
+                    <div className="flex flex-col gap-2">
+                        <div className="flex gap-2 flex-wrap">
+                            <Select
+                                value={exportType || ""}
+                                onValueChange={value => setExportType(value as ImportType)}
+                            >
+                                <SelectTrigger>
+                                    {exportType ? (
+                                        <span className="text-muted-foreground">Export for:</span>
+                                    ) : null}
+                                    <SelectValue placeholder="Export for..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {Object.keys(IMPORT_TYPES).map(key => (
+                                        <SelectItem key={key} value={key}>
+                                            {key === "Backup" ? "Backup (this website)" : key}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <Button onClick={() => setExportPage(true)} disabled={!exportType}>
+                                Export
+                            </Button>
+                        </div>
+                        {exportType === "Backup" ? (
+                            <div className="text-muted-foreground">
+                                Creates a backup of your Holy Grail so you can restore it at a later
+                                stage.
+                            </div>
+                        ) : exportType === "Tome of D2" ? (
+                            <div className="text-muted-foreground">
+                                Creates a{" "}
+                                <code className="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+                                    .txt
+                                </code>{" "}
+                                file that can be used to restore Holy Grail data in the Tome of D2
+                                mobile application. Note: this file is only compatible with Tome of
+                                D2 v5.
+                            </div>
+                        ) : exportType === "d2-holy-grail" ? (
+                            <div className="text-muted-foreground">
+                                Creates a{" "}
+                                <code className="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+                                    .json
+                                </code>{" "}
+                                file that can be used to restore Holy Grail data on the{" "}
                                 <a
                                     href="https://d2-holy-grail.herokuapp.com"
                                     className="underline-offset-4 hover:underline text-primary hover:text-primary/90"

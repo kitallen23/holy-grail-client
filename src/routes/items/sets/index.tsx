@@ -5,7 +5,7 @@ import type { WithKey } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
 import type { SetItem, Tier } from "@/types/items";
 import { createFileRoute } from "@tanstack/react-router";
-import { CircleAlert } from "lucide-react";
+import { CircleAlertIcon } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import SetTier from "@/routes/items/sets/-SetTier";
 import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
@@ -72,7 +72,7 @@ function SetItemsPage() {
         return (
             <div className="max-w-2xl mx-auto pt-4">
                 <Alert variant="destructive">
-                    <CircleAlert />
+                    <CircleAlertIcon />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
                         Something went wrong when loading items. Please refresh the page or try

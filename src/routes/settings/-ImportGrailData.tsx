@@ -9,20 +9,20 @@ import {
     getItemsToImport_TomeOfD2,
     type External_D2HolyGrailData,
     type External_TomeOfD2GrailData,
-} from "@/lib/adapters/import";
+} from "@/lib/adapters/import-export";
 import { bulkSetUserItems } from "@/lib/api";
 import { delay } from "@/lib/utils";
 import { useGrailPageStore } from "@/stores/useGrailPageStore";
 import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
 import { useNavigate } from "@tanstack/react-router";
-import { CircleAlert, CloudCheckIcon, LoaderCircleIcon } from "lucide-react";
+import { CircleAlertIcon, CloudCheckIcon, LoaderCircleIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import type { ImportType } from ".";
 
 type Props = {
     file?: File;
-    importType?: ImportType;
+    importType: ImportType;
     setFile: {
         (type: ImportType, file: File): void;
         (): void;
@@ -155,7 +155,7 @@ const ImportGrailData = ({ file, importType, setFile }: Props) => {
         return (
             <div className="max-w-lg mx-auto pt-4">
                 <Alert variant="destructive">
-                    <CircleAlert />
+                    <CircleAlertIcon />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
                         Something went wrong when loading data. Please refresh the page or try again
@@ -169,7 +169,7 @@ const ImportGrailData = ({ file, importType, setFile }: Props) => {
         return (
             <div className="max-w-lg mx-auto pt-4">
                 <Alert variant="destructive">
-                    <CircleAlert />
+                    <CircleAlertIcon />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
                         <div>Something went wrong when processing the file.</div>
