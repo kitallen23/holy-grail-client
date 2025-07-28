@@ -5,10 +5,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGrailProgress, useItems } from "@/hooks/queries";
 import {
+    getItemsToImport_Backup,
     getItemsToImport_D2HolyGrail,
     getItemsToImport_TomeOfD2,
     type External_D2HolyGrailData,
     type External_TomeOfD2GrailData,
+    type Internal_GrailData,
 } from "@/lib/adapters/import-export";
 import { bulkSetUserItems } from "@/lib/api";
 import { delay } from "@/lib/utils";
@@ -82,30 +84,39 @@ const ImportGrailData = ({ file, importType, setFile }: Props) => {
     }, [file]);
 
     const [externalImportData, setExternalImportData] = useState<{
-        found: string[];
-        notFound: string[];
+        found: Internal_GrailData;
+        notFound: Internal_GrailData;
     }>();
     const externalCount =
         (externalImportData?.found.length ?? 0) + (externalImportData?.notFound.length ?? 0);
 
     useEffect(() => {
         if (grailProgress && fileContents && data) {
-            if (importType === "Tome of D2") {
-                setExternalImportData(
-                    getItemsToImport_TomeOfD2(
-                        grailProgress,
-                        fileContents as External_TomeOfD2GrailData,
-                        data
-                    )
-                );
-            } else if (importType === "d2-holy-grail") {
-                setExternalImportData(
-                    getItemsToImport_D2HolyGrail(
-                        grailProgress,
-                        fileContents as External_D2HolyGrailData,
-                        data
-                    )
-                );
+            try {
+                if (importType === "Tome of D2") {
+                    setExternalImportData(
+                        getItemsToImport_TomeOfD2(
+                            grailProgress,
+                            fileContents as External_TomeOfD2GrailData,
+                            data
+                        )
+                    );
+                } else if (importType === "d2-holy-grail") {
+                    setExternalImportData(
+                        getItemsToImport_D2HolyGrail(
+                            grailProgress,
+                            fileContents as External_D2HolyGrailData,
+                            data
+                        )
+                    );
+                } else if (importType === "Backup") {
+                    setExternalImportData(
+                        getItemsToImport_Backup(grailProgress, fileContents as Internal_GrailData)
+                    );
+                }
+            } catch (error) {
+                console.error(`Error: `, error);
+                setFileError(true);
             }
         }
     }, [grailProgress, fileContents, data]);
@@ -126,9 +137,7 @@ const ImportGrailData = ({ file, importType, setFile }: Props) => {
 
         setIsImporting(true);
         try {
-            const payload: { itemKey: string }[] = externalImportData?.notFound.map(itemKey => ({
-                itemKey,
-            }));
+            const payload: Internal_GrailData = externalImportData?.notFound;
 
             await Promise.all([bulkSetUserItems(payload), delay(1000)]);
 
@@ -305,7 +314,9 @@ const ImportGrailData = ({ file, importType, setFile }: Props) => {
                         <DialogTitle>Items To Add</DialogTitle>
                     </DialogHeader>
                     <ul className="space-y-1 list-disc list-inside">
-                        {externalImportData?.notFound.map(item => <li key={item}>{item}</li>)}
+                        {externalImportData?.notFound.map(item => (
+                            <li key={item.itemKey}>{item.itemKey}</li>
+                        ))}
                     </ul>
                 </DialogContent>
             </Dialog>
@@ -318,7 +329,9 @@ const ImportGrailData = ({ file, importType, setFile }: Props) => {
                         <DialogTitle>Items To Skip (Already Found)</DialogTitle>
                     </DialogHeader>
                     <ul className="space-y-1 list-disc list-inside">
-                        {externalImportData?.found.map(item => <li key={item}>{item}</li>)}
+                        {externalImportData?.found.map(item => (
+                            <li key={item.itemKey}>{item.itemKey}</li>
+                        ))}
                     </ul>
                 </DialogContent>
             </Dialog>

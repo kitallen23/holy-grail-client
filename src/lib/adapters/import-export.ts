@@ -3,6 +3,9 @@ import type { GrailProgressItem } from "../api";
 import tomeOfD2SetItems from "./tome-of-d2/sets.json";
 import tomeOfD2UniqueItems from "./tome-of-d2/uniques.json";
 
+type Internal_GrailItem = { itemKey: string; found: boolean; foundAt?: string };
+export type Internal_GrailData = Internal_GrailItem[];
+
 type TomeOfD2GrailItem = [number, "unique" | "set", number];
 export type External_TomeOfD2GrailData = { grail: TomeOfD2GrailItem[] };
 
@@ -49,12 +52,39 @@ const ITEM_NAME_MAP_TOME_OF_D2: Record<string, string> = {
     "Tal Rasha's Fine Spun Cloth": "Tal Rasha's Fine-Spun Cloth",
 };
 
+export function getItemsToImport_Backup(
+    internalProgress: Record<string, GrailProgressItem>,
+    externalProgress: Internal_GrailData
+): { found: Internal_GrailItem[]; notFound: Internal_GrailItem[] } {
+    const itemsToImport: { found: Internal_GrailItem[]; notFound: Internal_GrailItem[] } = {
+        found: [],
+        notFound: [],
+    };
+
+    externalProgress.forEach(({ itemKey, found, foundAt }) => {
+        if (!found) {
+            return;
+        }
+        const internalProgressItem = internalProgress[itemKey];
+        if (internalProgressItem) {
+            itemsToImport.found.push({ itemKey, foundAt: foundAt || undefined, found: true });
+        } else {
+            itemsToImport.notFound.push({ itemKey, foundAt: foundAt || undefined, found: true });
+        }
+    });
+
+    return {
+        found: itemsToImport.found.sort((a, b) => a.itemKey.localeCompare(b.itemKey)),
+        notFound: itemsToImport.notFound.sort((a, b) => a.itemKey.localeCompare(b.itemKey)),
+    };
+}
+
 export function getItemsToImport_TomeOfD2(
     internalProgress: Record<string, GrailProgressItem>,
     externalProgress: External_TomeOfD2GrailData,
     items: Partial<Items>
-): { found: string[]; notFound: string[] } {
-    const itemsToImport: { found: string[]; notFound: string[] } = {
+): { found: Internal_GrailItem[]; notFound: Internal_GrailItem[] } {
+    const itemsToImport: { found: Internal_GrailItem[]; notFound: Internal_GrailItem[] } = {
         found: [],
         notFound: [],
     };
@@ -100,9 +130,9 @@ export function getItemsToImport_TomeOfD2(
     itemsToCheck.forEach(key => {
         const internalProgressItem = internalProgress[key];
         if (internalProgressItem) {
-            itemsToImport.found.push(key);
+            itemsToImport.found.push({ itemKey: key, found: true });
         } else {
-            itemsToImport.notFound.push(key);
+            itemsToImport.notFound.push({ itemKey: key, found: true });
         }
     });
 
@@ -121,12 +151,12 @@ export function getItemsToImport_D2HolyGrail(
     internalProgress: Record<string, GrailProgressItem>,
     externalProgress: External_D2HolyGrailData,
     items: Partial<Items>
-): { found: string[]; notFound: string[] } {
+): { found: Internal_GrailItem[]; notFound: Internal_GrailItem[] } {
     const allInternalItemKeys = Object.keys(items.uniqueItems ?? {})
         .concat(Object.keys(items.setItems ?? {}))
         .concat(Object.keys(items.runes ?? {}));
 
-    const itemsToImport: { found: string[]; notFound: string[] } = {
+    const itemsToImport: { found: Internal_GrailItem[]; notFound: Internal_GrailItem[] } = {
         found: [],
         notFound: [],
     };
@@ -214,9 +244,9 @@ export function getItemsToImport_D2HolyGrail(
 
         const internalProgressItem = internalProgress[key];
         if (internalProgressItem) {
-            itemsToImport.found.push(key);
+            itemsToImport.found.push({ itemKey: key, found: true });
         } else {
-            itemsToImport.notFound.push(key);
+            itemsToImport.notFound.push({ itemKey: key, found: true });
         }
     });
 
@@ -225,8 +255,6 @@ export function getItemsToImport_D2HolyGrail(
         notFound: itemsToImport.notFound.sort(),
     };
 }
-
-export type Internal_GrailData = { itemKey: string; found: boolean; foundAt: string }[];
 
 export function prepareExportData_Backup(grailProgress: Record<string, GrailProgressItem>): {
     count: number;

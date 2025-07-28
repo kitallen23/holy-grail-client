@@ -42,7 +42,7 @@ export const fetchRunewords = () => api.get("runewords").json();
 export const fetchUserItems = () => api.get("user-items").json<UserItemsResponse>();
 export const setUserItem = (itemKey: string, found: boolean) =>
     api.post("user-items/set", { json: { itemKey, found } });
-export const bulkSetUserItems = (items: { itemKey: string; foundAt?: string }[]) =>
+export const bulkSetUserItems = (items: { itemKey: string; foundAt?: string; found: boolean }[]) =>
     api.post("user-items/set-bulk", { json: { items } });
 export const clearUserItems = () => api.delete("user-items/clear").json();
 

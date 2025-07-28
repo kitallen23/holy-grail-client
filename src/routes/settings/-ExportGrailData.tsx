@@ -152,8 +152,13 @@ const ExportGrailData = ({ exportType, onCancel }: Props) => {
     };
 
     useEffect(() => {
-        if (grailProgress && data && Object.keys(grailProgress).length && isReady) {
-            onExport(exportType, grailProgress, data);
+        if (grailProgress && data && isReady) {
+            if (!grailProgress.length) {
+                toast.error("No Holy Grail data to export.");
+                onCancel();
+            } else {
+                onExport(exportType, grailProgress, data);
+            }
         }
     }, [exportType, grailProgress, data, isReady]);
 
