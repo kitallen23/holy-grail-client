@@ -108,6 +108,11 @@ function RouteComponent() {
         }
     };
 
+    const onExportCancel = () => {
+        setExportPage(false);
+        setExportType(undefined);
+    };
+
     if (isLoading) {
         return null;
     }
@@ -125,7 +130,7 @@ function RouteComponent() {
         return <ImportGrailData importType={importType} file={importFile} setFile={setFile} />;
     }
     if (exportType && exportPage) {
-        return <ExportGrailData exportType={exportType} onCancel={() => setExportPage(false)} />;
+        return <ExportGrailData exportType={exportType} onCancel={onExportCancel} />;
     }
 
     return (
@@ -251,7 +256,7 @@ function RouteComponent() {
                                 <code className="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
                                     .json
                                 </code>{" "}
-                                file that can be used to restore Holy Grail data on the{" "}
+                                file in the format that{" "}
                                 <a
                                     href="https://d2-holy-grail.herokuapp.com"
                                     className="underline-offset-4 hover:underline text-primary hover:text-primary/90"
@@ -260,7 +265,7 @@ function RouteComponent() {
                                 >
                                     d2-holy-grail
                                 </a>{" "}
-                                website.
+                                uses on their website.
                             </div>
                         ) : null}
                     </div>

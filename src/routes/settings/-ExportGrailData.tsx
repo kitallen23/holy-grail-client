@@ -1,7 +1,7 @@
 import { useGrailProgress, useItems } from "@/hooks/queries";
 import type { ImportType } from ".";
 import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CircleAlertIcon, LoaderCircleIcon } from "lucide-react";
 import Heading from "@/components/Heading";
@@ -33,7 +33,7 @@ const ExportGrailData = ({ exportType, onCancel }: Props) => {
     const totalItemCount =
         Object.keys(uniqueItems || {}).length +
         Object.keys(setItems || {}).length +
-        Object.keys(runes || {}).length;
+        (exportType === "Backup" ? Object.keys(runes || {}).length : 0);
 
     const [isReady, setIsReady] = useState(false);
     useEffect(() => {
@@ -51,7 +51,22 @@ const ExportGrailData = ({ exportType, onCancel }: Props) => {
     } = useGrailProgress();
 
     const { items: grailProgress, setItems: setGrailItems } = useGrailProgressStore();
-    const foundItemCount = Object.keys(grailProgress || {}).length;
+
+    const foundItemCount = useMemo(() => {
+        if (!runes || !grailProgress) {
+            return 0;
+        }
+
+        if (exportType === "Backup") {
+            return Object.keys(grailProgress || {}).length;
+        } else {
+            const runeKeys = Object.keys(runes);
+            const nonRuneProgress = Object.keys(grailProgress).filter(
+                itemKey => !runeKeys.includes(itemKey)
+            );
+            return nonRuneProgress.length;
+        }
+    }, [runes, grailProgress, exportType]);
 
     useEffect(() => {
         // Only initialise our grailProgress store's items if it's not already populated
@@ -105,6 +120,9 @@ const ExportGrailData = ({ exportType, onCancel }: Props) => {
 
             if (!exportData) {
                 throw new Error();
+            } else if (exportData.count === 0) {
+                toast.error("No items to export.");
+                throw "No items to export";
             }
             setExportData(exportData);
 
@@ -174,21 +192,43 @@ const ExportGrailData = ({ exportType, onCancel }: Props) => {
                 </div>
             ) : (
                 <>
+                    {exportType === "d2-holy-grail" ? (
+                        <Alert variant="destructive">
+                            <CircleAlertIcon />
+                            <AlertTitle>Important information</AlertTitle>
+                            <AlertDescription>
+                                <div>
+                                    This exports in d2-holy-grail&apos;s format, but d2-holy-grail
+                                    doesn&apos;t accept imports of its own format for some reason.
+                                </div>
+                                <div>
+                                    You&apos;ll need to manually convert this to CSV or ask their
+                                    developer to support importing their own format.
+                                </div>
+                                <div>
+                                    <span className="font-bold">Bottom line:</span> you cannot
+                                    import this file into d2-holy-grail.
+                                </div>
+                            </AlertDescription>
+                        </Alert>
+                    ) : null}
                     <div className="flex flex-col gap-1">
                         <div>
-                            Grail items to export: {foundItemCount} / {totalItemCount}
+                            Grail items to export{" "}
+                            {exportType !== "Backup" ? "(excluding runes)" : null}: {foundItemCount}{" "}
+                            / {totalItemCount}
                         </div>
-                        <div>Grail items added to file: {exportData.count}</div>
-                        {exportType !== "Backup" && exportData.count !== foundItemCount ? (
-                            <div className="text-muted-foreground -indent-2 pl-2">
-                                Note: Small differences between these numbers are expected due to
-                                how each app tracks Holy Grail data.
+                        {exportType !== "Backup" ? (
+                            <div className="text-muted-foreground pl-2">
+                                Note: {exportType} doesn&apos;t track runes as part of their Holy
+                                Grail.
                             </div>
                         ) : null}
-                        {exportType !== "Backup" ? (
-                            <div className="text-muted-foreground -indent-2 pl-2">
-                                Note: {exportType} doesn&apos;t track runes as part of the Holy
-                                Grail.
+                        <div>Grail items added to file: {exportData.count}</div>
+                        {exportType !== "Backup" && exportData.count !== foundItemCount ? (
+                            <div className="text-muted-foreground pl-2">
+                                Note: Small differences between these numbers are expected due to
+                                how each app tracks Holy Grail data, such as Rainbow Facet jewels.
                             </div>
                         ) : null}
                     </div>
