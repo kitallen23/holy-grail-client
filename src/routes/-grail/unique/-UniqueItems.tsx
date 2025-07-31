@@ -4,7 +4,7 @@ import { getSearchableText, ITEM_CATEGORIES } from "@/routes/items/-utils";
 import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import type { UniqueItem } from "@/types/items";
 import { useEffect, useMemo } from "react";
-import UniqueItemCategory from "@/routes/-grail/unique/UniqueItemCategory";
+import UniqueItemCategory from "@/routes/-grail/unique/-UniqueItemCategory";
 import { useShowItemList } from "@/hooks/useShowItemList";
 import { useItemDialogStore } from "@/stores/useItemDialogStore";
 

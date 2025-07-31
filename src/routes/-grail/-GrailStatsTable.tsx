@@ -3,8 +3,8 @@ import type { Rune, SetItem, UniqueItem } from "@/types/items";
 import type { GrailProgressItem } from "@/lib/api";
 import { Progress } from "@/components/ui/progress";
 import { useMemo } from "react";
-import type { RowData } from "./types";
-import { buildTableRows } from "./utils";
+import type { RowData } from "./-types";
+import { buildTableRows } from "./-utils";
 
 interface GrailStatsTableProps {
     uniqueItems: Record<string, UniqueItem>;

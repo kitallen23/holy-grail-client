@@ -1,7 +1,7 @@
 import { useGrailProgress, useItems } from "@/hooks/queries";
-import GrailStatsTable from "./GrailStatsTable";
-import GrailRemainingItemSummary from "./GrailRemainingItemSummary";
-import GrailItemList from "./GrailItemList";
+import GrailStatsTable from "./-GrailStatsTable";
+import GrailRemainingItemSummary from "./-GrailRemainingItemSummary";
+import GrailItemList from "./-GrailItemList";
 import Heading from "@/components/Heading";
 import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import type { Items } from "@/types/items";
@@ -17,6 +17,7 @@ import { useEffect } from "react";
 import { BadgeInfoIcon, CircleAlertIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Link } from "@tanstack/react-router";
+import GrailHeatmap from "./-GrailHeatmap";
 
 const PAGE_CONTENTS_KEYS = ["Summary", "Item List"] as const;
 
@@ -143,6 +144,8 @@ export default function GrailPage() {
                             grailProgress={grailProgress}
                         />
                     </div>
+
+                    <GrailHeatmap />
 
                     <GrailRemainingItemSummary
                         uniqueItems={uniqueItems!}

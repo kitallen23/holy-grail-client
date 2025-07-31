@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
-import type { UniqueBase } from "./utils";
+import type { UniqueBase } from "./-utils";
 
 type Props = {
     uniqueBase: UniqueBase;

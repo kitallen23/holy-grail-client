@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import type { UniqueItem } from "@/types/items";
-import UniqueItemSubcategory from "./UniqueItemSubcategory.tsx";
+import UniqueItemSubcategory from "./-UniqueItemSubcategory.tsx";
 import type {
     TopLevelCategory,
     UniqueBaseCategory,

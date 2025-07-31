@@ -5,7 +5,7 @@ import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
 import type { SetItem } from "@/types/items";
 import { useEffect, useMemo } from "react";
 import { SETS } from "@/routes/items/sets/-utils";
-import ItemSet from "@/routes/-grail/sets/ItemSet";
+import ItemSet from "@/routes/-grail/sets/-ItemSet";
 import clsx from "clsx";
 import Heading from "@/components/Heading";
 import { useShowItemList } from "@/hooks/useShowItemList";

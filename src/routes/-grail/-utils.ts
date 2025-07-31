@@ -1,5 +1,5 @@
 import type { BaseItem, Rune, SetItem, UniqueItem } from "@/types/items";
-import type { RowData } from "./types";
+import type { RowData } from "./-types";
 import type { GrailProgressItem } from "@/lib/api";
 import type { WithKey } from "@/routes/items/-types";
 import { ITEM_CATEGORIES } from "@/routes/items/-utils";

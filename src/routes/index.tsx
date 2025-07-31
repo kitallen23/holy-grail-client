@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import GrailPage from "@/routes/-grail/GrailPage";
+import GrailPage from "@/routes/-grail/-GrailPage";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 import { useSearchBar } from "@/stores/useSearchStore";

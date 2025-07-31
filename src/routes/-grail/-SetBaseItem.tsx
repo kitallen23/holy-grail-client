@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
-import type { SetBase } from "./utils";
+import type { SetBase } from "./-utils";
 
 type Props = {
     setBase: SetBase;
