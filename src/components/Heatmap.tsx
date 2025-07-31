@@ -1,5 +1,6 @@
 import { useMemo, useRef, useEffect, useLayoutEffect, useState } from "react";
 import { clsx } from "clsx";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface HeatmapData {
     date: string; // ISO date string
@@ -117,20 +118,34 @@ export default function Heatmap({ data, color = "primary", ...rest }: HeatmapPro
         return `bg-${color}`;
     };
 
+    const formatDateForDisplay = (dateString: string): string => {
+        // Parse the YYYY-MM-DD string as a local date (not UTC)
+        const [year, month, day] = dateString.split("-").map(Number);
+        const date = new Date(year, month - 1, day); // month is 0-indexed
+        return date.toLocaleDateString();
+    };
+
     // Measure and calculate label positions after render
     useLayoutEffect(() => {
         const newPositions: Record<string, number> = {};
 
-        monthLabels.forEach(({ month, weekIndex }) => {
-            const labelElement = labelRefs.current[`${month}-${weekIndex}`];
-            if (labelElement) {
-                const textWidth = labelElement.getBoundingClientRect().width;
-                const remainingWeeks = totalWeeks - weekIndex;
-                const availableWidth = remainingWeeks * (512 / totalWeeks);
-                const overflow = Math.max(0, textWidth - availableWidth);
-                newPositions[`${month}-${weekIndex}`] = overflow > 0 ? -overflow : 0;
-            }
-        });
+        const gridContainer = scrollContainerRef.current?.querySelector(".grid.h-4") as HTMLElement;
+
+        if (gridContainer) {
+            const actualContainerWidth = gridContainer.getBoundingClientRect().width;
+            const actualColumnWidth = actualContainerWidth / totalWeeks;
+
+            monthLabels.forEach(({ month, weekIndex }) => {
+                const labelElement = labelRefs.current[`${month}-${weekIndex}`];
+                if (labelElement) {
+                    const textWidth = labelElement.scrollWidth;
+                    const remainingWeeks = totalWeeks - weekIndex;
+                    const availableWidth = remainingWeeks * actualColumnWidth;
+                    const overflow = Math.max(0, textWidth - availableWidth);
+                    newPositions[`${month}-${weekIndex}`] = overflow > 0 ? -overflow : 0;
+                }
+            });
+        }
 
         setLabelPositions(newPositions);
     }, [monthLabels, totalWeeks]);
@@ -163,10 +178,10 @@ export default function Heatmap({ data, color = "primary", ...rest }: HeatmapPro
                                     ref={el => {
                                         labelRefs.current[labelKey] = el;
                                     }}
-                                    className="text-xs text-muted-foreground relative"
+                                    className="text-xs text-muted-foreground"
                                     style={{
                                         gridColumn: weekIndex + 1,
-                                        left: `${leftOffset}px`,
+                                        transform: `translateX(${leftOffset}px)`,
                                     }}
                                 >
                                     {month}
@@ -185,18 +200,25 @@ export default function Heatmap({ data, color = "primary", ...rest }: HeatmapPro
                         }}
                     >
                         {cells.map(({ data, gridColumn, gridRow }) => (
-                            <div
-                                key={data.date}
-                                className={clsx(
-                                    "aspect-square rounded-xs",
-                                    getIntensityClass(data.count)
-                                )}
-                                style={{
-                                    gridColumn,
-                                    gridRow,
-                                }}
-                                title={`${data.date}: ${data.count} items`}
-                            />
+                            <Tooltip key={data.date} delayDuration={400}>
+                                <TooltipTrigger asChild>
+                                    <div
+                                        className={clsx(
+                                            "aspect-square rounded-xs",
+                                            getIntensityClass(data.count)
+                                        )}
+                                        style={{
+                                            gridColumn,
+                                            gridRow,
+                                        }}
+                                        title={`${data.date}: ${data.count} items`}
+                                    />
+                                </TooltipTrigger>
+
+                                <TooltipContent>
+                                    {formatDateForDisplay(data.date)}: {data.count} items
+                                </TooltipContent>
+                            </Tooltip>
                         ))}
                     </div>
                 </div>
