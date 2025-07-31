@@ -72,23 +72,34 @@ export default function Heatmap({ data, color = "primary", ...rest }: HeatmapPro
             });
         }
 
-        // Calculate month labels positions
+        // Calculate month labels positions - only show when month dominates the week
         const monthLabels: { month: string; weekIndex: number }[] = [];
-        let currentMonth = -1;
+        let lastLabeledMonth = -1;
 
         for (let week = 0; week < totalWeeks; week++) {
-            const firstDayOfWeek = cells.find(cell => cell.gridColumn === week + 1);
-            if (firstDayOfWeek) {
-                const date = new Date(firstDayOfWeek.data.date);
-                const month = date.getMonth();
+            // Get all days in this week column
+            const daysInWeek = cells.filter(cell => cell.gridColumn === week + 1);
 
-                if (month !== currentMonth) {
-                    monthLabels.push({
-                        month: MONTHS[month],
-                        weekIndex: week,
-                    });
-                    currentMonth = month;
-                }
+            // Count days per month in this week
+            const monthCounts = new Map<number, number>();
+            daysInWeek.forEach(cell => {
+                const date = new Date(cell.data.date);
+                const month = date.getMonth();
+                monthCounts.set(month, (monthCounts.get(month) || 0) + 1);
+            });
+
+            // Find month that has all 7 days in this week
+            const fullWeekMonth = Array.from(monthCounts.entries()).find(
+                ([, count]) => count === 7
+            )?.[0];
+
+            // Add label if full week month exists and is different from previous week
+            if (fullWeekMonth !== undefined && fullWeekMonth !== lastLabeledMonth) {
+                monthLabels.push({
+                    month: MONTHS[fullWeekMonth],
+                    weekIndex: week,
+                });
+                lastLabeledMonth = fullWeekMonth;
             }
         }
 
