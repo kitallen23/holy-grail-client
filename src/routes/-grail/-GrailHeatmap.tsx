@@ -22,10 +22,11 @@ function GrailHeatmap() {
 
         Object.values(grailProgress).forEach(item => {
             if (item.found && item.foundAt) {
-                // Extract date part (YYYY-MM-DD) from ISO string
-                const dateKey = item.foundAt.split("T")[0];
-                const currentCount = dateCountMap.get(dateKey) || 0;
-                dateCountMap.set(dateKey, currentCount + 1);
+                // Convert ISO string to local date to avoid timezone issues
+                const foundDate = new Date(item.foundAt);
+                const localDateKey = `${foundDate.getFullYear()}-${String(foundDate.getMonth() + 1).padStart(2, "0")}-${String(foundDate.getDate()).padStart(2, "0")}`;
+                const currentCount = dateCountMap.get(localDateKey) || 0;
+                dateCountMap.set(localDateKey, currentCount + 1);
             }
         });
 
@@ -40,11 +41,7 @@ function GrailHeatmap() {
         return null;
     }
 
-    return (
-        <div>
-            <Heatmap className="mx-auto" data={heatmapData} color="primary" />
-        </div>
-    );
+    return <Heatmap className="mx-auto max-w-xl w-full" data={heatmapData} color="primary" />;
 }
 
 export default GrailHeatmap;

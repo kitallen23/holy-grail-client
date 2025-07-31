@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useRef, useEffect } from "react";
 import { clsx } from "clsx";
 
 interface HeatmapData {
@@ -6,7 +6,7 @@ interface HeatmapData {
     count: number;
 }
 
-interface HeatmapProps {
+interface HeatmapProps extends React.HTMLAttributes<HTMLDivElement> {
     data: HeatmapData[];
     color?: string;
     className?: string;
@@ -16,12 +16,15 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 
 const DAYS_IN_WEEK = 7;
 
-export default function Heatmap({ data, color = "primary", className }: HeatmapProps) {
-    const { grid, monthLabels } = useMemo(() => {
+export default function Heatmap({ data, color = "primary", ...rest }: HeatmapProps) {
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    const { cells, monthLabels, totalWeeks } = useMemo(() => {
         // Create a map of date -> count for quick lookup
         const dataMap = new Map<string, number>();
         data.forEach(item => {
-            const dateKey = item.date.split("T")[0]; // Get YYYY-MM-DD part
+            // Ensure we're using the date as-is (already in local timezone format from GrailHeatmap)
+            const dateKey = item.date.includes("T") ? item.date.split("T")[0] : item.date;
             dataMap.set(dateKey, item.count);
         });
 
@@ -39,34 +42,34 @@ export default function Heatmap({ data, color = "primary", className }: HeatmapP
         const totalDays =
             Math.floor((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
 
-        // Since we start on Monday, startDayOfWeek is always 0
-        const startDayOfWeek = 0;
-
         // Calculate total weeks needed
         const totalWeeks = Math.ceil(totalDays / DAYS_IN_WEEK);
 
-        // Create the grid
-        const grid: (HeatmapData | null)[][] = [];
-        for (let week = 0; week < totalWeeks; week++) {
-            const weekData: (HeatmapData | null)[] = [];
-            for (let day = 0; day < DAYS_IN_WEEK; day++) {
-                const dayIndex = week * DAYS_IN_WEEK + day - startDayOfWeek;
+        // Create flat array of cells with grid positions
+        const cells: Array<{
+            data: HeatmapData;
+            gridColumn: number;
+            gridRow: number;
+        }> = [];
 
-                if (dayIndex < 0 || dayIndex >= totalDays) {
-                    weekData.push(null); // Empty space
-                } else {
-                    const currentDate = new Date(startDate);
-                    currentDate.setDate(startDate.getDate() + dayIndex);
-                    const dateKey = currentDate.toISOString().split("T")[0];
-                    const count = dataMap.get(dateKey) || 0;
+        for (let dayIndex = 0; dayIndex < totalDays; dayIndex++) {
+            const currentDate = new Date(startDate);
+            currentDate.setDate(startDate.getDate() + dayIndex);
+            // Use local date formatting to avoid timezone conversion issues
+            const dateKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
+            const count = dataMap.get(dateKey) || 0;
 
-                    weekData.push({
-                        date: dateKey,
-                        count,
-                    });
-                }
-            }
-            grid.push(weekData);
+            const week = Math.floor(dayIndex / DAYS_IN_WEEK);
+            const dayOfWeek = dayIndex % DAYS_IN_WEEK;
+
+            cells.push({
+                data: {
+                    date: dateKey,
+                    count,
+                },
+                gridColumn: week + 1,
+                gridRow: dayOfWeek + 1,
+            });
         }
 
         // Calculate month labels positions
@@ -74,9 +77,9 @@ export default function Heatmap({ data, color = "primary", className }: HeatmapP
         let currentMonth = -1;
 
         for (let week = 0; week < totalWeeks; week++) {
-            const firstDayOfWeek = grid[week].find(day => day !== null);
+            const firstDayOfWeek = cells.find(cell => cell.gridColumn === week + 1);
             if (firstDayOfWeek) {
-                const date = new Date(firstDayOfWeek.date);
+                const date = new Date(firstDayOfWeek.data.date);
                 const month = date.getMonth();
 
                 if (month !== currentMonth) {
@@ -89,7 +92,7 @@ export default function Heatmap({ data, color = "primary", className }: HeatmapP
             }
         }
 
-        return { grid, monthLabels };
+        return { cells, monthLabels, totalWeeks };
     }, [data]);
 
     const getIntensityClass = (count: number): string => {
@@ -101,20 +104,30 @@ export default function Heatmap({ data, color = "primary", className }: HeatmapP
         return `bg-${color}`;
     };
 
+    // Auto-scroll to the right (most recent data) on mount and data changes
+    useEffect(() => {
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+        }
+    }, [data]);
+
     return (
-        <div className={clsx("w-lg", className)}>
-            {/* Scrollable container */}
-            <div className="overflow-x-auto">
-                <div className="flex flex-col gap-2 min-w-fit">
+        <div {...rest}>
+            <div ref={scrollContainerRef} className="overflow-x-auto">
+                <div className="flex flex-col gap-2" style={{ minWidth: "512px" }}>
                     {/* Month labels */}
-                    <div className="relative h-4">
+                    <div
+                        className="grid h-4"
+                        style={{
+                            gridTemplateColumns: `repeat(${totalWeeks}, minmax(8px, 1fr))`,
+                        }}
+                    >
                         {monthLabels.map(({ month, weekIndex }) => (
                             <div
                                 key={`${month}-${weekIndex}`}
-                                className="absolute text-xs text-muted-foreground"
+                                className="text-xs text-muted-foreground"
                                 style={{
-                                    left: `${weekIndex * 14}px`, // 12px square + 2px gap
-                                    top: 0,
+                                    gridColumn: weekIndex + 1,
                                 }}
                             >
                                 {month}
@@ -123,20 +136,27 @@ export default function Heatmap({ data, color = "primary", className }: HeatmapP
                     </div>
 
                     {/* Heatmap grid */}
-                    <div className="flex gap-0.5">
-                        {grid.map((week, weekIndex) => (
-                            <div key={weekIndex} className="flex flex-col gap-0.5">
-                                {week.map((day, dayIndex) => (
-                                    <div
-                                        key={`${weekIndex}-${dayIndex}`}
-                                        className={clsx(
-                                            "w-3 h-3 rounded-sm",
-                                            day ? getIntensityClass(day.count) : "transparent"
-                                        )}
-                                        title={day ? `${day.date}: ${day.count} items` : undefined}
-                                    />
-                                ))}
-                            </div>
+                    <div
+                        className="grid gap-[2px]"
+                        style={{
+                            gridTemplateColumns: `repeat(${totalWeeks}, minmax(8px, 1fr))`,
+                            gridTemplateRows: `repeat(${DAYS_IN_WEEK}, minmax(8px, 1fr))`,
+                            aspectRatio: `${totalWeeks} / ${DAYS_IN_WEEK}`,
+                        }}
+                    >
+                        {cells.map(({ data, gridColumn, gridRow }) => (
+                            <div
+                                key={data.date}
+                                className={clsx(
+                                    "aspect-square rounded-xs",
+                                    getIntensityClass(data.count)
+                                )}
+                                style={{
+                                    gridColumn,
+                                    gridRow,
+                                }}
+                                title={`${data.date}: ${data.count} items`}
+                            />
                         ))}
                     </div>
                 </div>
