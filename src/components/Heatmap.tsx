@@ -1,4 +1,4 @@
-import { useMemo, useRef, useEffect } from "react";
+import { useMemo, useRef, useEffect, useLayoutEffect, useState } from "react";
 import { clsx } from "clsx";
 
 interface HeatmapData {
@@ -18,6 +18,8 @@ const DAYS_IN_WEEK = 7;
 
 export default function Heatmap({ data, color = "primary", ...rest }: HeatmapProps) {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [labelPositions, setLabelPositions] = useState<Record<string, number>>({});
+    const labelRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
     const { cells, monthLabels, totalWeeks } = useMemo(() => {
         // Create a map of date -> count for quick lookup
@@ -115,6 +117,24 @@ export default function Heatmap({ data, color = "primary", ...rest }: HeatmapPro
         return `bg-${color}`;
     };
 
+    // Measure and calculate label positions after render
+    useLayoutEffect(() => {
+        const newPositions: Record<string, number> = {};
+
+        monthLabels.forEach(({ month, weekIndex }) => {
+            const labelElement = labelRefs.current[`${month}-${weekIndex}`];
+            if (labelElement) {
+                const textWidth = labelElement.getBoundingClientRect().width;
+                const remainingWeeks = totalWeeks - weekIndex;
+                const availableWidth = remainingWeeks * (512 / totalWeeks);
+                const overflow = Math.max(0, textWidth - availableWidth);
+                newPositions[`${month}-${weekIndex}`] = overflow > 0 ? -overflow : 0;
+            }
+        });
+
+        setLabelPositions(newPositions);
+    }, [monthLabels, totalWeeks]);
+
     // Auto-scroll to the right (most recent data) on mount and data changes
     useEffect(() => {
         if (scrollContainerRef.current) {
@@ -133,17 +153,26 @@ export default function Heatmap({ data, color = "primary", ...rest }: HeatmapPro
                             gridTemplateColumns: `repeat(${totalWeeks}, minmax(8px, 1fr))`,
                         }}
                     >
-                        {monthLabels.map(({ month, weekIndex }) => (
-                            <div
-                                key={`${month}-${weekIndex}`}
-                                className="text-xs text-muted-foreground"
-                                style={{
-                                    gridColumn: weekIndex + 1,
-                                }}
-                            >
-                                {month}
-                            </div>
-                        ))}
+                        {monthLabels.map(({ month, weekIndex }) => {
+                            const labelKey = `${month}-${weekIndex}`;
+                            const leftOffset = labelPositions[labelKey] || 0;
+
+                            return (
+                                <div
+                                    key={labelKey}
+                                    ref={el => {
+                                        labelRefs.current[labelKey] = el;
+                                    }}
+                                    className="text-xs text-muted-foreground relative"
+                                    style={{
+                                        gridColumn: weekIndex + 1,
+                                        left: `${leftOffset}px`,
+                                    }}
+                                >
+                                    {month}
+                                </div>
+                            );
+                        })}
                     </div>
 
                     {/* Heatmap grid */}
