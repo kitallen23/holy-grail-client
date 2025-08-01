@@ -1,6 +1,6 @@
 import { useMemo, useRef, useEffect, useLayoutEffect, useState } from "react";
-import { clsx } from "clsx";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import MonthLabels from "./MonthLabels";
+import HeatmapGrid from "./HeatmapGrid";
 
 interface HeatmapData {
     date: string; // ISO date string
@@ -9,7 +9,6 @@ interface HeatmapData {
 
 interface HeatmapProps extends React.HTMLAttributes<HTMLDivElement> {
     data: HeatmapData[];
-    color?: string;
     className?: string;
 }
 
@@ -17,7 +16,7 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 
 const DAYS_IN_WEEK = 7;
 
-export default function Heatmap({ data, color = "primary", ...rest }: HeatmapProps) {
+export default function Heatmap({ data, ...rest }: HeatmapProps) {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [labelPositions, setLabelPositions] = useState<Record<string, number>>({});
     const labelRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -109,27 +108,6 @@ export default function Heatmap({ data, color = "primary", ...rest }: HeatmapPro
         return { cells, monthLabels, totalWeeks };
     }, [data]);
 
-    const getIntensityClass = (count: number): string => {
-        if (count === 0) return "bg-surface";
-        if (count === 1) return `bg-${color}/20`;
-        if (count === 2) return `bg-${color}/40`;
-        if (count === 3) return `bg-${color}/60`;
-        if (count === 4) return `bg-${color}/80`;
-        return `bg-${color}`;
-    };
-
-    const formatDateForDisplay = (dateString: string): string => {
-        // Parse the YYYY-MM-DD string as a local date (not UTC)
-        const [year, month, day] = dateString.split("-").map(Number);
-        const date = new Date(year, month - 1, day); // month is 0-indexed
-        return date.toLocaleDateString();
-    };
-
-    // Clear refs when month labels change to prevent memory leaks
-    useLayoutEffect(() => {
-        labelRefs.current = {};
-    }, [monthLabels]);
-
     // Measure and calculate label positions after render
     useLayoutEffect(() => {
         const newPositions: Record<string, number> = {};
@@ -166,65 +144,14 @@ export default function Heatmap({ data, color = "primary", ...rest }: HeatmapPro
         <div {...rest}>
             <div ref={scrollContainerRef} className="overflow-x-auto">
                 <div className="flex flex-col gap-2 min-w-lg">
-                    {/* Month labels */}
-                    <div
-                        className="grid h-4"
-                        style={{
-                            gridTemplateColumns: `repeat(${totalWeeks}, minmax(8px, 1fr))`,
-                        }}
-                    >
-                        {monthLabels.map(({ month, weekIndex }) => {
-                            const labelKey = `${month}-${weekIndex}`;
-                            const leftOffset = labelPositions[labelKey] || 0;
+                    <MonthLabels
+                        monthLabels={monthLabels}
+                        totalWeeks={totalWeeks}
+                        labelPositions={labelPositions}
+                        labelRefs={labelRefs}
+                    />
 
-                            return (
-                                <div
-                                    key={labelKey}
-                                    ref={el => {
-                                        labelRefs.current[labelKey] = el;
-                                    }}
-                                    className="text-xs text-muted-foreground"
-                                    style={{
-                                        gridColumn: weekIndex + 1,
-                                        transform: `translateX(${leftOffset}px)`,
-                                    }}
-                                >
-                                    {month}
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                    {/* Heatmap grid */}
-                    <div
-                        className="grid gap-[2px]"
-                        style={{
-                            gridTemplateColumns: `repeat(${totalWeeks}, minmax(8px, 1fr))`,
-                            gridTemplateRows: `repeat(${DAYS_IN_WEEK}, minmax(8px, 1fr))`,
-                            aspectRatio: `${totalWeeks} / ${DAYS_IN_WEEK}`,
-                        }}
-                    >
-                        {cells.map(({ data, gridColumn, gridRow }) => (
-                            <Tooltip key={data.date} delayDuration={400}>
-                                <TooltipTrigger asChild>
-                                    <div
-                                        className={clsx(
-                                            "aspect-square rounded-xs",
-                                            getIntensityClass(data.count)
-                                        )}
-                                        style={{
-                                            gridColumn,
-                                            gridRow,
-                                        }}
-                                    />
-                                </TooltipTrigger>
-
-                                <TooltipContent>
-                                    {formatDateForDisplay(data.date)}: {data.count} items
-                                </TooltipContent>
-                            </Tooltip>
-                        ))}
-                    </div>
+                    <HeatmapGrid cells={cells} totalWeeks={totalWeeks} />
                 </div>
             </div>
         </div>

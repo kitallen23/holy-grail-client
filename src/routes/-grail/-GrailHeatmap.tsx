@@ -41,7 +41,7 @@ function GrailHeatmap() {
         return null;
     }
 
-    return <Heatmap className="mx-auto max-w-xl w-full" data={heatmapData} color="primary" />;
+    return <Heatmap className="mx-auto max-w-xl w-full" data={heatmapData} />;
 }
 
 export default GrailHeatmap;
