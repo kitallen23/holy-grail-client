@@ -125,6 +125,11 @@ export default function Heatmap({ data, color = "primary", ...rest }: HeatmapPro
         return date.toLocaleDateString();
     };
 
+    // Clear refs when month labels change to prevent memory leaks
+    useLayoutEffect(() => {
+        labelRefs.current = {};
+    }, [monthLabels]);
+
     // Measure and calculate label positions after render
     useLayoutEffect(() => {
         const newPositions: Record<string, number> = {};
