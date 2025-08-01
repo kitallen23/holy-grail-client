@@ -141,7 +141,7 @@ export default function Heatmap({ data, ...rest }: HeatmapProps) {
     }, [data]);
 
     return (
-        <div {...rest}>
+        <div {...rest} aria-hidden="true">
             <div ref={scrollContainerRef} className="overflow-x-auto">
                 <div className="flex flex-col gap-2 min-w-lg">
                     <MonthLabels
