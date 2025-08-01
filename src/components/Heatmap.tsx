@@ -160,7 +160,7 @@ export default function Heatmap({ data, color = "primary", ...rest }: HeatmapPro
     return (
         <div {...rest}>
             <div ref={scrollContainerRef} className="overflow-x-auto">
-                <div className="flex flex-col gap-2" style={{ minWidth: "512px" }}>
+                <div className="flex flex-col gap-2 min-w-lg">
                     {/* Month labels */}
                     <div
                         className="grid h-4"
@@ -211,7 +211,6 @@ export default function Heatmap({ data, color = "primary", ...rest }: HeatmapPro
                                             gridColumn,
                                             gridRow,
                                         }}
-                                        title={`${data.date}: ${data.count} items`}
                                     />
                                 </TooltipTrigger>
 

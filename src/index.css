@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@source inline("bg-primary/20 bg-primary/40 bg-primary/60 bg-primary/80 bg-primary");
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
