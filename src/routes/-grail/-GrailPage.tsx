@@ -18,6 +18,7 @@ import { BadgeInfoIcon, CircleAlertIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Link } from "@tanstack/react-router";
 import GrailHeatmap from "./-GrailHeatmap";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const PAGE_CONTENTS_KEYS = ["Summary", "Item List"] as const;
 
@@ -88,7 +89,24 @@ export default function GrailPage() {
     }
 
     if (isFetching || !data || !grailProgress) {
-        return null;
+        return (
+            <div className="max-w-xs mx-auto pt-16 flex flex-col gap-8 text-center opacity-20">
+                <div className="pb-1 flex justify-center items-center h-9">
+                    <Skeleton className="w-24 h-6" />
+                </div>
+                <div className="flex flex-col gap-4">
+                    <div className="h-8 flex items-center justify-center px-3">
+                        <Skeleton className="w-full max-w-64 h-4" />
+                    </div>
+                    <div className="h-8 flex items-center justify-center px-3">
+                        <Skeleton className="w-full max-w-46 h-4" />
+                    </div>
+                    <div className="h-8 flex items-center justify-center px-3">
+                        <Skeleton className="w-full max-w-52 h-4" />
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (
