@@ -1,42 +1,38 @@
+/**
+ * All types in this file are identical on client / server
+ */
 export type BaseCategory =
-    | "Armor"
     | "Axes"
-    | "Belts"
-    | "Boots"
     | "Bows"
-    | "Circlets"
     | "Crossbows"
     | "Daggers"
-    | "Gloves"
-    | "Hammers"
-    | "Helmets"
     | "Javelins"
+    | "Hammers"
     | "Maces"
     | "Polearms"
     | "Scepters"
-    | "Shields"
     | "Spears"
     | "Staves"
     | "Swords"
     | "Throwing Weapons"
     | "Wands"
-    | "Amazon Spears"
     | "Amazon Bows"
     | "Amazon Javelins"
+    | "Amazon Spears"
     | "Assassin Katars"
+    | "Sorceress Orbs"
+    | "Armor"
+    | "Belts"
+    | "Boots"
+    | "Gloves"
+    | "Helmets"
+    | "Circlets"
+    | "Shields"
     | "Barbarian Helmets"
     | "Druid Pelts"
     | "Necromancer Shrunken Heads"
-    | "Paladin Shields"
-    | "Sorceress Orbs"
-    | "Amulets"
-    | "Rings"
-    | "Jewels"
-    | "Charms";
+    | "Paladin Shields";
 
-/**
- * All types below this line are identical on client / server
- */
 export type UniqueCategory =
     | "Unique Armor"
     | "Exceptional Unique Armor"
@@ -119,7 +115,7 @@ export type UniqueCategory =
     | "Unique Charms"
     | "Unique Jewels";
 
-type SetCategory =
+export type SetCategory =
     | "Angelic Raiment"
     | "Arcanna's Tricks"
     | "Arctic Gear"
@@ -191,22 +187,24 @@ type RuneName =
 
 export type RunewordBaseType = "Weapons" | "Body Armor" | "Shields" | "Helmets";
 
+export type Tier = "Normal" | "Exceptional" | "Elite";
+
 // Main string, ...variables
 export type ItemProp = [string, ...string[]];
 
-interface BaseItem {
+interface ItemBase {
     name: string;
     implicits?: ItemProp[];
-    affixes: ItemProp[];
+    affixes?: ItemProp[];
 }
 
-export interface UniqueItem extends BaseItem {
+export interface UniqueItem extends ItemBase {
     type: string;
     image: string;
     category: UniqueCategory;
 }
 
-export interface SetItem extends BaseItem {
+export interface SetItem extends ItemBase {
     type: string;
     image: string;
     category: SetCategory;
@@ -215,7 +213,7 @@ export interface SetItem extends BaseItem {
     setItems: string[];
 }
 
-export interface Runeword extends BaseItem {
+export interface Runeword extends ItemBase {
     runes: RuneName[];
     type: RunewordBaseType;
     itemTypes: string[];
@@ -228,10 +226,17 @@ export interface Rune {
     implicits: Record<RuneItemType, string>;
 }
 
+export interface BaseItem extends ItemBase {
+    tier: Tier;
+    tierItems: string[];
+    category: BaseCategory;
+}
+
 export type Items = {
     uniqueItems: Record<string, UniqueItem>;
     setItems: Record<string, SetItem>;
     runes: Record<string, Rune>;
+    baseItems: Record<string, BaseItem>;
 };
 
 export type Runewords = Record<string, Runeword>;

@@ -7,7 +7,9 @@ import type { Runeword } from "@/types/items";
  * @returns A lowercase string containing all searchable text joined with spaces
  */
 export function getSearchableText(runeword: Runeword): string {
-    const searchableAffixes = runeword.affixes.map(affix => cleanVariablePlaceholders(affix[0]));
+    const searchableAffixes = (runeword.affixes || []).map(affix =>
+        cleanVariablePlaceholders(affix[0])
+    );
 
     const searchableFields = [
         runeword.name,
