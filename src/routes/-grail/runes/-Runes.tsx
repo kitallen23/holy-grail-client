@@ -8,7 +8,7 @@ import { useItemDialogStore } from "@/stores/useItemDialogStore";
 import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import type { Rune } from "@/types/items";
 import clsx from "clsx";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useDeferredValue } from "react";
 
 type Props = { runes: Record<string, Rune> };
 
@@ -17,6 +17,7 @@ export default function Runes({ runes }: Props) {
     const { shouldDisplay, setFilteredItemCount } = useShowItemList();
     const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
     const { selectedFilters } = useSearchFilters();
+    const deferredSelectedFilters = useDeferredValue(selectedFilters);
 
     const displayedRunes: RuneArrayItem[] = useMemo(() => {
         if (!runes || !debouncedSearchString.trim()) {
@@ -35,12 +36,12 @@ export default function Runes({ runes }: Props) {
         }
 
         const filtered: Record<string, Rune> = {};
-        const hasActiveFilter = Object.values(selectedFilters).some(val => val);
+        const hasActiveFilter = Object.values(deferredSelectedFilters).some(val => val);
 
         Object.entries(runes).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
             if (matchesAllTerms(searchableText, searchTerms)) {
-                if (!hasActiveFilter || selectedFilters["Runes"]) {
+                if (!hasActiveFilter || deferredSelectedFilters["Runes"]) {
                     filtered[key] = item;
                 }
             }
@@ -50,7 +51,7 @@ export default function Runes({ runes }: Props) {
             ...value,
             key,
         }));
-    }, [runes, debouncedSearchString, selectedFilters]);
+    }, [runes, debouncedSearchString, deferredSelectedFilters]);
 
     useEffect(() => {
         setFilteredItemCount("rune", displayedRunes.length);

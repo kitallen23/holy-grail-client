@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { useGrailPageStore } from "@/stores/useGrailPageStore";
 import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
-import { useEffect } from "react";
+import { useEffect, useDeferredValue } from "react";
 import { BadgeInfoIcon, CircleAlertIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Link } from "@tanstack/react-router";
@@ -44,6 +44,9 @@ export default function GrailPage() {
     } = useGrailProgress();
 
     const { items: grailProgress, setItems: setGrailItems } = useGrailProgressStore();
+
+    // Defer heavy data to prevent blocking UI during filter changes and search clearing
+    const deferredGrailProgress = useDeferredValue(grailProgress);
 
     useEffect(() => {
         if (_grailProgress && !grailProgress) {
@@ -94,7 +97,7 @@ export default function GrailPage() {
                 <div className="pb-1 flex justify-center items-center h-9">
                     <Skeleton className="w-24 h-6" />
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col">
                     <div className="h-8 flex items-center justify-center px-3">
                         <Skeleton className="w-full max-w-64 h-4" />
                     </div>
@@ -159,7 +162,7 @@ export default function GrailPage() {
                             uniqueItems={uniqueItems!}
                             setItems={setItems!}
                             runes={runes!}
-                            grailProgress={grailProgress}
+                            grailProgress={deferredGrailProgress}
                         />
                     </div>
 
@@ -169,7 +172,7 @@ export default function GrailPage() {
                         uniqueItems={uniqueItems!}
                         setItems={setItems!}
                         baseItems={baseItems!}
-                        grailProgress={grailProgress}
+                        grailProgress={deferredGrailProgress}
                     />
                 </>
             ) : null}

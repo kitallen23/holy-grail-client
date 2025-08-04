@@ -3,7 +3,7 @@ import type { TopLevelCategory, UniqueBaseCategory, WithKey } from "@/routes/ite
 import { getSearchableText, ITEM_CATEGORIES } from "@/routes/items/-utils";
 import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import type { UniqueItem } from "@/types/items";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useDeferredValue } from "react";
 import UniqueItemCategory from "@/routes/-grail/unique/-UniqueItemCategory";
 import { useShowItemList } from "@/hooks/useShowItemList";
 import { useItemDialogStore } from "@/stores/useItemDialogStore";
@@ -15,6 +15,7 @@ export default function UniqueItems({ uniqueItems }: Props) {
     const { setFilteredItemCount } = useShowItemList();
     const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
     const { selectedFilters } = useSearchFilters();
+    const deferredSelectedFilters = useDeferredValue(selectedFilters);
 
     const displayedItems: Record<string, UniqueItem> | undefined = useMemo(() => {
         if (!uniqueItems) {
@@ -23,7 +24,7 @@ export default function UniqueItems({ uniqueItems }: Props) {
 
         const searchTerms = getSearchTerms(debouncedSearchString);
         const filtered: Record<string, UniqueItem> = {};
-        const hasActiveFilter = Object.values(selectedFilters).some(val => val);
+        const hasActiveFilter = Object.values(deferredSelectedFilters).some(val => val);
 
         Object.entries(uniqueItems).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
@@ -34,14 +35,14 @@ export default function UniqueItems({ uniqueItems }: Props) {
                     )
                 )?.[0];
 
-                if (!hasActiveFilter || selectedFilters[`Unique ${itemType}`]) {
+                if (!hasActiveFilter || deferredSelectedFilters[`Unique ${itemType}`]) {
                     filtered[key] = item;
                 }
             }
         });
 
         return filtered;
-    }, [uniqueItems, debouncedSearchString, selectedFilters]);
+    }, [uniqueItems, debouncedSearchString, deferredSelectedFilters]);
 
     useEffect(() => {
         setFilteredItemCount("unique", Object.keys(displayedItems).length);

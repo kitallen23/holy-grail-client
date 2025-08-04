@@ -10,7 +10,7 @@ interface GrailStatsTableProps {
     uniqueItems: Record<string, UniqueItem>;
     setItems: Record<string, SetItem>;
     runes: Record<string, Rune>;
-    grailProgress: Record<string, GrailProgressItem>;
+    grailProgress?: Record<string, GrailProgressItem>;
 }
 
 export default function GrailStatsTable({
@@ -20,7 +20,7 @@ export default function GrailStatsTable({
     grailProgress,
 }: GrailStatsTableProps) {
     const tableRows: RowData[] = useMemo(
-        () => buildTableRows(uniqueItems, setItems, runes, grailProgress),
+        () => (grailProgress ? buildTableRows(uniqueItems, setItems, runes, grailProgress) : []),
         [uniqueItems, setItems, runes, grailProgress]
     );
     const totalFound = tableRows.reduce((acc, curr) => (acc += curr.found), 0);

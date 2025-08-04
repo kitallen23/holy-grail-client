@@ -1,6 +1,6 @@
 import type { GrailProgressItem } from "@/lib/api";
 import type { BaseItem, SetItem, UniqueItem } from "@/types/items";
-import { useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 import {
     getRemainingSetBases,
     getRemainingUniqueBases,
@@ -22,7 +22,7 @@ type Props = {
     uniqueItems: Record<string, UniqueItem>;
     setItems: Record<string, SetItem>;
     baseItems: Record<string, BaseItem>;
-    grailProgress: Record<string, GrailProgressItem>;
+    grailProgress?: Record<string, GrailProgressItem>;
 };
 
 // Must be divisible by 2 and 3 for our 3-column layout to be responsive
@@ -41,14 +41,26 @@ export default function GrailRemainingItemSummary({
     const [itemLimit, setItemLimit] = useState(DEFAULT_ITEM_LIMIT);
     const { setItem } = useItemDialogStore();
     const { selectedFilters } = useSearchFilters();
+    const deferredSelectedFilters = useDeferredValue(selectedFilters);
 
     const remainingUniqueBases = useMemo(
-        () => getRemainingUniqueBases(uniqueItems, baseItems, grailProgress, selectedFilters),
-        [uniqueItems, baseItems, grailProgress, selectedFilters]
+        () =>
+            grailProgress
+                ? getRemainingUniqueBases(
+                      uniqueItems,
+                      baseItems,
+                      grailProgress,
+                      deferredSelectedFilters
+                  )
+                : {},
+        [uniqueItems, baseItems, grailProgress, deferredSelectedFilters]
     );
     const remainingSetBases = useMemo(
-        () => getRemainingSetBases(setItems, baseItems, grailProgress, selectedFilters),
-        [setItems, baseItems, grailProgress, selectedFilters]
+        () =>
+            grailProgress
+                ? getRemainingSetBases(setItems, baseItems, grailProgress, deferredSelectedFilters)
+                : {},
+        [setItems, baseItems, grailProgress, deferredSelectedFilters]
     );
 
     const displayedUniqueBases = Object.entries(remainingUniqueBases)

@@ -25,7 +25,7 @@ function RouteComponent() {
                 <div className="pb-1 flex justify-center items-center h-9">
                     <Skeleton className="w-24 h-6" />
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col">
                     <div className="h-8 flex items-center justify-center px-3">
                         <Skeleton className="w-full max-w-64 h-4" />
                     </div>
