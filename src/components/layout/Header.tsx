@@ -147,7 +147,7 @@ export default function Header() {
                         <div
                             className={`${styles.title} text-lg flex items-center text-primary-foreground flex-nowrap font-semibold gap-1`}
                         >
-                            <PentagramIcon height="1em" />
+                            <PentagramIcon height="0.875em" />
                             HOLY GRAIL
                         </div>
 
