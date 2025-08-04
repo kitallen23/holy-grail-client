@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 import { useSearchBar } from "@/stores/useSearchStore";
 import LoginForm from "@/components/LoginForm";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/")({
     component: RouteComponent,
@@ -19,7 +20,24 @@ function RouteComponent() {
     }, [user]);
 
     if (isLoading) {
-        return null;
+        return (
+            <div className="max-w-xs mx-auto pt-16 flex flex-col gap-8 text-center opacity-20">
+                <div className="pb-1 flex justify-center items-center h-9">
+                    <Skeleton className="w-24 h-6" />
+                </div>
+                <div className="flex flex-col gap-4">
+                    <div className="h-8 flex items-center justify-center px-3">
+                        <Skeleton className="w-full max-w-64 h-4" />
+                    </div>
+                    <div className="h-8 flex items-center justify-center px-3">
+                        <Skeleton className="w-full max-w-46 h-4" />
+                    </div>
+                    <div className="h-8 flex items-center justify-center px-3">
+                        <Skeleton className="w-full max-w-52 h-4" />
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     if (!user) {
