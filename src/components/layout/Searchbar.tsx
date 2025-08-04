@@ -7,13 +7,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
+import { useSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import { FilterIcon, XIcon } from "lucide-react";
 import React, { useEffect, useRef } from "react";
 
 export default function Searchbar() {
     const searchInputRef = useRef<HTMLInputElement>(null);
-    const { searchString, setSearchString, clearSearch } = useDebouncedSearch();
+    const { searchString, setSearchString, clearSearch } = useSearchString();
     const { currentPageFilters, selectedFilters, setFilterValue } = useSearchFilters();
 
     useEffect(() => {

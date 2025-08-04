@@ -5,7 +5,7 @@ import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { RuneArrayItem } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
 import { useItemDialogStore } from "@/stores/useItemDialogStore";
-import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
+import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import type { Rune } from "@/types/items";
 import clsx from "clsx";
 import { useEffect, useMemo } from "react";
@@ -13,7 +13,7 @@ import { useEffect, useMemo } from "react";
 type Props = { runes: Record<string, Rune> };
 
 export default function Runes({ runes }: Props) {
-    const { debouncedSearchString } = useDebouncedSearch();
+    const { debouncedSearchString } = useDebouncedSearchString();
     const { shouldDisplay, setFilteredItemCount } = useShowItemList();
     const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
     const { selectedFilters } = useSearchFilters();

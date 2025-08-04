@@ -11,7 +11,7 @@ import type { Runeword, RunewordBaseType } from "@/types/items";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { WithKey } from "@/routes/items/-types";
 import RunewordDialog from "@/components/ItemTooltip/RunewordDialog";
-import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
+import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/runewords/")({
@@ -22,7 +22,7 @@ const RUNEWORD_BASE_TYPES: RunewordBaseType[] = ["Weapons", "Body Armor", "Helme
 
 function RunewordsPage() {
     const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
-    const { debouncedSearchString, clearSearch } = useDebouncedSearch();
+    const { debouncedSearchString, clearSearch } = useDebouncedSearchString();
     const { data, isFetching, error } = useRunewords();
 
     useEffect(() => {

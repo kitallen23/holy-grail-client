@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { useDebounce } from "@/hooks/useDebounce";
 import { SEARCH_DEBOUNCE_DELAY } from "@/lib/constants";
+import { useEffect } from "react";
 
 export interface FilterOption {
     id: string;
@@ -22,6 +23,9 @@ interface SearchStore {
     setSearchString: (value: string) => void;
     clearSearch: () => void;
 
+    debouncedSearchString: string;
+    setDebouncedSearchString: (value: string) => void;
+
     currentPageFilters: FilterConfig[] | null;
     selectedFilters: Record<string, boolean>;
 
@@ -36,7 +40,10 @@ const useSearchStore = create<SearchStore>(set => ({
 
     searchString: "",
     setSearchString: (value: string) => set({ searchString: value }),
-    clearSearch: () => set({ searchString: "" }),
+    clearSearch: () => set({ searchString: "", debouncedSearchString: "" }),
+
+    debouncedSearchString: "",
+    setDebouncedSearchString: (value: string) => set({ debouncedSearchString: value }),
 
     currentPageFilters: null,
     selectedFilters: {},
@@ -64,14 +71,21 @@ const useSearchStore = create<SearchStore>(set => ({
     clearFilters: () => set({ selectedFilters: {} }),
 }));
 
-export const useDebouncedSearch = () => {
+export const useSearchString = () => {
     const searchString = useSearchStore(state => state.searchString);
-    const debouncedSearchString = useDebounce(searchString, SEARCH_DEBOUNCE_DELAY);
 
     return {
         searchString,
-        debouncedSearchString,
         setSearchString: useSearchStore(state => state.setSearchString),
+        clearSearch: useSearchStore(state => state.clearSearch),
+    };
+};
+
+export const useDebouncedSearchString = () => {
+    const debouncedSearchString = useSearchStore(state => state.debouncedSearchString);
+
+    return {
+        debouncedSearchString,
         clearSearch: useSearchStore(state => state.clearSearch),
     };
 };
@@ -95,4 +109,14 @@ export const useSearchBar = () => {
         isVisible,
         setVisibility: useSearchStore(state => state.setVisibility),
     };
+};
+
+export const useSearchDebounceManager = () => {
+    const searchString = useSearchStore(state => state.searchString);
+    const setDebouncedSearchString = useSearchStore(state => state.setDebouncedSearchString);
+    const debouncedValue = useDebounce(searchString, SEARCH_DEBOUNCE_DELAY);
+
+    useEffect(() => {
+        setDebouncedSearchString(debouncedValue);
+    }, [debouncedValue, setDebouncedSearchString]);
 };

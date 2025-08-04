@@ -7,7 +7,7 @@ import type { TopLevelCategory, WithKey } from "@/routes/items/-types";
 import { getSearchableText, ITEM_CATEGORIES } from "@/routes/items/-utils";
 import BaseItemCategory from "@/routes/items/bases/-BaseItemCategory";
 import { useItemDialogStore } from "@/stores/useItemDialogStore";
-import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
+import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import type { BaseCategory, BaseItem, Tier } from "@/types/items";
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlertIcon } from "lucide-react";
@@ -22,7 +22,7 @@ function BaseItemsPage() {
     const baseItems = data?.baseItems;
 
     const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
-    const { debouncedSearchString, clearSearch } = useDebouncedSearch();
+    const { debouncedSearchString, clearSearch } = useDebouncedSearchString();
     const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
 
     useEffect(() => {

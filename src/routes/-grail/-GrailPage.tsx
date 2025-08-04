@@ -3,7 +3,7 @@ import GrailStatsTable from "./-GrailStatsTable";
 import GrailRemainingItemSummary from "./-GrailRemainingItemSummary";
 import GrailItemList from "./-GrailItemList";
 import Heading from "@/components/Heading";
-import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
+import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import type { Items } from "@/types/items";
 import {
     NavigationMenu,
@@ -23,7 +23,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const PAGE_CONTENTS_KEYS = ["Summary", "Item List"] as const;
 
 export default function GrailPage() {
-    const { debouncedSearchString } = useDebouncedSearch();
+    const { debouncedSearchString } = useDebouncedSearchString();
     const { setPageFilters } = useSearchFilters();
     const {
         data,

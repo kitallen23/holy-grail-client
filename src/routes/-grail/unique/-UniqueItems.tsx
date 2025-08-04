@@ -1,7 +1,7 @@
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { TopLevelCategory, UniqueBaseCategory, WithKey } from "@/routes/items/-types";
 import { getSearchableText, ITEM_CATEGORIES } from "@/routes/items/-utils";
-import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
+import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import type { UniqueItem } from "@/types/items";
 import { useEffect, useMemo } from "react";
 import UniqueItemCategory from "@/routes/-grail/unique/-UniqueItemCategory";
@@ -11,7 +11,7 @@ import { useItemDialogStore } from "@/stores/useItemDialogStore";
 type Props = { uniqueItems: Record<string, UniqueItem> };
 
 export default function UniqueItems({ uniqueItems }: Props) {
-    const { debouncedSearchString } = useDebouncedSearch();
+    const { debouncedSearchString } = useDebouncedSearchString();
     const { setFilteredItemCount } = useShowItemList();
     const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
     const { selectedFilters } = useSearchFilters();

@@ -7,7 +7,7 @@ import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { RuneArrayItem } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
 import { useItemDialogStore } from "@/stores/useItemDialogStore";
-import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
+import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import type { Rune } from "@/types/items";
 import { createFileRoute } from "@tanstack/react-router";
 import clsx from "clsx";
@@ -23,7 +23,7 @@ function RunesPage() {
     const runes = data?.runes;
 
     const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
-    const { debouncedSearchString, clearSearch } = useDebouncedSearch();
+    const { debouncedSearchString, clearSearch } = useDebouncedSearchString();
     const { clearFilters } = useSearchFilters();
 
     const displayedRunes: RuneArrayItem[] = useMemo(() => {

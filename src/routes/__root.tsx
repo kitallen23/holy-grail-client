@@ -1,6 +1,6 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import Header from "@/components/layout/Header";
-import { useSearchBar } from "@/stores/useSearchStore";
+import { useSearchBar, useSearchDebounceManager } from "@/stores/useSearchStore";
 import LoginModal from "@/components/LoginModal";
 import { Toaster } from "@/components/ui/sonner";
 import ItemDialog from "@/components/ItemTooltip/ItemDialog";
@@ -10,6 +10,7 @@ import ItemDialog from "@/components/ItemTooltip/ItemDialog";
 
 const RootLayout = () => {
     const { isVisible } = useSearchBar();
+    useSearchDebounceManager();
 
     return (
         <>

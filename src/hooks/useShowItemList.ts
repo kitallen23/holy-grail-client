@@ -1,8 +1,8 @@
 import { useGrailPageStore } from "@/stores/useGrailPageStore";
-import { useDebouncedSearch } from "@/stores/useSearchStore";
+import { useDebouncedSearchString } from "@/stores/useSearchStore";
 
 export const useShowItemList = () => {
-    const { debouncedSearchString } = useDebouncedSearch();
+    const { debouncedSearchString } = useDebouncedSearchString();
     const {
         pageContents,
         uniqueItemCount,

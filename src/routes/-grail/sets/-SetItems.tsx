@@ -1,7 +1,7 @@
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { SetItemArrayItem, WithKey } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
-import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
+import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import type { SetItem } from "@/types/items";
 import { useEffect, useMemo } from "react";
 import { SETS } from "@/routes/items/sets/-utils";
@@ -29,7 +29,7 @@ function getSetItems(data: Record<string, SetItem> | null): SetItemArrayItem[] {
 }
 
 export default function SetItems({ setItems }: Props) {
-    const { debouncedSearchString } = useDebouncedSearch();
+    const { debouncedSearchString } = useDebouncedSearchString();
     const { shouldDisplay, setFilteredItemCount } = useShowItemList();
     const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
     const { selectedFilters } = useSearchFilters();

@@ -8,7 +8,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CircleAlertIcon } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import SetTier from "@/routes/items/sets/-SetTier";
-import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
+import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { SETS } from "@/routes/items/sets/-utils";
@@ -25,7 +25,7 @@ function SetItemsPage() {
     const setItems = data?.setItems;
 
     const { item: selectedItem, type: selectedItemType, setItem } = useItemDialogStore();
-    const { debouncedSearchString, clearSearch } = useDebouncedSearch();
+    const { debouncedSearchString, clearSearch } = useDebouncedSearchString();
     const { selectedFilters, setPageFilters, clearFilters } = useSearchFilters();
 
     useEffect(() => {

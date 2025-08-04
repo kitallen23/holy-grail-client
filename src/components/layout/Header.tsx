@@ -1,7 +1,7 @@
 import styles from "./Header.module.scss";
 import { Link, useMatchRoute } from "@tanstack/react-router";
 import Searchbar from "@/components/layout/Searchbar";
-import { useDebouncedSearch, useSearchBar } from "@/stores/useSearchStore";
+import { useDebouncedSearchString, useSearchBar } from "@/stores/useSearchStore";
 import { useEffect, useState } from "react";
 import {
     NavigationMenu,
@@ -76,7 +76,7 @@ export default function Header() {
     const matchRoute = useMatchRoute();
     const { user, isLoading, logout } = useAuth();
     const { isVisible } = useSearchBar();
-    const { debouncedSearchString } = useDebouncedSearch();
+    const { debouncedSearchString } = useDebouncedSearchString();
     const { onOpenChange } = useLoginModalStore();
 
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);

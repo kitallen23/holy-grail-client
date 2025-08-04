@@ -2,7 +2,7 @@ import type { Rune, SetItem, UniqueItem } from "@/types/items";
 import UniqueItems from "@/routes/-grail/unique/-UniqueItems";
 import SetItems from "@/routes/-grail/sets/-SetItems";
 import Runes from "@/routes/-grail/runes/-Runes";
-import { useDebouncedSearch, useSearchFilters } from "@/stores/useSearchStore";
+import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import { Button } from "@/components/ui/button";
 import { useShowItemList } from "@/hooks/useShowItemList";
 
@@ -15,7 +15,7 @@ type Props = {
 };
 
 export default function GrailSearchResults({ data }: Props) {
-    const { clearSearch } = useDebouncedSearch();
+    const { clearSearch } = useDebouncedSearchString();
     const { clearFilters } = useSearchFilters();
     const { itemCount } = useShowItemList();
 
