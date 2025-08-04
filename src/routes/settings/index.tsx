@@ -24,6 +24,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import ExportGrailData from "./-ExportGrailData";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/settings/")({
     component: RouteComponent,
@@ -114,7 +115,13 @@ function RouteComponent() {
     };
 
     if (isLoading) {
-        return null;
+        return (
+            <div className="max-w-lg mx-auto pt-8 flex flex-col gap-8 opacity-20">
+                <div className="pb-1 flex justify-center items-center h-9">
+                    <Skeleton className="w-46 h-6" />
+                </div>
+            </div>
+        );
     }
 
     if (!user) {
