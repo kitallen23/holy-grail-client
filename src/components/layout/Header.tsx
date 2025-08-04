@@ -29,6 +29,7 @@ import {
 import clsx from "clsx";
 import { useLoginModalStore } from "@/stores/useLoginModalStore";
 import { useAuth } from "@/hooks/useAuth";
+import PentagramIcon from "@/components/PentagramIcon";
 
 const NAV_ITEMS = [
     {
@@ -144,8 +145,9 @@ export default function Header() {
                             </DropdownMenuContent>
                         </DropdownMenu>
                         <div
-                            className={`${styles.title} text-lg flex items-center text-primary-foreground flex-nowrap font-semibold`}
+                            className={`${styles.title} text-lg flex items-center text-primary-foreground flex-nowrap font-semibold gap-1`}
                         >
+                            <PentagramIcon height="1em" />
                             HOLY GRAIL
                         </div>
 
