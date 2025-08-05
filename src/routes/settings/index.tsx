@@ -25,9 +25,17 @@ import {
 } from "@/components/ui/select";
 import ExportGrailData from "./-ExportGrailData";
 import { Skeleton } from "@/components/ui/skeleton";
+import { APP_TITLE } from "@/lib/constants";
 
 export const Route = createFileRoute("/settings/")({
     component: RouteComponent,
+    head: () => ({
+        meta: [
+            {
+                title: `Settings - ${APP_TITLE}`,
+            },
+        ],
+    }),
 });
 
 const IMPORT_TYPES = {

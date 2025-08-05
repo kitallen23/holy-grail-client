@@ -13,9 +13,17 @@ import type { WithKey } from "@/routes/items/-types";
 import RunewordDialog from "@/components/ItemTooltip/RunewordDialog";
 import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import { Button } from "@/components/ui/button";
+import { APP_TITLE } from "@/lib/constants";
 
 export const Route = createFileRoute("/runewords/")({
     component: RunewordsPage,
+    head: () => ({
+        meta: [
+            {
+                title: `Runewords - ${APP_TITLE}`,
+            },
+        ],
+    }),
 });
 
 const RUNEWORD_BASE_TYPES: RunewordBaseType[] = ["Weapons", "Body Armor", "Helmets", "Shields"];

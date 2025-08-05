@@ -13,9 +13,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { SETS } from "@/routes/items/sets/-utils";
 import { useItemDialogStore } from "@/stores/useItemDialogStore";
+import { APP_TITLE } from "@/lib/constants";
 
 export const Route = createFileRoute("/items/sets/")({
     component: SetItemsPage,
+    head: () => ({
+        meta: [
+            {
+                title: `Set Items - ${APP_TITLE}`,
+            },
+        ],
+    }),
 });
 
 const TIERS: Tier[] = ["Normal", "Exceptional", "Elite"];

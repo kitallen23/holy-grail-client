@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useItems } from "@/hooks/queries";
+import { APP_TITLE } from "@/lib/constants";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { TopLevelCategory, UniqueBaseCategory, WithKey } from "@/routes/items/-types";
 import { getSearchableText, ITEM_CATEGORIES } from "@/routes/items/-utils";
@@ -17,6 +18,13 @@ import { useEffect, useMemo } from "react";
 
 export const Route = createFileRoute("/items/unique/")({
     component: UniqueItemsPage,
+    head: () => ({
+        meta: [
+            {
+                title: `Unique Items - ${APP_TITLE}`,
+            },
+        ],
+    }),
 });
 
 function UniqueItemsPage() {

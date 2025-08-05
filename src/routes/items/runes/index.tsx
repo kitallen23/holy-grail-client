@@ -3,6 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useItems } from "@/hooks/queries";
+import { APP_TITLE } from "@/lib/constants";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
 import type { RuneArrayItem } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
@@ -16,6 +17,13 @@ import { useMemo } from "react";
 
 export const Route = createFileRoute("/items/runes/")({
     component: RunesPage,
+    head: () => ({
+        meta: [
+            {
+                title: `Runes - ${APP_TITLE}`,
+            },
+        ],
+    }),
 });
 
 function RunesPage() {
