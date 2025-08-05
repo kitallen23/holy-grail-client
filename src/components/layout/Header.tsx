@@ -145,7 +145,7 @@ export default function Header() {
                             </DropdownMenuContent>
                         </DropdownMenu>
                         <div
-                            className={`${styles.title} text-lg flex items-center text-primary-foreground flex-nowrap font-semibold gap-1`}
+                            className={`${styles.title} text-lg flex items-center text-primary-foreground flex-nowrap font-semibold gap-1 cursor-default`}
                         >
                             <PentagramIcon height="0.875em" />
                             HOLY GRAIL
