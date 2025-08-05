@@ -38,12 +38,37 @@ export const Route = createRootRoute({
     head: () => ({
         meta: [
             {
-                name: "Holy Grail",
+                name: "description",
                 content: "Diablo 2 Holy Grail item tracker",
             },
             {
                 title: APP_TITLE,
             },
+
+            // OpenGraph config
+            { property: "og:type", content: "website" },
+            { property: "og:site_name", content: "Holy Grail" },
+            { property: "og:title", content: "Holy Grail - Diablo 2 Item Tracker" },
+            {
+                property: "og:description",
+                content:
+                    "Track your Diablo 2 Holy Grail progress. Find and collect unique items, set items, and runes.",
+            },
+            { property: "og:url", content: "https://holy-grail.chuggs.net" },
+            { property: "og:image", content: "https://holy-grail.chuggs.net/og-image.png" },
+            { property: "og:image:width", content: "1200" },
+            { property: "og:image:height", content: "630" },
+            { property: "og:image:alt", content: "Holy Grail - Diablo 2 Item Tracker" },
+
+            // OG Twitter Card tags
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "Holy Grail - Diablo 2 Item Tracker" },
+            {
+                name: "twitter:description",
+                content:
+                    "Track your Diablo 2 Holy Grail progress. Find and collect unique items, set items, and runes.",
+            },
+            { name: "twitter:image", content: "https://holy-grail.chuggs.net/og-image.png" },
         ],
     }),
 });
