@@ -134,7 +134,7 @@ function RouteComponent() {
 
     if (!user) {
         return (
-            <div className="max-w-xs mx-auto pt-16 flex flex-col gap-8 text-center">
+            <div className="max-w-xs mx-auto pt-16 flex flex-col gap-8 text-center pb-8">
                 <h2 className="text-lg leading-none font-semibold">Sign in to access settings</h2>
                 <LoginForm />
             </div>
@@ -150,7 +150,7 @@ function RouteComponent() {
 
     return (
         <>
-            <div className="max-w-lg mx-auto pt-8 flex flex-col gap-8">
+            <div className="max-w-lg mx-auto pt-8 flex flex-col gap-8 pb-8">
                 <div className="flex flex-col gap-4">
                     <Heading className="text-primary">Import Holy Grail Data</Heading>
                     <div className="flex flex-col gap-2">
