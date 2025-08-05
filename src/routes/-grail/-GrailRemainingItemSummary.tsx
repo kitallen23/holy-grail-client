@@ -98,6 +98,10 @@ export default function GrailRemainingItemSummary({
     return (
         <div className="grid grid-cols-1 gap-4">
             <Heading className="text-destructive">Remaining Grail Items</Heading>
+            <div className="text-muted-foreground text-sm text-center">
+                If you see any of these unidentified items, pick them up. They may be grail items
+                you&apos;re missing.
+            </div>
             <div
                 className={clsx("grid gap-4", {
                     "md:grid-cols-2": showUniqueBases && showSetBases,

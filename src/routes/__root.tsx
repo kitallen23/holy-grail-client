@@ -1,5 +1,6 @@
 import { createRootRoute, HeadContent, Outlet } from "@tanstack/react-router";
 import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import { useSearchBar, useSearchDebounceManager } from "@/stores/useSearchStore";
 import LoginModal from "@/components/LoginModal";
 import { Toaster } from "@/components/ui/sonner";
@@ -16,16 +17,20 @@ const RootLayout = () => {
     return (
         <>
             <HeadContent />
-            <Header />
-            <main
-                className={`px-2 sm:px-4 mx-auto w-full max-w-4xl h-dvh ${isVisible ? "pt-21" : "pt-8"}`}
-            >
-                <Outlet />
-                <LoginModal />
-                <ItemDialog />
-            </main>
+
+            <div className="min-h-dvh flex flex-col">
+                <Header />
+                <main
+                    className={`px-2 sm:px-4 mx-auto w-full max-w-4xl ${isVisible ? "pt-21" : "pt-8"} flex-1`}
+                >
+                    <Outlet />
+                    <LoginModal />
+                    <ItemDialog />
+                </main>
+                <Footer />
+            </div>
+
             <Toaster />
-            {/* <footer></footer> */}
 
             {/* <TanStackRouterDevtools /> */}
             {/* <ReactQueryDevtools initialIsOpen={false} /> */}

@@ -134,7 +134,7 @@ function RouteComponent() {
 
     if (!user) {
         return (
-            <div className="max-w-xs mx-auto pt-16 flex flex-col gap-8 text-center">
+            <div className="max-w-xs mx-auto pt-16 flex flex-col gap-8 text-center pb-8">
                 <h2 className="text-lg leading-none font-semibold">Sign in to access settings</h2>
                 <LoginForm />
             </div>
@@ -150,9 +150,9 @@ function RouteComponent() {
 
     return (
         <>
-            <div className="max-w-lg mx-auto pt-8 flex flex-col gap-8">
+            <div className="max-w-lg mx-auto pt-8 flex flex-col gap-8 pb-8">
                 <div className="flex flex-col gap-4">
-                    <Heading className="text-destructive">Import Holy Grail Data</Heading>
+                    <Heading className="text-primary">Import Holy Grail Data</Heading>
                     <div className="flex flex-col gap-2">
                         <div className="flex gap-2 flex-wrap">
                             <Select
@@ -225,7 +225,7 @@ function RouteComponent() {
                     </div>
                 </div>
                 <div className="flex flex-col gap-4">
-                    <Heading className="text-destructive">Export Holy Grail Data</Heading>
+                    <Heading className="text-primary">Export Holy Grail Data</Heading>
                     <div className="flex flex-col gap-2">
                         <div className="flex gap-2 flex-wrap">
                             <Select
@@ -286,7 +286,7 @@ function RouteComponent() {
                     </div>
                 </div>
                 <div className="flex flex-col gap-4">
-                    <Heading className="text-destructive">Reset Holy Grail</Heading>
+                    <Heading className="text-primary">Reset Holy Grail</Heading>
                     <div className="flex flex-col gap-2">
                         <div>
                             Use the button below to reset all of your Holy Grail progress. This
@@ -299,6 +299,19 @@ function RouteComponent() {
                                 Reset
                             </Button>
                         </div>
+                    </div>
+                </div>
+                <div className="flex flex-col gap-4">
+                    <Heading className="text-primary">Credits</Heading>
+                    <div className="text-muted-foreground space-y-4">
+                        <p>
+                            Special thanks to my wife and brother for their invaluable help with
+                            planning and testing this application.
+                        </p>
+                        <p>
+                            Thanks to the developer of Tome of D2 for providing import/export
+                            compatibility.
+                        </p>
                     </div>
                 </div>
             </div>
