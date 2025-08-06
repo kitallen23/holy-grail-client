@@ -9,7 +9,10 @@ function Footer() {
             className={`${styles.footer} bg-background h-6 border-t border-border/50 px-2 sm:px-4`}
         >
             <div className="max-w-4xl mx-auto flex gap-4 justify-end items-center">
-                <div className="text-muted-foreground/75 text-xs font-mono">v{APP_VERSION}</div>
+                <div className="text-muted-foreground/75 text-xs font-formal">v{APP_VERSION}</div>
+                <div className="text-muted-foreground/75 text-xs font-formal">
+                    © 2025 kitallen23
+                </div>
                 <div className="text-muted-foreground/75 text-xs">
                     <Button variant="ghost" size="icon" className="size-5" asChild>
                         <a

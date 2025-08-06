@@ -312,6 +312,10 @@ function RouteComponent() {
                             Thanks to the developer of Tome of D2 for providing import/export
                             compatibility.
                         </p>
+                        <p className="text-xs">
+                            Diablo II and all related content are trademarks and copyrights of
+                            Blizzard Entertainment, Inc.
+                        </p>
                     </div>
                 </div>
             </div>
