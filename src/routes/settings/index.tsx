@@ -252,8 +252,8 @@ function RouteComponent() {
                         </div>
                         {exportType === "Backup" ? (
                             <div className="text-muted-foreground">
-                                Creates a backup of your Holy Grail so you can restore it at a later
-                                stage.
+                                Creates a backup file of your Holy Grail data so you can restore it
+                                at a later stage via the import feature.
                             </div>
                         ) : exportType === "Tome of D2" ? (
                             <div className="text-muted-foreground">
