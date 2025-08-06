@@ -70,6 +70,9 @@ body {
 .font-diablo {
     font-family: "Exocet Blizzard MixedCaps";
 }
+.font-formal {
+    font-family: "Formal436";
+}
 
 @theme inline {
     --radius-sm: calc(var(--radius) - 4px);

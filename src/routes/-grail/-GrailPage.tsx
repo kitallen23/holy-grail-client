@@ -73,6 +73,13 @@ export default function GrailPage() {
         return () => setPageFilters(null);
     }, []);
 
+    const totalFound = Object.keys(grailProgress || {}).length;
+    const totalItems =
+        Object.keys(uniqueItems || {}).length +
+        Object.keys(setItems || {}).length +
+        Object.keys(runes || {}).length;
+    const isGrailComplete = totalFound === totalItems;
+
     const isFetching = isFetchingItems || isFetchingGrailProgress;
     const error = itemsError || grailProgressError;
 
@@ -155,6 +162,22 @@ export default function GrailPage() {
                                 <div>Good luck on your journey!</div>
                             </AlertDescription>
                         </Alert>
+                    ) : null}
+                    {isGrailComplete ? (
+                        <>
+                            <div className="flex flex-col">
+                                <Heading className="text-primary pb-0 text-2xl sm:text-3xl font-medium">
+                                    Holy Grail
+                                </Heading>
+                                <Heading className="text-primary text-5xl sm:text-6xl font-medium">
+                                    COMPLETE
+                                </Heading>
+                            </div>
+                            <p className="text-center max-w-md mx-auto mb-8 font-formal">
+                                I knew in time you would defeat the Holy Grail. You have done
+                                everything you set out to do, my friend.
+                            </p>
+                        </>
                     ) : null}
                     <div className="grid max-w-lg mx-auto w-full">
                         <Heading className="text-destructive">Statistics</Heading>

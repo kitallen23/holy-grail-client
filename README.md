@@ -1,4 +1,7 @@
-# Holy Grail
+<div align="center">
+  <img src="assets/logo-rounded.png" alt="Logo" width="100" height="100">
+</div>
+<h1 align="center">Holy Grail</h1>
 
 A web application to help Diablo 2 players track their progress through the Holy Grail challenge - the self-imposed quest to collect every unique and set item in the game.
 
@@ -77,4 +80,4 @@ Built files will be output to the `dist/` directory.
 
 ## License
 
-MIT
+ISC

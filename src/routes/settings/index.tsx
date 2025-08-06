@@ -252,8 +252,8 @@ function RouteComponent() {
                         </div>
                         {exportType === "Backup" ? (
                             <div className="text-muted-foreground">
-                                Creates a backup of your Holy Grail so you can restore it at a later
-                                stage.
+                                Creates a backup file of your Holy Grail data so you can restore it
+                                at a later stage via the import feature.
                             </div>
                         ) : exportType === "Tome of D2" ? (
                             <div className="text-muted-foreground">
@@ -311,6 +311,10 @@ function RouteComponent() {
                         <p>
                             Thanks to the developer of Tome of D2 for providing import/export
                             compatibility.
+                        </p>
+                        <p className="text-xs">
+                            Diablo II and all related content are trademarks and copyrights of
+                            Blizzard Entertainment, Inc.
                         </p>
                     </div>
                 </div>
