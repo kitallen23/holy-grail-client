@@ -1,5 +1,9 @@
 # Holy Grail
 
+<div align="center">
+  <img src="assets/logo-rounded.png" alt="Logo" width="200" height="200">
+</div>
+
 A web application to help Diablo 2 players track their progress through the Holy Grail challenge - the self-imposed quest to collect every unique and set item in the game.
 
 ## Features
