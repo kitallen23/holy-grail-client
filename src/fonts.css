@@ -10,3 +10,9 @@
     font-display: swap;
     font-weight: 700;
 }
+@font-face {
+    font-family: "Formal436";
+    src: url("/assets/Formal436BT-Regular.woff2") format("woff2");
+    font-display: swap;
+    font-weight: 400;
+}
