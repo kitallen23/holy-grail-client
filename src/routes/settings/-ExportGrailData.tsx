@@ -153,7 +153,7 @@ const ExportGrailData = ({ exportType, onCancel }: Props) => {
 
     useEffect(() => {
         if (grailProgress && data && isReady) {
-            if (!grailProgress.length) {
+            if (!Object.keys(grailProgress).length) {
                 toast.error("No Holy Grail data to export.");
                 onCancel();
             } else {
