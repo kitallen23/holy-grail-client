@@ -73,7 +73,11 @@ const NAV_ITEMS = [
     },
 ];
 
-export default function Header() {
+type Props = {
+    hideSearch: boolean;
+};
+
+export default function Header({ hideSearch }: Props) {
     const matchRoute = useMatchRoute();
     const { user, isLoading, logout } = useAuthStore();
     const { isVisible } = useSearchBar();
@@ -241,7 +245,7 @@ export default function Header() {
                     )}
                 </div>
             </header>
-            {isVisible ? (
+            {isVisible && !hideSearch ? (
                 <div
                     className={`${styles.searchbar} h-13 bg-background flex items-center justify-center fixed top-8 right-0 w-full flex-nowrap border-b`}
                 >
