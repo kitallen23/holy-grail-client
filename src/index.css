@@ -65,6 +65,7 @@ html {
     background-repeat: repeat;
 }
 body {
+    overscroll-behavior-y: auto;
     margin: 0;
 }
 
