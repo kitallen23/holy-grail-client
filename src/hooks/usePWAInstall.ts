@@ -86,3 +86,20 @@ export function usePWAInstall() {
         hasNativePrompt: !!deferredPrompt,
     };
 }
+
+export const getInstallInstructions = () => {
+    const userAgent = navigator.userAgent;
+
+    // All iOS browsers (except Firefox) use "Add to Home Screen"
+    if (/iPhone|iPad/.test(userAgent) && !/Firefox/.test(userAgent)) {
+        return "To install: Tap Share → Add to Home Screen";
+    }
+
+    // Desktop/Android Chrome-based browsers
+    if (/Chrome|Edg/.test(userAgent)) {
+        return "To install: Look for the install button in your address bar";
+    }
+
+    // Generic fallback
+    return "To install: Look for install options in your browser menu";
+};
