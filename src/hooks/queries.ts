@@ -18,7 +18,7 @@ export const useItems = (types: QueryType[], options?: UseItemsOptions) => {
     const queryClient = useQueryClient();
 
     return useQuery({
-        queryKey: ["items", types.sort()],
+        queryKey: ["items", [...types].sort((a, b) => a.localeCompare(b))],
         queryFn: async () => {
             // Check what's already cached
             const missingTypes = types.filter(type => {
