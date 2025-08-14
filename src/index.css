@@ -59,6 +59,7 @@
 }
 
 html {
+    overscroll-behavior-y: auto;
     scroll-padding-top: calc(var(--spacing) * 8);
     background-image: url("/assets/noisy-texture-100x100_background.png");
     background-repeat: repeat;
