@@ -47,8 +47,14 @@ export function usePWAInstall() {
         };
     }, []);
 
-    // Check if browser supports PWA installation
     const isPWACapable = () => {
+        // iOS devices can install PWAs via "Add to Home Screen"
+        // BUT Firefox iOS doesn't support this
+        if (/iPhone|iPad/.test(navigator.userAgent)) {
+            return !/Firefox/.test(navigator.userAgent);
+        }
+
+        // Desktop/Android browsers need service worker + install API
         return (
             "serviceWorker" in navigator &&
             ("BeforeInstallPromptEvent" in window || /Chrome|Edg|Samsung/.test(navigator.userAgent))
