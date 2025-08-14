@@ -3,25 +3,8 @@ import styles from "./Footer.module.scss";
 import GithubIcon from "@/components/GithubIcon";
 import { Button } from "../ui/button";
 import { MonitorDownIcon } from "lucide-react";
-import { usePWAInstall } from "@/hooks/usePWAInstall";
+import { getInstallInstructions, usePWAInstall } from "@/hooks/usePWAInstall";
 import { toast } from "sonner";
-
-const getInstallInstructions = () => {
-    const userAgent = navigator.userAgent;
-
-    // iOS Safari
-    if (/iPhone|iPad/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome/.test(userAgent)) {
-        return "To install: Tap Share → Add to Home Screen";
-    }
-
-    // Desktop/Android Chrome-based (Chrome, Edge, Samsung, etc.)
-    if (/Chrome|Edg/.test(userAgent)) {
-        return "To install: Look for the install button in your address bar";
-    }
-
-    // Generic fallback
-    return "To install: Look for install options in your browser menu";
-};
 
 function Footer() {
     const { shouldShowButton, installApp } = usePWAInstall();
