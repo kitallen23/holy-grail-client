@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useGrailProgress } from "@/hooks/queries";
 import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export const useGrailData = () => {
-    const { user } = useAuth();
+    const { user } = useAuthStore();
     const {
         data: _grailProgress,
         isFetching,

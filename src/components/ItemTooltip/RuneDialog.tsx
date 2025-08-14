@@ -4,7 +4,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import type { Rune } from "@/types/items";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import type { WithKey } from "@/routes/items/-types";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/useAuthStore";
 import GrailIndicator from "./GrailIndicator";
 
 interface RuneDialogProps extends React.ComponentProps<typeof DialogPrimitive.Root> {
@@ -12,7 +12,7 @@ interface RuneDialogProps extends React.ComponentProps<typeof DialogPrimitive.Ro
 }
 
 export default function RuneDialog({ rune, ...props }: RuneDialogProps) {
-    const { user } = useAuth();
+    const { user } = useAuthStore();
     const isLoggedIn = !!user;
 
     return (

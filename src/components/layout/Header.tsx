@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import clsx from "clsx";
 import { useLoginModalStore } from "@/stores/useLoginModalStore";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/useAuthStore";
 import PentagramIcon from "@/components/PentagramIcon";
 
 const NAV_ITEMS = [
@@ -75,7 +75,7 @@ const NAV_ITEMS = [
 
 export default function Header() {
     const matchRoute = useMatchRoute();
-    const { user, isLoading, logout } = useAuth();
+    const { user, isLoading, logout } = useAuthStore();
     const { isVisible } = useSearchBar();
     const { debouncedSearchString } = useDebouncedSearchString();
     const { onOpenChange } = useLoginModalStore();

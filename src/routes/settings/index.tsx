@@ -1,7 +1,7 @@
 import Heading from "@/components/Heading";
 import LoginForm from "@/components/LoginForm";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { useSearchBar } from "@/stores/useSearchStore";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -55,7 +55,7 @@ const IMPORT_TYPES = {
 export type ImportType = keyof typeof IMPORT_TYPES;
 
 function RouteComponent() {
-    const { user, isLoading } = useAuth();
+    const { user, isLoading } = useAuthStore();
     const { setVisibility } = useSearchBar();
     const navigate = useNavigate({ from: "/settings" });
     const { setItems } = useGrailProgressStore();
