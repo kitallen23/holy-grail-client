@@ -1,9 +1,10 @@
-import { useGrailProgress, useItems } from "@/hooks/queries";
+import { useItems } from "@/hooks/queries";
 import GrailStatsTable from "./-GrailStatsTable";
 import GrailRemainingItemSummary from "./-GrailRemainingItemSummary";
 import GrailItemList from "./-GrailItemList";
 import Heading from "@/components/Heading";
 import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
+import { useGrailPageStore } from "@/stores/useGrailPageStore";
 import type { Items } from "@/types/items";
 import {
     NavigationMenu,
@@ -11,14 +12,13 @@ import {
     NavigationMenuLink,
     NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import { useGrailPageStore } from "@/stores/useGrailPageStore";
-import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
 import { useEffect, useDeferredValue } from "react";
 import { BadgeInfoIcon, CircleAlertIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Link } from "@tanstack/react-router";
 import GrailHeatmap from "./-GrailHeatmap";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGrailData } from "@/hooks/useGrailData";
 
 const PAGE_CONTENTS_KEYS = ["Summary", "Item List"] as const;
 
@@ -36,23 +36,14 @@ export default function GrailPage() {
     const runes = data?.runes;
 
     const { pageContents, setPageContents } = useGrailPageStore();
-
     const {
-        data: _grailProgress,
+        items: grailProgress,
         isFetching: isFetchingGrailProgress,
         error: grailProgressError,
-    } = useGrailProgress();
-
-    const { items: grailProgress, setItems: setGrailItems } = useGrailProgressStore();
+    } = useGrailData();
 
     // Defer heavy data to prevent blocking UI during filter changes and search clearing
     const deferredGrailProgress = useDeferredValue(grailProgress);
-
-    useEffect(() => {
-        if (_grailProgress && !grailProgress) {
-            setGrailItems(_grailProgress);
-        }
-    }, [_grailProgress, grailProgress]);
 
     useEffect(() => {
         const filters = [

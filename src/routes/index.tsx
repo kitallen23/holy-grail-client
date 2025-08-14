@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import GrailPage from "@/routes/-grail/-GrailPage";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { useEffect } from "react";
 import { useSearchBar } from "@/stores/useSearchStore";
 import LoginForm from "@/components/LoginForm";
@@ -11,7 +11,7 @@ export const Route = createFileRoute("/")({
 });
 
 function RouteComponent() {
-    const { user, isLoading } = useAuth();
+    const { user, isLoading } = useAuthStore();
     const { setVisibility } = useSearchBar();
 
     useEffect(() => {

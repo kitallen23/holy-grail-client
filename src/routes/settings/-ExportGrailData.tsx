@@ -1,6 +1,5 @@
-import { useGrailProgress, useItems } from "@/hooks/queries";
+import { useItems } from "@/hooks/queries";
 import type { ImportType } from ".";
-import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
 import { useEffect, useMemo, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CircleAlertIcon, LoaderCircleIcon } from "lucide-react";
@@ -18,6 +17,7 @@ import {
 } from "@/lib/adapters/import-export";
 import { toast } from "sonner";
 import type { Items } from "@/types/items";
+import { useGrailData } from "@/hooks/useGrailData";
 
 type Props = {
     exportType: ImportType;
@@ -45,13 +45,10 @@ const ExportGrailData = ({ exportType, onCancel }: Props) => {
     }, []);
 
     const {
-        data: _grailProgress,
+        items: grailProgress,
         isFetching: isFetchingGrailProgress,
         error: grailProgressError,
-    } = useGrailProgress();
-
-    const { items: grailProgress, setItems: setGrailItems } = useGrailProgressStore();
-
+    } = useGrailData();
     const foundItemCount = useMemo(() => {
         if (!runes || !grailProgress) {
             return 0;
@@ -67,13 +64,6 @@ const ExportGrailData = ({ exportType, onCancel }: Props) => {
             return nonRuneProgress.length;
         }
     }, [runes, grailProgress, exportType]);
-
-    useEffect(() => {
-        // Only initialise our grailProgress store's items if it's not already populated
-        if (_grailProgress && !grailProgress) {
-            setGrailItems(_grailProgress);
-        }
-    }, [_grailProgress, grailProgress]);
 
     const [isExported, setIsExported] = useState(false);
     const [downloadUrl, setDownloadUrl] = useState("");

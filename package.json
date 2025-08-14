@@ -1,13 +1,14 @@
 {
     "name": "holy-grail-client",
     "private": true,
-    "version": "0.5.1",
+    "version": "1.0.0",
     "type": "module",
     "license": "ISC",
     "scripts": {
         "dev": "vite",
         "build": "tsc -b && vite build",
         "lint": "eslint 'src/**/*.{ts,tsx}' --report-unused-disable-directives --max-warnings 0",
+        "check": "tsc -b && pnpm lint",
         "preview": "vite preview",
         "prepare": "husky"
     },

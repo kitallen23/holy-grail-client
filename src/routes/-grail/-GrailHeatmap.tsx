@@ -1,18 +1,9 @@
-import { useGrailProgress } from "@/hooks/queries";
-import { useGrailProgressStore } from "@/stores/useGrailProgressStore";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import Heatmap from "@/components/Heatmap";
+import { useGrailData } from "@/hooks/useGrailData";
 
 function GrailHeatmap() {
-    const { data: _grailProgress, isFetching: isFetchingGrailProgress } = useGrailProgress();
-
-    const { items: grailProgress, setItems: setGrailItems } = useGrailProgressStore();
-
-    useEffect(() => {
-        if (_grailProgress && !grailProgress) {
-            setGrailItems(_grailProgress);
-        }
-    }, [_grailProgress, grailProgress]);
+    const { items: grailProgress, isFetching: isFetchingGrailProgress } = useGrailData();
 
     const heatmapData = useMemo(() => {
         if (!grailProgress) return [];

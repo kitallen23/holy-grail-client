@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import clsx from "clsx";
 import { useLoginModalStore } from "@/stores/useLoginModalStore";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/useAuthStore";
 import PentagramIcon from "@/components/PentagramIcon";
 
 const NAV_ITEMS = [
@@ -73,9 +73,13 @@ const NAV_ITEMS = [
     },
 ];
 
-export default function Header() {
+type Props = {
+    hideSearch: boolean;
+};
+
+export default function Header({ hideSearch }: Props) {
     const matchRoute = useMatchRoute();
-    const { user, isLoading, logout } = useAuth();
+    const { user, isLoading, logout } = useAuthStore();
     const { isVisible } = useSearchBar();
     const { debouncedSearchString } = useDebouncedSearchString();
     const { onOpenChange } = useLoginModalStore();
@@ -241,7 +245,7 @@ export default function Header() {
                     )}
                 </div>
             </header>
-            {isVisible ? (
+            {isVisible && !hideSearch ? (
                 <div
                     className={`${styles.searchbar} h-13 bg-background flex items-center justify-center fixed top-8 right-0 w-full flex-nowrap border-b`}
                 >

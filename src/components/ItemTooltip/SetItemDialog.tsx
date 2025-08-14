@@ -6,7 +6,7 @@ import ItemAffix from "@/components/ItemTooltip/ItemAffix";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import SetItemBonusAffix from "@/components/ItemTooltip/SetItemBonusAffix";
 import clsx from "clsx";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/useAuthStore";
 import GrailIndicator from "./GrailIndicator";
 import type { WithKey } from "@/routes/items/-types";
 
@@ -22,7 +22,7 @@ const SetItemDialog = React.forwardRef<
     React.ComponentRef<typeof DialogContent>,
     SetItemDialogProps
 >(({ item, onSetItemClick, onBaseItemClick, ...props }, ref) => {
-    const { user } = useAuth();
+    const { user } = useAuthStore();
     const isLoggedIn = !!user;
 
     const displayedItemBonuses = Object.entries(item?.itemBonuses || {}).sort((a, b) =>

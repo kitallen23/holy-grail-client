@@ -4,7 +4,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import type { UniqueItem } from "@/types/items";
 import ItemAffix from "@/components/ItemTooltip/ItemAffix";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/useAuthStore";
 import type { WithKey } from "@/routes/items/-types";
 import GrailIndicator from "./GrailIndicator";
 
@@ -19,7 +19,7 @@ export const UniqueItemDialog = React.forwardRef<
     React.ComponentRef<typeof DialogContent>,
     UniqueItemDialogProps
 >(({ item, onBaseItemClick, ...props }, ref) => {
-    const { user } = useAuth();
+    const { user } = useAuthStore();
     const isLoggedIn = !!user;
 
     return (

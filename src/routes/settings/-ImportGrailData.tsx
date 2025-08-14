@@ -3,7 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGrailProgress, useItems } from "@/hooks/queries";
+import { useItems } from "@/hooks/queries";
 import {
     getItemsToImport_Backup,
     getItemsToImport_D2HolyGrail,
@@ -21,6 +21,7 @@ import { CircleAlertIcon, CloudCheckIcon, LoaderCircleIcon } from "lucide-react"
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import type { ImportType } from ".";
+import { useGrailData } from "@/hooks/useGrailData";
 
 type Props = {
     file?: File;
@@ -45,20 +46,12 @@ const ImportGrailData = ({ file, importType, setFile }: Props) => {
         Object.keys(runes || {}).length;
 
     const {
-        data: _grailProgress,
+        items: grailProgress,
         isFetching: isFetchingGrailProgress,
         error: grailProgressError,
-    } = useGrailProgress();
-
-    const { items: grailProgress, setItems: setGrailItems, bulkSetFound } = useGrailProgressStore();
+    } = useGrailData();
+    const { bulkSetFound } = useGrailProgressStore();
     const foundItemCount = Object.keys(grailProgress || {}).length;
-
-    useEffect(() => {
-        // Only initialise our grailProgress store's items if it's not already populated
-        if (_grailProgress && !grailProgress) {
-            setGrailItems(_grailProgress);
-        }
-    }, [_grailProgress, grailProgress]);
 
     const [fileContents, setFileContents] = useState<
         External_TomeOfD2GrailData | External_D2HolyGrailData

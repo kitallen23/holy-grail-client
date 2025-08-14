@@ -8,6 +8,7 @@ import { useGrailPageStore } from "./useGrailPageStore";
 interface AuthState {
     user: User | null;
     isLoading: boolean;
+    isLoggingOut: boolean;
     checkAuth: () => Promise<void>;
     logout: () => Promise<void>;
 }
@@ -15,6 +16,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>(set => ({
     user: null,
     isLoading: true,
+    isLoggingOut: false,
 
     checkAuth: async () => {
         try {
@@ -26,6 +28,7 @@ export const useAuthStore = create<AuthState>(set => ({
     },
 
     logout: async () => {
+        set({ isLoggingOut: true });
         try {
             await apiLogout();
         } catch (error) {
@@ -38,7 +41,7 @@ export const useAuthStore = create<AuthState>(set => ({
             // Remove cached user data from react-query
             queryClient.removeQueries({ queryKey: ["grail-progress"] });
 
-            set({ user: null });
+            set({ user: null, isLoggingOut: false });
             toast.success("You've been signed out.");
         }
     },
