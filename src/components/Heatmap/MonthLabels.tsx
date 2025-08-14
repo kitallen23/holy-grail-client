@@ -33,7 +33,7 @@ export default function MonthLabels({
                         ref={el => {
                             labelRefs.current[labelKey] = el;
                         }}
-                        className="text-xs text-muted-foreground"
+                        className="text-xs text-muted-foreground select-none cursor-default"
                         style={{
                             gridColumn: weekIndex + 1,
                             transform: `translateX(${leftOffset}px)`,

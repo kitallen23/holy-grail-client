@@ -1,10 +1,12 @@
 import { createRootRoute, HeadContent, Outlet } from "@tanstack/react-router";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { useSearchBar, useSearchDebounceManager } from "@/stores/useSearchStore";
 import LoginModal from "@/components/LoginModal";
 import { Toaster } from "@/components/ui/sonner";
 import ItemDialog from "@/components/ItemTooltip/ItemDialog";
+
+import { useSearchBar, useSearchDebounceManager } from "@/stores/useSearchStore";
+import { useGrailData } from "@/hooks/useGrailData";
 import { APP_TITLE } from "@/lib/constants";
 
 // import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
@@ -13,6 +15,8 @@ import { APP_TITLE } from "@/lib/constants";
 const RootLayout = () => {
     const { isVisible } = useSearchBar();
     useSearchDebounceManager();
+
+    useGrailData();
 
     return (
         <>

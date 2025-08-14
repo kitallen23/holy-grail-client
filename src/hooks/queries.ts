@@ -5,6 +5,7 @@ import {
     fetchUserItems,
     type GrailProgressItem,
     type QueryType,
+    type UserItemsResponse,
 } from "@/lib/api";
 import type { Items, Runewords } from "@/types/items";
 
@@ -68,7 +69,11 @@ export const useRunewords = () => {
     });
 };
 
-export const useGrailProgress = () => {
+type UseGrailProgressOptions = Omit<
+    UseQueryOptions<UserItemsResponse, Error, Record<string, GrailProgressItem>>,
+    "queryKey" | "queryFn" | "select"
+>;
+export const useGrailProgress = (options?: UseGrailProgressOptions) => {
     return useQuery({
         queryKey: ["grail-progress"],
         queryFn: fetchUserItems,
@@ -82,6 +87,7 @@ export const useGrailProgress = () => {
                 {} as Record<string, GrailProgressItem>
             );
         },
+        ...options,
     });
 };
 
