@@ -26,7 +26,7 @@ const SetItemDialog = React.forwardRef<
     const isLoggedIn = !!user;
 
     const displayedItemBonuses = Object.entries(item?.itemBonuses || {}).sort((a, b) =>
-        a[0] > b[0] ? 0 : 1
+        a[0].localeCompare(b[0])
     );
 
     return (

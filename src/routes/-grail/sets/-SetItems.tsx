@@ -23,7 +23,7 @@ function getSetItems(data: Record<string, SetItem> | null): SetItemArrayItem[] {
             ...value,
             key,
         }))
-        .sort((a, b) => (a.name > b.name ? 1 : 0));
+        .sort((a, b) => a.name.localeCompare(b.name));
 
     return tierSetItems;
 }

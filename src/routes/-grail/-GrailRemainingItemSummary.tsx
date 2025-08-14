@@ -71,7 +71,7 @@ export default function GrailRemainingItemSummary({
             };
         })
         .filter(entry => entry.notFoundUniqueItems.length && !entry.hide)
-        .sort((a, b) => (a.key > b.key ? 1 : 0));
+        .sort((a, b) => a.key.localeCompare(b.key));
     const displayedSetBases = Object.entries(remainingSetBases)
         .map(([key, item]) => {
             return {
@@ -80,7 +80,7 @@ export default function GrailRemainingItemSummary({
             };
         })
         .filter(entry => entry.notFoundSetItems.length && !entry.hide)
-        .sort((a, b) => (a.key > b.key ? 1 : 0));
+        .sort((a, b) => a.key.localeCompare(b.key));
 
     const [selectedItemBase, setSelectedItemBase] = useState<SelectedItemState>();
 

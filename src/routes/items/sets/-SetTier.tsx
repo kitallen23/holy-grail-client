@@ -23,7 +23,7 @@ function getFilteredTierSetItems(
             const setTier = SETS.find(set => set.name === item.category)?.tier;
             return setTier === tier;
         })
-        .sort((a, b) => (a.name > b.name ? 1 : 0));
+        .sort((a, b) => a.name.localeCompare(b.name));
 
     return tierSetItems;
 }

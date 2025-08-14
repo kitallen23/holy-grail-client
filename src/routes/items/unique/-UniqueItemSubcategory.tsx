@@ -16,7 +16,7 @@ function getFilteredUniqueItems(
     let categoryUniqueItems = data.filter(item => item.category.endsWith(`Unique ${subcategory}`));
 
     if (subcategory !== "Charms") {
-        categoryUniqueItems = categoryUniqueItems.sort((a, b) => (a.name > b.name ? 1 : 0));
+        categoryUniqueItems = categoryUniqueItems.sort((a, b) => a.name.localeCompare(b.name));
     }
 
     return categoryUniqueItems;
