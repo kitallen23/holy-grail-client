@@ -23,7 +23,7 @@ function getFilteredBaseItems(
         .filter(item =>
             ITEM_CATEGORIES[category].some(subcategory => item.category === subcategory)
         )
-        .sort((a, b) => tierOrder[a.tier] - tierOrder[b.tier]);
+        .sort((a, b) => (tierOrder[a.tier] ?? Infinity) - (tierOrder[b.tier] ?? Infinity));
 
     return categoryBaseItems;
 }

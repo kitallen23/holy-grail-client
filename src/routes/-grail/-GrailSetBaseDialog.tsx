@@ -17,7 +17,7 @@ const GrailSetBaseDialog = React.forwardRef<React.ComponentRef<typeof DialogCont
     ({ base, notFoundSetItems, foundSetItems, onClick, ...props }, ref) => {
         const allSets = (notFoundSetItems || [])
             .concat(foundSetItems || [])
-            .sort((a, b) => (a.key > b.key ? 1 : 0));
+            .sort((a, b) => a.key.localeCompare(b.key));
         return (
             <Dialog {...props}>
                 {base ? (

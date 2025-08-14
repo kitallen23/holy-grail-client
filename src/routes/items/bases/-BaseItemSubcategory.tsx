@@ -16,7 +16,7 @@ function getFilteredBaseItems(
 
     const categoryBaseItems = data
         .filter(item => item.category === subcategory)
-        .sort((a, b) => tierOrder[a.tier] - tierOrder[b.tier]);
+        .sort((a, b) => (tierOrder[a.tier] ?? Infinity) - (tierOrder[b.tier] ?? Infinity));
 
     return categoryBaseItems;
 }

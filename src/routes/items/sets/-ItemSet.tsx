@@ -12,7 +12,7 @@ function getFilteredSetItems(data: SetItemArrayItem[], set: SetCategory): SetIte
 
     const categorySetItems = data.filter(item => item.category === set);
     const setOrder = Object.fromEntries(
-        categorySetItems[0]?.setItems.map((item, i) => [item, i++]) ?? []
+        categorySetItems[0]?.setItems.map((item, i) => [item, i]) ?? []
     );
 
     const sortedCategorySetItems = categorySetItems.sort((a, b) => {

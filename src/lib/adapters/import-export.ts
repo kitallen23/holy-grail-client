@@ -137,8 +137,8 @@ export function getItemsToImport_TomeOfD2(
     });
 
     return {
-        found: itemsToImport.found.sort(),
-        notFound: itemsToImport.notFound.sort(),
+        found: itemsToImport.found.sort((a, b) => a.itemKey.localeCompare(b.itemKey)),
+        notFound: itemsToImport.notFound.sort((a, b) => a.itemKey.localeCompare(b.itemKey)),
     };
 }
 
@@ -251,8 +251,8 @@ export function getItemsToImport_D2HolyGrail(
     });
 
     return {
-        found: itemsToImport.found.sort(),
-        notFound: itemsToImport.notFound.sort(),
+        found: itemsToImport.found.sort((a, b) => a.itemKey.localeCompare(b.itemKey)),
+        notFound: itemsToImport.notFound.sort((a, b) => a.itemKey.localeCompare(b.itemKey)),
     };
 }
 

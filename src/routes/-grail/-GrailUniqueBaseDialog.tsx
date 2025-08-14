@@ -17,7 +17,7 @@ const GrailUniqueBaseDialog = React.forwardRef<React.ComponentRef<typeof DialogC
     ({ base, notFoundUniqueItems, foundUniqueItems, onClick, ...props }, ref) => {
         const allUniques = (notFoundUniqueItems || [])
             .concat(foundUniqueItems || [])
-            .sort((a, b) => (a.key > b.key ? 1 : 0));
+            .sort((a, b) => a.key.localeCompare(b.key));
         return (
             <Dialog {...props}>
                 {base ? (

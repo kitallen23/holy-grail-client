@@ -21,7 +21,7 @@ function getFilteredRunewords(data: Runewords | null, type: RunewordBaseType): R
             key,
         }))
         .filter(item => item.type === type)
-        .sort((a, b) => (a.name > b.name ? 1 : 0));
+        .sort((a, b) => a.name.localeCompare(b.name));
 
     return categoryRunewords;
 }
