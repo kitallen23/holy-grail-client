@@ -8,7 +8,8 @@ export const useGrailItem = (itemKey: string) => {
                 key: itemKey,
                 found: item?.found ?? false,
                 foundAt: item?.foundAt ?? "",
-                setFound: (value: boolean) => state.setFound(itemKey, value),
+                setFound: (value: boolean, pathname?: string) =>
+                    state.setFound(itemKey, value, pathname),
             };
         },
         (oldState, newState) =>

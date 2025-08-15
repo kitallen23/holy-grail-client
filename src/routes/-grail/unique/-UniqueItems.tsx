@@ -7,6 +7,28 @@ import { useEffect, useMemo, useDeferredValue } from "react";
 import UniqueItemCategory from "@/routes/-grail/unique/-UniqueItemCategory";
 import { useShowItemList } from "@/hooks/useShowItemList";
 import { useItemDialogStore } from "@/stores/useItemDialogStore";
+import { useGrailData } from "@/hooks/useGrailData";
+import { useDebounce } from "@/hooks/useDebounce";
+import type { GrailProgressItem } from "@/lib/api";
+
+const filterDisplayableItems = (
+    hideFound: boolean,
+    items: Record<string, UniqueItem>,
+    grailProgress: Record<string, GrailProgressItem>
+): Record<string, UniqueItem> => {
+    const filteredItems: Record<string, UniqueItem> = {};
+    if (hideFound) {
+        Object.entries(items).forEach(([key, item]) => {
+            const itemIsFound = grailProgress[key]?.found;
+            if (!itemIsFound) {
+                filteredItems[key] = item;
+            }
+        });
+        return filteredItems;
+    } else {
+        return items;
+    }
+};
 
 type Props = { uniqueItems: Record<string, UniqueItem> };
 
@@ -17,14 +39,19 @@ export default function UniqueItems({ uniqueItems }: Props) {
     const { selectedFilters } = useSearchFilters();
     const deferredSelectedFilters = useDeferredValue(selectedFilters);
 
+    const { items } = useGrailData();
+    const debouncedGrailProgress = useDebounce(items, 1000);
+
     const displayedItems: Record<string, UniqueItem> | undefined = useMemo(() => {
         if (!uniqueItems) {
             return uniqueItems;
         }
+        const { "Hide Found Items": hideFoundItemsFilter, ...itemFilters } =
+            deferredSelectedFilters;
 
         const searchTerms = getSearchTerms(debouncedSearchString);
         const filtered: Record<string, UniqueItem> = {};
-        const hasActiveFilter = Object.values(deferredSelectedFilters).some(val => val);
+        const hasActiveFilter = Object.values(itemFilters).some(val => val);
 
         Object.entries(uniqueItems).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
@@ -35,14 +62,14 @@ export default function UniqueItems({ uniqueItems }: Props) {
                     )
                 )?.[0];
 
-                if (!hasActiveFilter || deferredSelectedFilters[`Unique ${itemType}`]) {
+                if (!hasActiveFilter || itemFilters[`Unique ${itemType}`]) {
                     filtered[key] = item;
                 }
             }
         });
 
-        return filtered;
-    }, [uniqueItems, debouncedSearchString, deferredSelectedFilters]);
+        return filterDisplayableItems(hideFoundItemsFilter, filtered, debouncedGrailProgress ?? {});
+    }, [uniqueItems, debouncedSearchString, deferredSelectedFilters, debouncedGrailProgress]);
 
     useEffect(() => {
         setFilteredItemCount("unique", Object.keys(displayedItems).length);

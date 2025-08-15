@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import type { ImportType } from ".";
 import { useGrailData } from "@/hooks/useGrailData";
+import { trackEvent } from "@/hooks/useAnalytics";
 
 type Props = {
     file?: File;
@@ -142,6 +143,7 @@ const ImportGrailData = ({ file, importType, setFile }: Props) => {
             setPageContents("Summary");
             navigate({ to: "/" });
             setFile();
+            trackEvent("import", { type: importType });
         } catch (error) {
             console.error(`Error: `, error);
             toast.error("Something went wrong when importing. Please try again later.");

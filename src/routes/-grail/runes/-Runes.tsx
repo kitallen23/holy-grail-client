@@ -1,14 +1,29 @@
 import CheckboxItem from "@/components/CheckboxItem";
 import HeadingSeparator from "@/components/HeadingSeparator";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useGrailData } from "@/hooks/useGrailData";
 import { useShowItemList } from "@/hooks/useShowItemList";
+import type { GrailProgressItem } from "@/lib/api";
 import { getSearchTerms, matchesAllTerms } from "@/lib/search";
-import type { RuneArrayItem } from "@/routes/items/-types";
+import type { RuneArrayItem, WithKey } from "@/routes/items/-types";
 import { getSearchableText } from "@/routes/items/-utils";
 import { useItemDialogStore } from "@/stores/useItemDialogStore";
 import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import type { Rune } from "@/types/items";
 import clsx from "clsx";
 import { useEffect, useMemo, useDeferredValue } from "react";
+
+const filterDisplayableRunes = (
+    hideFound: boolean,
+    runes: WithKey<Rune>[],
+    grailProgress: Record<string, GrailProgressItem>
+) => {
+    if (hideFound) {
+        return runes.filter(rune => (grailProgress[rune.key] ? false : true));
+    } else {
+        return runes;
+    }
+};
 
 type Props = { runes: Record<string, Rune> };
 
@@ -19,43 +34,69 @@ export default function Runes({ runes }: Props) {
     const { selectedFilters } = useSearchFilters();
     const deferredSelectedFilters = useDeferredValue(selectedFilters);
 
+    const { items } = useGrailData();
+    const debouncedGrailProgress = useDebounce(items, 1000);
+
     const displayedRunes: RuneArrayItem[] = useMemo(() => {
+        const { "Hide Found Items": hideFoundItemsFilter, ...itemFilters } =
+            deferredSelectedFilters;
+
         if (!runes || !debouncedSearchString.trim()) {
-            return Object.entries(runes || {}).map(([key, value]) => ({
+            const displayableRunes = Object.entries(runes || {}).map(([key, value]) => ({
                 ...value,
                 key,
             }));
+            return filterDisplayableRunes(
+                hideFoundItemsFilter,
+                displayableRunes,
+                debouncedGrailProgress ?? {}
+            );
         }
 
         const searchTerms = getSearchTerms(debouncedSearchString);
         if (searchTerms.length === 0) {
-            return Object.entries(runes || {}).map(([key, value]) => ({
+            const displayableRunes = Object.entries(runes || {}).map(([key, value]) => ({
                 ...value,
                 key,
             }));
+            return filterDisplayableRunes(
+                hideFoundItemsFilter,
+                displayableRunes,
+                debouncedGrailProgress ?? {}
+            );
         }
 
         const filtered: Record<string, Rune> = {};
-        const hasActiveFilter = Object.values(deferredSelectedFilters).some(val => val);
+        const hasActiveFilter = Object.values(itemFilters).some(val => val);
 
         Object.entries(runes).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
             if (matchesAllTerms(searchableText, searchTerms)) {
-                if (!hasActiveFilter || deferredSelectedFilters["Runes"]) {
+                if (!hasActiveFilter || itemFilters["Runes"]) {
                     filtered[key] = item;
                 }
             }
         });
 
-        return Object.entries(filtered).map(([key, value]) => ({
+        const displayableRunes = Object.entries(filtered).map(([key, value]) => ({
             ...value,
             key,
         }));
-    }, [runes, debouncedSearchString, deferredSelectedFilters]);
+        return filterDisplayableRunes(
+            hideFoundItemsFilter,
+            displayableRunes,
+            debouncedGrailProgress ?? {}
+        );
+    }, [runes, debouncedSearchString, deferredSelectedFilters, debouncedGrailProgress]);
 
     useEffect(() => {
         setFilteredItemCount("rune", displayedRunes.length);
     }, [displayedRunes]);
+
+    const hasActiveFilter = Object.values(deferredSelectedFilters).some(val => val);
+    if (hasActiveFilter && !deferredSelectedFilters["Runes"]) {
+        return null;
+    }
 
     if (!Object.keys(displayedRunes).length) {
         return null;

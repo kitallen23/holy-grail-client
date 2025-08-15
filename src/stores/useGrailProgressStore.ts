@@ -1,3 +1,4 @@
+import { trackEvent } from "@/hooks/useAnalytics";
 import { setUserItem, type GrailProgressItem } from "@/lib/api";
 import { API_CALL_DEBOUNCE_DELAY } from "@/lib/constants";
 import { createWithEqualityFn as create } from "zustand/traditional";
@@ -7,7 +8,7 @@ const pendingUpdates = new Map<string, NodeJS.Timeout>();
 
 interface GrailProgressStore {
     items?: Record<string, GrailProgressItem>;
-    setFound: (key: string, value: boolean) => void;
+    setFound: (key: string, value: boolean, pathname?: string) => void;
     bulkSetFound: (items: { itemKey: string; foundAt?: string }[]) => void;
     setItems: (value?: Record<string, GrailProgressItem>) => void;
 }
@@ -15,7 +16,7 @@ interface GrailProgressStore {
 export const useGrailProgressStore = create<GrailProgressStore>(set => ({
     items: undefined,
 
-    setFound: (itemKey, found) => {
+    setFound: (itemKey, found, pathname) => {
         // Clear existing timeout for this item
         const existingUpdate = pendingUpdates.get(itemKey);
         if (existingUpdate) {
@@ -53,6 +54,8 @@ export const useGrailProgressStore = create<GrailProgressStore>(set => ({
         const timeout = setTimeout(() => {
             setUserItem(itemKey, found);
             pendingUpdates.delete(itemKey);
+
+            trackEvent("item_found", { pathname, itemKey });
         }, API_CALL_DEBOUNCE_DELAY);
 
         pendingUpdates.set(itemKey, timeout);

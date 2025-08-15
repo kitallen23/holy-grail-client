@@ -7,6 +7,7 @@ import ItemDialog from "@/components/ItemTooltip/ItemDialog";
 
 import { useSearchBar, useSearchDebounceManager } from "@/stores/useSearchStore";
 import { useGrailData } from "@/hooks/useGrailData";
+import { useAnalytics } from "@/hooks/useAnalytics";
 import { APP_TITLE } from "@/lib/constants";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { LoaderCircleIcon } from "lucide-react";
@@ -19,6 +20,7 @@ const RootLayout = () => {
     const { isLoggingOut } = useAuthStore();
     useSearchDebounceManager();
     useGrailData();
+    useAnalytics();
 
     return (
         <>

@@ -24,7 +24,7 @@ const PAGE_CONTENTS_KEYS = ["Summary", "Item List"] as const;
 
 export default function GrailPage() {
     const { debouncedSearchString } = useDebouncedSearchString();
-    const { setPageFilters } = useSearchFilters();
+    const { selectedFilters, setPageFilters } = useSearchFilters();
     const {
         data,
         isFetching: isFetchingItems,
@@ -58,11 +58,31 @@ export default function GrailPage() {
                     { id: "Runes", label: "Runes", value: false },
                 ],
             },
+            {
+                id: "other",
+                label: "Other",
+                options: [
+                    {
+                        id: "Hide Found Items",
+                        label: "Hide Found Items",
+                        value: localStorage.getItem("holy-grail__hideFoundItems") === "true",
+                    },
+                ],
+            },
         ];
         setPageFilters(filters);
 
         return () => setPageFilters(null);
     }, []);
+
+    useEffect(() => {
+        if ("Hide Found Items" in selectedFilters) {
+            localStorage.setItem(
+                "holy-grail__hideFoundItems",
+                selectedFilters["Hide Found Items"].toString()
+            );
+        }
+    }, [selectedFilters["Hide Found Items"]]);
 
     const totalFound = Object.keys(grailProgress || {}).length;
     const totalItems =

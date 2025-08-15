@@ -26,6 +26,7 @@ import {
 import ExportGrailData from "./-ExportGrailData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { APP_TITLE } from "@/lib/constants";
+import { trackEvent } from "@/hooks/useAnalytics";
 
 export const Route = createFileRoute("/settings/")({
     component: RouteComponent,
@@ -109,6 +110,7 @@ function RouteComponent() {
 
             toast.success("Your grail has been reset.");
             navigate({ to: "/" });
+            trackEvent("reset_grail");
         } catch (error) {
             console.error(`Error: `, error);
             toast.error("Something went wrong when resetting your grail. Please try again later.");
@@ -301,8 +303,27 @@ function RouteComponent() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col gap-4">
-                    <Heading className="text-primary">Credits</Heading>
+                <div className="flex flex-col">
+                    <Heading className="text-primary text-xl">Support &amp; Feedback</Heading>
+                    <div className="text-muted-foreground space-y-4">
+                        <p>
+                            Encountered an issue or want to suggest a feature? Please open an issue
+                            on the{" "}
+                            <a
+                                href="https://github.com/kitallen23/holy-grail-client/issues"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline-offset-4 underline text-muted-foreground hover:text-muted-foreground/90"
+                            >
+                                GitHub repository
+                            </a>
+                            . I welcome community feedback and contributions to make this tool
+                            better for all Diablo II players.
+                        </p>
+                    </div>
+                </div>
+                <div className="flex flex-col">
+                    <Heading className="text-primary text-xl">Credits</Heading>
                     <div className="text-muted-foreground space-y-4">
                         <p>
                             Special thanks to my wife and brother for their invaluable help with

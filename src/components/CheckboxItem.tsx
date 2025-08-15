@@ -3,6 +3,7 @@ import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useGrailItem } from "@/hooks/useGrailItem";
+import { useLocation } from "@tanstack/react-router";
 
 type Props<T> = Omit<React.ComponentProps<typeof CheckboxPrimitive.Root>, "onClick"> & {
     name: string;
@@ -25,7 +26,9 @@ export default function CheckboxItem<T>({
     onClick,
     ...props
 }: Props<T>) {
-    const { found, setFound } = useGrailItem(uniqueName);
+    const { pathname } = useLocation();
+    const { found, setFound: _setFound } = useGrailItem(uniqueName);
+    const setFound = (value: boolean) => _setFound(value, pathname);
 
     return (
         <label className="inline-grid gap-2 grid-cols-[auto_1fr] items-center w-fit">

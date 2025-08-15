@@ -22,6 +22,12 @@ export default defineConfig([
     tseslint.configs.recommended,
     pluginReact.configs.flat.recommended,
     {
+        files: ["**/*.d.ts"],
+        rules: {
+            "@typescript-eslint/no-explicit-any": "off",
+        },
+    },
+    {
         files: ["**/*.json"],
         plugins: { json },
         language: "json/jsonc",
