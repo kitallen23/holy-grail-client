@@ -18,6 +18,7 @@ import {
 import { toast } from "sonner";
 import type { Items } from "@/types/items";
 import { useGrailData } from "@/hooks/useGrailData";
+import { trackEvent } from "@/hooks/useAnalytics";
 
 type Props = {
     exportType: ImportType;
@@ -133,6 +134,7 @@ const ExportGrailData = ({ exportType, onCancel }: Props) => {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            trackEvent("export", { type: exportType });
         } catch (error) {
             console.error(`Error: `, error);
             toast.error("Something went wrong when exporting. Please try again later.");

@@ -26,6 +26,7 @@ import {
 import ExportGrailData from "./-ExportGrailData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { APP_TITLE } from "@/lib/constants";
+import { trackEvent } from "@/hooks/useAnalytics";
 
 export const Route = createFileRoute("/settings/")({
     component: RouteComponent,
@@ -109,6 +110,7 @@ function RouteComponent() {
 
             toast.success("Your grail has been reset.");
             navigate({ to: "/" });
+            trackEvent("reset_grail");
         } catch (error) {
             console.error(`Error: `, error);
             toast.error("Something went wrong when resetting your grail. Please try again later.");
