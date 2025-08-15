@@ -58,6 +58,11 @@ export default function GrailPage() {
                     { id: "Runes", label: "Runes", value: false },
                 ],
             },
+            {
+                id: "other",
+                label: "Other",
+                options: [{ id: "Hide Found Items", label: "Hide Found Items", value: false }],
+            },
         ];
         setPageFilters(filters);
 

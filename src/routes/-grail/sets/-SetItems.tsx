@@ -10,6 +10,28 @@ import clsx from "clsx";
 import Heading from "@/components/Heading";
 import { useShowItemList } from "@/hooks/useShowItemList";
 import { useItemDialogStore } from "@/stores/useItemDialogStore";
+import { useGrailData } from "@/hooks/useGrailData";
+import { useDebounce } from "@/hooks/useDebounce";
+import type { GrailProgressItem } from "@/lib/api";
+
+const filterDisplayableItems = (
+    hideFound: boolean,
+    items: Record<string, SetItem>,
+    grailProgress: Record<string, GrailProgressItem>
+): Record<string, SetItem> => {
+    const filteredItems: Record<string, SetItem> = {};
+    if (hideFound) {
+        Object.entries(items).forEach(([key, item]) => {
+            const itemIsFound = grailProgress[key]?.found;
+            if (!itemIsFound) {
+                filteredItems[key] = item;
+            }
+        });
+        return filteredItems;
+    } else {
+        return items;
+    }
+};
 
 type Props = { setItems: Record<string, SetItem> };
 
@@ -35,27 +57,32 @@ export default function SetItems({ setItems }: Props) {
     const { selectedFilters } = useSearchFilters();
     const deferredSelectedFilters = useDeferredValue(selectedFilters);
 
+    const { items } = useGrailData();
+    const debouncedGrailProgress = useDebounce(items, 1000);
+
     const displayedItems: Record<string, SetItem> | undefined = useMemo(() => {
         if (!setItems) {
             return setItems;
         }
+        const { "Hide Found Items": hideFoundItemsFilter, ...itemFilters } =
+            deferredSelectedFilters;
 
         const searchTerms = getSearchTerms(debouncedSearchString);
 
         const filtered: Record<string, SetItem> = {};
-        const hasActiveFilter = Object.values(deferredSelectedFilters).some(val => val);
+        const hasActiveFilter = Object.values(itemFilters).some(val => val);
 
         Object.entries(setItems).forEach(([key, item]) => {
             const searchableText = getSearchableText(item);
             if (matchesAllTerms(searchableText, searchTerms)) {
-                if (!hasActiveFilter || deferredSelectedFilters["Set Items"]) {
+                if (!hasActiveFilter || itemFilters["Set Items"]) {
                     filtered[key] = item;
                 }
             }
         });
 
-        return filtered;
-    }, [setItems, debouncedSearchString, deferredSelectedFilters]);
+        return filterDisplayableItems(hideFoundItemsFilter, filtered, debouncedGrailProgress ?? {});
+    }, [setItems, debouncedSearchString, deferredSelectedFilters, debouncedGrailProgress]);
 
     useEffect(() => {
         setFilteredItemCount("set", Object.keys(displayedItems).length);

@@ -42,25 +42,23 @@ export default function GrailRemainingItemSummary({
     const { setItem } = useItemDialogStore();
     const { selectedFilters } = useSearchFilters();
     const deferredSelectedFilters = useDeferredValue(selectedFilters);
+    const itemFilters = Object.fromEntries(
+        Object.entries(deferredSelectedFilters).filter(([key]) => key !== "Hide Found Items")
+    );
 
     const remainingUniqueBases = useMemo(
         () =>
             grailProgress
-                ? getRemainingUniqueBases(
-                      uniqueItems,
-                      baseItems,
-                      grailProgress,
-                      deferredSelectedFilters
-                  )
+                ? getRemainingUniqueBases(uniqueItems, baseItems, grailProgress, itemFilters)
                 : {},
-        [uniqueItems, baseItems, grailProgress, deferredSelectedFilters]
+        [uniqueItems, baseItems, grailProgress, itemFilters]
     );
     const remainingSetBases = useMemo(
         () =>
             grailProgress
-                ? getRemainingSetBases(setItems, baseItems, grailProgress, deferredSelectedFilters)
+                ? getRemainingSetBases(setItems, baseItems, grailProgress, itemFilters)
                 : {},
-        [setItems, baseItems, grailProgress, deferredSelectedFilters]
+        [setItems, baseItems, grailProgress, itemFilters]
     );
 
     const displayedUniqueBases = Object.entries(remainingUniqueBases)
