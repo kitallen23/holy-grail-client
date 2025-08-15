@@ -2,13 +2,16 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useGrailItem } from "@/hooks/useGrailItem";
 import { getRelativeText } from "@/lib/utils";
+import { useLocation } from "@tanstack/react-router";
 
 type Props = {
     itemKey: string;
 };
 
 const GrailIndicator = ({ itemKey }: Props) => {
-    const { found, foundAt, setFound } = useGrailItem(itemKey);
+    const { pathname } = useLocation();
+    const { found, foundAt, setFound: _setFound } = useGrailItem(itemKey);
+    const setFound = (value: boolean) => _setFound(value, pathname);
 
     const relativeText = getRelativeText(foundAt);
 
