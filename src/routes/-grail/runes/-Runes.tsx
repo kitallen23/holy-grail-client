@@ -57,6 +57,11 @@ export default function Runes({ runes }: Props) {
         setFilteredItemCount("rune", displayedRunes.length);
     }, [displayedRunes]);
 
+    const hasActiveFilter = Object.values(deferredSelectedFilters).some(val => val);
+    if (hasActiveFilter && !deferredSelectedFilters["Runes"]) {
+        return null;
+    }
+
     if (!Object.keys(displayedRunes).length) {
         return null;
     }
