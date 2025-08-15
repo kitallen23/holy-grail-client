@@ -304,7 +304,27 @@ function RouteComponent() {
                     </div>
                 </div>
                 <div className="flex flex-col gap-4">
-                    <Heading className="text-primary">Credits</Heading>
+                    <Heading className="text-primary text-xl">Support &amp; Feedback</Heading>
+                    <div className="text-muted-foreground space-y-4">
+                        <p>
+                            Encountered an issue or want to suggest a feature? Please open an issue
+                            on the{" "}
+                            <a
+                                href="https://github.com/kitallen23/holy-grail-client/issues"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline-offset-4 underline text-muted-foreground hover:text-muted-foreground/90"
+                            >
+                                GitHub repository
+                            </a>
+                            . I welcome community feedback and contributions to make this tool
+                            better for all Diablo II players. To report issues or to request a
+                            feature, please open an issue on GitHub.
+                        </p>
+                    </div>
+                </div>
+                <div className="flex flex-col gap-4">
+                    <Heading className="text-primary text-xl">Credits</Heading>
                     <div className="text-muted-foreground space-y-4">
                         <p>
                             Special thanks to my wife and brother for their invaluable help with
