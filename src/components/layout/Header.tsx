@@ -39,7 +39,7 @@ const NAV_ITEMS = [
     },
     {
         label: "Item Index",
-        path: "/items",
+        path: "/items/unique",
         fuzzy: true,
     },
     {
