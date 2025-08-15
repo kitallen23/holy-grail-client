@@ -303,7 +303,7 @@ function RouteComponent() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col">
                     <Heading className="text-primary text-xl">Support &amp; Feedback</Heading>
                     <div className="text-muted-foreground space-y-4">
                         <p>
@@ -318,12 +318,11 @@ function RouteComponent() {
                                 GitHub repository
                             </a>
                             . I welcome community feedback and contributions to make this tool
-                            better for all Diablo II players. To report issues or to request a
-                            feature, please open an issue on GitHub.
+                            better for all Diablo II players.
                         </p>
                     </div>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col">
                     <Heading className="text-primary text-xl">Credits</Heading>
                     <div className="text-muted-foreground space-y-4">
                         <p>
