@@ -2,6 +2,8 @@ import { useItems } from "@/hooks/queries";
 import GrailStatsTable from "./-GrailStatsTable";
 import GrailRemainingItemSummary from "./-GrailRemainingItemSummary";
 import GrailItemList from "./-GrailItemList";
+import GrailHeatmap from "./-GrailHeatmap";
+import GrailRemainingItemSummaryMobile from "./-GrailRemainingItemSummaryMobile";
 import Heading from "@/components/Heading";
 import { useDebouncedSearchString, useSearchFilters } from "@/stores/useSearchStore";
 import { useGrailPageStore } from "@/stores/useGrailPageStore";
@@ -16,9 +18,9 @@ import { useEffect, useDeferredValue } from "react";
 import { BadgeInfoIcon, CircleAlertIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Link } from "@tanstack/react-router";
-import GrailHeatmap from "./-GrailHeatmap";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGrailData } from "@/hooks/useGrailData";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 const PAGE_CONTENTS_KEYS = ["Summary", "Item List"] as const;
 
@@ -41,6 +43,8 @@ export default function GrailPage() {
         isFetching: isFetchingGrailProgress,
         error: grailProgressError,
     } = useGrailData();
+
+    const isMd = useMediaQuery("md");
 
     // Defer heavy data to prevent blocking UI during filter changes and search clearing
     const deferredGrailProgress = useDeferredValue(grailProgress);
@@ -202,12 +206,23 @@ export default function GrailPage() {
 
                     <GrailHeatmap />
 
-                    <GrailRemainingItemSummary
-                        uniqueItems={uniqueItems!}
-                        setItems={setItems!}
-                        baseItems={baseItems!}
-                        grailProgress={deferredGrailProgress}
-                    />
+                    {isMd ? (
+                        // Is above md breakpoint
+                        <GrailRemainingItemSummary
+                            uniqueItems={uniqueItems!}
+                            setItems={setItems!}
+                            baseItems={baseItems!}
+                            grailProgress={deferredGrailProgress}
+                        />
+                    ) : (
+                        // Is below md breakpoint
+                        <GrailRemainingItemSummaryMobile
+                            uniqueItems={uniqueItems!}
+                            setItems={setItems!}
+                            baseItems={baseItems!}
+                            grailProgress={deferredGrailProgress}
+                        />
+                    )}
                 </>
             ) : null}
             <GrailItemList data={data as Items} />
