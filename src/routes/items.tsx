@@ -16,7 +16,7 @@ function ItemsPage() {
 
     return (
         <>
-            <div className="pt-2 pb-8 grid grid-cols-1 gap-4">
+            <div className="pt-4 pb-8 grid grid-cols-1 gap-4">
                 <div className="flex justify-center">
                     <NavigationMenu orientation="horizontal">
                         <NavigationMenuList className="bg-popover p-1 rounded-md border">

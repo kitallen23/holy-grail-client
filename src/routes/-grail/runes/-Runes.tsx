@@ -41,30 +41,7 @@ export default function Runes({ runes }: Props) {
         const { "Hide Found Items": hideFoundItemsFilter, ...itemFilters } =
             deferredSelectedFilters;
 
-        if (!runes || !debouncedSearchString.trim()) {
-            const displayableRunes = Object.entries(runes || {}).map(([key, value]) => ({
-                ...value,
-                key,
-            }));
-            return filterDisplayableRunes(
-                hideFoundItemsFilter,
-                displayableRunes,
-                debouncedGrailProgress ?? {}
-            );
-        }
-
         const searchTerms = getSearchTerms(debouncedSearchString);
-        if (searchTerms.length === 0) {
-            const displayableRunes = Object.entries(runes || {}).map(([key, value]) => ({
-                ...value,
-                key,
-            }));
-            return filterDisplayableRunes(
-                hideFoundItemsFilter,
-                displayableRunes,
-                debouncedGrailProgress ?? {}
-            );
-        }
 
         const filtered: Record<string, Rune> = {};
         const hasActiveFilter = Object.values(itemFilters).some(val => val);
@@ -92,11 +69,6 @@ export default function Runes({ runes }: Props) {
     useEffect(() => {
         setFilteredItemCount("rune", displayedRunes.length);
     }, [displayedRunes]);
-
-    const hasActiveFilter = Object.values(deferredSelectedFilters).some(val => val);
-    if (hasActiveFilter && !deferredSelectedFilters["Runes"]) {
-        return null;
-    }
 
     if (!Object.keys(displayedRunes).length) {
         return null;
