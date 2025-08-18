@@ -11,6 +11,7 @@ export const useGrailData = () => {
         error,
     } = useGrailProgress({
         enabled: !!user?.email,
+        staleTime: 60000,
     });
 
     const { items, setItems: setGrailItems } = useGrailProgressStore();
