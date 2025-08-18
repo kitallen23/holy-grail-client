@@ -47,6 +47,8 @@ export default function Searchbar() {
     const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Escape") {
             setSearchString("");
+        } else if (e.key === "Enter") {
+            e.currentTarget.blur();
         }
     };
 
