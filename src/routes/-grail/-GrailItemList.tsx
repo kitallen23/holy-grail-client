@@ -17,7 +17,7 @@ type Props = {
 export default function GrailSearchResults({ data }: Props) {
     const { clearSearch } = useDebouncedSearchString();
     const { clearFilters } = useSearchFilters();
-    const { itemCount } = useShowItemList();
+    const { itemCount, shouldDisplay } = useShowItemList();
 
     const showClearButton = itemCount === 0;
 
@@ -26,7 +26,7 @@ export default function GrailSearchResults({ data }: Props) {
             <UniqueItems uniqueItems={data.uniqueItems} />
             <SetItems setItems={data.setItems} />
             <Runes runes={data.runes} />
-            {showClearButton ? (
+            {shouldDisplay && showClearButton ? (
                 <div className="mt-4 flex flex-col gap-2">
                     <div className="text-center text-muted-foreground italic">No items found.</div>
                     <Button
